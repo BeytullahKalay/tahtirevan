@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Lang } from "@/lib/i18n";
 import { Media, type Shot } from "./Media";
 
-type Item = { shot: Shot; subject: string; colors?: string[] };
+type Item = { shot: Shot; subject: string; colors?: string[]; fabric?: string };
 
 /** Detay galerisi: tıklayınca büyür, büyük görselde tıklanan noktaya yakınlaşır. */
 export function Gallery({ lang, items }: { lang: Lang; items: Item[] }) {
@@ -52,6 +52,8 @@ export function Gallery({ lang, items }: { lang: Lang; items: Item[] }) {
                 shot={it.shot}
                 subject={it.subject}
                 colors={it.colors}
+                fabric={it.fabric}
+                detail={i}
                 className={`w-full ${layout[i % layout.length].aspect}`}
                 sizes="(min-width: 768px) 50vw, 100vw"
               />
@@ -102,6 +104,8 @@ export function Gallery({ lang, items }: { lang: Lang; items: Item[] }) {
                     shot={items[active].shot}
                     subject={items[active].subject}
                     colors={items[active].colors}
+                    fabric={items[active].fabric}
+                    detail={active}
                     className="absolute inset-0"
                     zoom={false}
                     cursor={false}

@@ -91,7 +91,7 @@ export function PieceView({ lang, piece }: { lang: Lang; piece: Piece }) {
 
   const gallery = [
     { shot: "macro" as const, subject: `${piece.techniques[0][lang]}` },
-    { shot: "fabric" as const, subject: `${fabric.name} · ${fabric.motif[lang]}`, colors: fabric.colors },
+    { shot: "fabric" as const, subject: `${fabric.name} · ${fabric.motif[lang]}`, colors: fabric.colors, fabric: fabric.id },
     { shot: "macro" as const, subject: `${piece.techniques[2]?.[lang] ?? piece.techniques[1][lang]}` },
     { shot: "craft" as const, subject: `${piece.techniques[1][lang]}` },
   ];
@@ -133,6 +133,7 @@ export function PieceView({ lang, piece }: { lang: Lang; piece: Piece }) {
             shot="portrait"
             subject={`${piece.name} ${lower}, ${fabric.name} · ${lang === "tr" ? "boş mekânda, tek yönden ışık" : "empty room, single light source"}`}
             colors={fabric.colors}
+            fabric={fabric.id}
             className="absolute inset-0"
             priority
             labelPosition="top-right"
@@ -173,6 +174,7 @@ export function PieceView({ lang, piece }: { lang: Lang; piece: Piece }) {
               shot="fabric"
               subject={`${fabric.name} · ${fabric.motif[lang]}`}
               colors={fabric.colors}
+              fabric={fabric.id}
               className="aspect-[4/3] w-full"
               sizes="(min-width: 1024px) 50vw, 100vw"
             />
@@ -262,9 +264,7 @@ export function PieceView({ lang, piece }: { lang: Lang; piece: Piece }) {
 
       {/* Kişiselleştirme ve tek ana eylem */}
       <section className="border-t hairline px-[var(--gutter)] py-[14vh]">
-        <div className="max-w-[1100px]">
-          <Customizer lang={lang} piece={piece} />
-        </div>
+        <Customizer lang={lang} piece={piece} />
       </section>
 
       {related.length > 0 && (

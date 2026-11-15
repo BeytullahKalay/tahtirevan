@@ -63,10 +63,10 @@
     "id": "soraya",
     "name": "Soraya",
     "code": "susleme",
-    "colors": ["#1b3a5c", "#b0673a", "#d9cdb4"],
-    "colorNotes": { "tr": "Lacivert, bakır, fildişi", "en": "Indigo, copper, ivory" },
-    "motif": { "tr": "Merkezde büyük madalyon", "en": "A large central medallion" },
-    "scale": { "tr": "Büyük ölçek · 60 cm madalyon", "en": "Large scale · 60 cm medallion" },
+    "colors": ["#1a1614", "#c0583a", "#3f8f8a"],
+    "colorNotes": { "tr": "Siyah zemin, mercan, turkuaz, altın", "en": "Black ground, coral, turquoise, gold" },
+    "motif": { "tr": "Siyah zeminde iri buta", "en": "Large paisley on a black ground" },
+    "scale": { "tr": "Büyük ölçek · 48 cm rapor", "en": "Large scale · 48 cm repeat" },
     "suitableFor": ["kanepe", "koltuk"]
   },
   {
@@ -84,10 +84,10 @@
     "id": "zafran",
     "name": "Zafran",
     "code": "susleme",
-    "colors": ["#c98a1e", "#6a1f2a", "#3a2a1c"],
-    "colorNotes": { "tr": "Safran zemin, bordo, koyu tütün", "en": "Saffron ground, oxblood, dark tobacco" },
-    "motif": { "tr": "Safran zeminde damask", "en": "Damask on a saffron ground" },
-    "scale": { "tr": "Orta ölçek · 32 cm rapor", "en": "Medium scale · 32 cm repeat" },
+    "colors": ["#a8471f", "#e6d3b0", "#2a1a12"],
+    "colorNotes": { "tr": "Kiremit, fildişi, koyu tütün", "en": "Rust, ivory, dark tobacco" },
+    "motif": { "tr": "Merkezde büyük madalyon", "en": "A large central medallion" },
+    "scale": { "tr": "Büyük ölçek · 60 cm madalyon", "en": "Large scale · 60 cm medallion" },
     "suitableFor": ["sedir", "kanepe"]
   },
   {

@@ -1,9 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { fabrics, getCode, options, patternCodes, type Piece } from "@/lib/content";
 import { ROUTES, type Lang } from "@/lib/i18n";
+import { fabricSwatch, prefetchFabric } from "@/lib/media";
+import { ChairStudio } from "./ChairStudio";
 
 const COPY = {
   tr: {
@@ -18,6 +21,10 @@ const COPY = {
     cta: "Bu parça için görüşme talep et",
     catalog: "Kataloğu PDF olarak iste",
     note: "Seçim bağlayıcı değildir. Numune kutusu ve son karar görüşmeden sonra gelir.",
+    preview: "Kumaşı koltukta görün",
+    drag: "Sürükle · çevir",
+    aria: "Seçilen kumaşla üç boyutlu koltuk önizlemesi",
+    loading: "Kumaş yükleniyor",
   },
   en: {
     title: "Personalisation",
@@ -31,19 +38,18 @@ const COPY = {
     cta: "Request a consultation for this piece",
     catalog: "Request the catalogue as a PDF",
     note: "Nothing here is binding. The sample box and the final choice come after we speak.",
+    preview: "See the fabric on the chair",
+    drag: "Drag · turn",
+    aria: "Three-dimensional chair preview in the chosen fabric",
+    loading: "Loading fabric",
   },
 };
 
-function Swatch({ colors }: { colors: string[] }) {
-  const [a, b = a, c = b] = colors;
+function Swatch({ id }: { id: string }) {
   return (
-    <span
-      aria-hidden="true"
-      className="block h-full w-full"
-      style={{
-        background: `radial-gradient(70% 70% at 25% 30%, ${a} 0%, transparent 72%), radial-gradient(60% 60% at 78% 70%, ${b} 0%, transparent 72%), radial-gradient(50% 50% at 40% 90%, ${c} 0%, transparent 70%), #1d1814`,
-      }}
-    />
+    <span aria-hidden="true" className="relative block h-full w-full">
+      <Image src={fabricSwatch(id)} alt="" fill unoptimized className="object-cover transition-transform duration-700 group-hover:scale-125" />
+    </span>
   );
 }
 
@@ -63,7 +69,30 @@ export function Customizer({ lang, piece }: { lang: Lang; piece: Piece }) {
   }, [piece.id, fabric, wood, finish, size]);
 
   return (
-    <div>
+    <div className="grid gap-8 lg:grid-cols-12 lg:gap-16">
+      {/* 3B önizleme: telefonda kumaş seçerken ekranın üstünde sabit kalır, değişiklik hep görünür */}
+      <div className="sticky top-0 z-20 -mx-[var(--gutter)] self-start bg-gece px-[var(--gutter)] pb-3 pt-2 shadow-[0_18px_24px_-12px_rgba(20,17,15,1)] lg:top-24 lg:col-span-5 lg:mx-0 lg:bg-transparent lg:p-0 lg:shadow-none">
+        <div
+          className="relative transition-[background] duration-[1200ms]"
+          style={{ background: `radial-gradient(55% 50% at 50% 55%, ${chosenFabric.colors[0]}55 0%, transparent 72%)` }}
+        >
+          <ChairStudio
+            fabricId={fabric}
+            className="h-[34svh] w-full lg:aspect-square lg:h-auto"
+            label={`${t.aria}: ${chosenFabric.name}`}
+            loadingLabel={t.loading}
+          />
+        </div>
+        <div className="mt-2 flex items-baseline justify-between gap-4 lg:mt-3">
+          <p className="label">
+            <span className="lg:hidden">{chosenFabric.name}</span>
+            <span className="hidden lg:inline">{t.preview}</span>
+          </p>
+          <p className="label !text-[10px]">{t.drag}</p>
+        </div>
+      </div>
+
+      <div className="min-w-0 lg:col-span-7">
       <h2 className="display-sm">{t.title}</h2>
 
       {/* Kumaş numune şeridi: desen kodlarına göre gruplu */}
@@ -77,7 +106,11 @@ export function Customizer({ lang, piece }: { lang: Lang; piece: Piece }) {
             return (
               <div key={code.id} className="min-w-0">
                 <p className="font-serif text-xl italic text-fildisi/90">{code.name[lang]}</p>
-                <div className="-mx-1 mt-3 flex gap-3 overflow-x-auto px-1 pb-2" role="radiogroup" aria-label={`${t.fabric}: ${code.name[lang]}`}>
+                <div
+                  className="-mx-1 mt-3 flex gap-3 overflow-x-auto px-1 pb-2 lg:flex-wrap lg:overflow-visible"
+                  role="radiogroup"
+                  aria-label={`${t.fabric}: ${code.name[lang]}`}
+                >
                   {list.map((f) => {
                     const on = f.id === fabric;
                     const suits = f.suitableFor.includes(piece.type);
@@ -88,6 +121,9 @@ export function Customizer({ lang, piece }: { lang: Lang; piece: Piece }) {
                         role="radio"
                         aria-checked={on}
                         onClick={() => setFabric(f.id)}
+                        onPointerEnter={() => prefetchFabric(f.id)}
+                        onFocus={() => prefetchFabric(f.id)}
+                        onTouchStart={() => prefetchFabric(f.id)}
                         className="group flex w-[92px] shrink-0 flex-col items-start gap-2 text-left"
                       >
                         <span
@@ -95,7 +131,7 @@ export function Customizer({ lang, piece }: { lang: Lang; piece: Piece }) {
                             on ? "outline-altin" : "outline-transparent group-hover:outline-tas/60"
                           }`}
                         >
-                          <Swatch colors={f.colors} />
+                          <Swatch id={f.id} />
                         </span>
                         <span className={`text-[13px] leading-tight ${on ? "text-fildisi" : "text-tas"}`}>{f.name}</span>
                         {suits && <span className="sr-only">{t.suits}</span>}
@@ -136,6 +172,7 @@ export function Customizer({ lang, piece }: { lang: Lang; piece: Piece }) {
         </Link>
       </div>
       <p className="mt-6 max-w-[52ch] text-sm text-tas">{t.note}</p>
+      </div>
     </div>
   );
 }

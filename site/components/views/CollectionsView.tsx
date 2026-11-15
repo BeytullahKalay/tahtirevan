@@ -78,7 +78,7 @@ export function CollectionsView({ lang, only }: { lang: Lang; only?: string }) {
       </div>
 
       <div id="piece-panel" role="tabpanel" className="flex flex-col gap-[16vh] pt-[10vh]">
-        {list.map((col) => {
+        {list.map((col, ci) => {
           const items = piecesByCollection(col.id).filter((p) => tab === "all" || p.type === tab);
           if (items.length === 0 && !only) return null;
           return (
@@ -112,7 +112,7 @@ export function CollectionsView({ lang, only }: { lang: Lang; only?: string }) {
                     const l = LAYOUT[i % LAYOUT.length];
                     return (
                       <Reveal key={p.id} className={l.wrap} delay={(i % 2) * 0.12}>
-                        <PieceCard piece={p} lang={lang} aspect={l.aspect} />
+                        <PieceCard piece={p} lang={lang} aspect={l.aspect} priority={ci === 0 && i < 2} />
                       </Reveal>
                     );
                   })}

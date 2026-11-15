@@ -3,10 +3,10 @@ import { getCollection, getFabric, typeLabel, type Piece } from "@/lib/content";
 import { pieceHref, type Lang } from "@/lib/i18n";
 import { Media } from "./Media";
 
-type Props = { piece: Piece; lang: Lang; aspect?: string; sizes?: string };
+type Props = { piece: Piece; lang: Lang; aspect?: string; sizes?: string; priority?: boolean };
 
 /** Kartta yalnızca görsel, ad ve koleksiyon adı. Fiyat yok. */
-export function PieceCard({ piece, lang, aspect = "aspect-[4/5]", sizes = "(min-width: 1024px) 50vw, 100vw" }: Props) {
+export function PieceCard({ piece, lang, aspect = "aspect-[4/5]", sizes = "(min-width: 1024px) 50vw, 100vw", priority }: Props) {
   const col = getCollection(piece.collection);
   const fabric = getFabric(piece.fabric);
   return (
@@ -16,8 +16,10 @@ export function PieceCard({ piece, lang, aspect = "aspect-[4/5]", sizes = "(min-
         shot="portrait"
         subject={`${piece.name} ${typeLabel(piece.type, lang).toLocaleLowerCase(lang)}, ${fabric.name}`}
         colors={fabric.colors}
+        fabric={fabric.id}
         className={`w-full ${aspect}`}
         sizes={sizes}
+        priority={priority}
       />
       <div className="mt-5 flex items-baseline justify-between gap-4">
         <h3 className="font-serif text-3xl font-light leading-none">

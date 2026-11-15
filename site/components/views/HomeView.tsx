@@ -1,8 +1,12 @@
 import Link from "next/link";
 import siteData from "@/content/site.json";
-import { collections, getFabric, patternCodes, piecesByCollection, getCode } from "@/lib/content";
+import { collections, fabrics, getFabric, patternCodes, piecesByCollection, getCode } from "@/lib/content";
 import { collectionHref, href, ROUTES, type Lang } from "@/lib/i18n";
-import { HeroMedia } from "../HeroMedia";
+import { chairAlt, leadFabric } from "@/lib/media";
+import { ChairShowroom } from "../ChairShowroom";
+import { CountUp } from "../CountUp";
+import { FabricMarquee } from "../FabricMarquee";
+import { HeroChair } from "../HeroChair";
 import { Media } from "../Media";
 import { Parallax } from "../Parallax";
 import { Reveal } from "../Reveal";
@@ -73,26 +77,35 @@ export function HomeView({ lang }: { lang: Lang }) {
   const featuredCode = getCode(featured.code);
   const featuredPieces = piecesByCollection(featured.id);
   const heroFabric = getFabric(featuredPieces[0].fabric);
+  const rossaria = getFabric("rossaria");
+  const codeHref = (codeId: string) => `${ROUTES.patterns[lang]}#${getCode(codeId).slug[lang]}`;
+  const orbs = [
+    { id: "mayura", x: -31, y: -20, size: 128, depth: 1.2 },
+    { id: "soraya", x: 32, y: -24, size: 104, depth: 0.8 },
+    { id: "simur", x: -35, y: 17, size: 92, depth: 1.6 },
+    { id: "colibri", x: 36, y: 14, size: 136, depth: 1 },
+  ].map((o) => {
+    const f = getFabric(o.id);
+    return { ...o, name: f.name, href: codeHref(f.code) };
+  });
 
   return (
     <>
-      {/* 1. Açılış */}
-      <section className="relative h-[100svh] min-h-[560px] w-full" aria-label="Tahtırevan">
-        <HeroMedia
-          lang={lang}
-          video={siteData.hero.video}
-          poster={siteData.hero.poster}
-          subject={siteData.hero.subject[lang]}
-        />
-        <div className="relative z-10 flex h-full flex-col items-center justify-end px-[var(--gutter)] pb-[14svh] text-center">
-          <h1 className="rise display max-w-[12ch] [text-shadow:0_2px_30px_rgba(10,8,6,0.6)]">A throne, made for one.</h1>
-          <div className="rise" style={{ ["--d" as string]: "350ms" }}>
-            <Link href={href(lang, "collections")} className="link-gold label tap mt-10 !text-fildisi">
-              {c.discover}
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* 1. Açılış: koltuk döner, yaklaşır ve kumaşın içine girer */}
+      <HeroChair
+        title="A throne, made for one."
+        cta={c.discover}
+        ctaHref={href(lang, "collections")}
+        chairAlt={chairAlt(lang)}
+        fabric={{
+          id: rossaria.id,
+          name: rossaria.name,
+          code: `${lang === "tr" ? "Desen kodu" : "Pattern code"} · ${getCode(rossaria.code).name[lang]}`,
+          motif: rossaria.motif[lang],
+        }}
+        orbs={orbs}
+        scrollHint={lang === "tr" ? "Kaydır" : "Scroll"}
+      />
 
       {/* 2. Manifesto */}
       <section className="px-[var(--gutter)] py-[22vh] text-center">
@@ -108,6 +121,15 @@ export function HomeView({ lang }: { lang: Lang }) {
         </Reveal>
       </section>
 
+      {/* 2b. Kumaş şeridi: kaydırma hızıyla akar */}
+      <FabricMarquee
+        label={lang === "tr" ? "Kumaş kütüphanesi" : "Fabric library"}
+        items={fabrics.map((f) => ({ id: f.id, name: f.name, code: getCode(f.code).name[lang], href: codeHref(f.code) }))}
+      />
+
+      {/* 2c. Kumaş stüdyosu: 3B koltuk */}
+      <ChairShowroom lang={lang} />
+
       {/* 3. Öne çıkan koleksiyon */}
       <section className="px-[var(--gutter)] pb-[18vh]">
         <div className="grid items-end gap-10 lg:grid-cols-12">
@@ -119,6 +141,7 @@ export function HomeView({ lang }: { lang: Lang }) {
                   shot="space"
                   subject={`${featuredPieces[0].name}, ${heroFabric.name} · ${lang === "tr" ? "taş konakta" : "in a stone mansion"}`}
                   colors={heroFabric.colors}
+                  fabric={heroFabric.id}
                   className="absolute inset-0"
                   cursor={false}
                   sizes="(min-width: 1024px) 66vw, 100vw"
@@ -166,6 +189,7 @@ export function HomeView({ lang }: { lang: Lang }) {
                 shot={shot as "macro" | "craft"}
                 subject={subject}
                 colors={i === 1 ? ["#5a3a24"] : ["#4a3424"]}
+                detail={i}
                 className={i === 0 ? "aspect-[4/3] w-full md:aspect-[4/5]" : "aspect-[3/4] w-full"}
                 sizes="(min-width: 768px) 40vw, 50vw"
               />
@@ -176,7 +200,9 @@ export function HomeView({ lang }: { lang: Lang }) {
         <dl className="mt-20 grid gap-12 border-t hairline pt-12 md:grid-cols-3">
           {siteData.craftNumbers.map((n, i) => (
             <Reveal key={n.value} delay={i * 0.12}>
-              <dt className="nums font-serif text-[4.5rem] font-light leading-none text-fildisi md:text-[6rem]">{n.value}</dt>
+              <dt className="nums font-serif text-[4.5rem] font-light leading-none text-fildisi md:text-[6rem]">
+                <CountUp value={n.value} />
+              </dt>
               <dd className="mt-3 max-w-[30ch] text-tas">{n[lang]}</dd>
             </Reveal>
           ))}
@@ -212,6 +238,7 @@ export function HomeView({ lang }: { lang: Lang }) {
                 shot="fabric"
                 subject={`${code.name[lang]} · ${lang === "tr" ? "kumaş yakın çekim" : "fabric close-up"}`}
                 colors={code.colors}
+                fabric={leadFabric(code.id)}
                 className="absolute inset-0"
                 labelPosition="top-right"
                 sizes="100vw"

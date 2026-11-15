@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { fabricsByCode, patternCodes, piecesByCode, typeLabel } from "@/lib/content";
 import { pieceHref, type Lang } from "@/lib/i18n";
+import { leadFabric } from "@/lib/media";
 import { Media } from "../Media";
 import { Reveal } from "../Reveal";
 
@@ -68,6 +69,7 @@ export function PatternsView({ lang }: { lang: Lang }) {
                 shot="fabric"
                 subject={`${code.name[lang]} · ${list.map((f) => f.name).join(", ")}`}
                 colors={code.colors}
+                fabric={leadFabric(code.id)}
                 className="absolute inset-0"
                 labelPosition="top-right"
                 sizes="100vw"
@@ -98,6 +100,7 @@ export function PatternsView({ lang }: { lang: Lang }) {
                       shot="fabric"
                       subject={`${f.name} · ${f.motif[lang]}`}
                       colors={f.colors}
+                      fabric={f.id}
                       className="aspect-square w-full"
                       sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                     />

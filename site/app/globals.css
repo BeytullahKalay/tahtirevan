@@ -214,13 +214,16 @@ main:focus {
 .media {
   position: relative;
   overflow: hidden;
-  background: var(--color-kor);
+  /* Sayfa zeminiyle aynı: alt katman bir an kısa kalsa bile açık çizgi görünmez */
+  background: var(--color-gece);
   isolation: isolate;
 }
 
+/* İç katman kenarlardan 1 px taşar (dışı kırpılır). Kart yüksekliği küsuratlı olunca tarayıcı
+   hareketli katmanı ayrı yuvarlıyor ve altta 1 px boşluk kalıyordu. */
 .media-inner {
   position: absolute;
-  inset: 0;
+  inset: -1px;
   transition: transform 1400ms var(--ease);
   will-change: transform;
 }
@@ -230,6 +233,165 @@ main:focus {
 button:hover > .zoomable .media-inner,
 .group:hover .zoomable .media-inner {
   transform: scale(1.04);
+}
+
+/* ---------- Kumaş ve ürün sahnesi ---------- */
+
+.kenburns {
+  animation: kenburns 26s ease-in-out infinite alternate;
+  transform-origin: 40% 45%;
+}
+
+@keyframes kenburns {
+  from {
+    transform: scale(1.04) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.16) translate3d(-2%, -1.5%, 0);
+  }
+}
+
+/* Telefonda sürekli büyüyen görseller bellek ve pil yer; yalnızca sabit hafif büyütme kalır */
+@media (max-width: 767px), (pointer: coarse) {
+  .kenburns {
+    animation: none;
+    transform: scale(1.04);
+  }
+}
+
+.chair-float {
+  animation: chair-float 7s ease-in-out infinite;
+  transition: transform 1200ms var(--ease);
+}
+
+@keyframes chair-float {
+  0%,
+  100% {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+  50% {
+    translate: 0 -2.2%;
+    rotate: -0.6deg;
+  }
+}
+
+.chair-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: 7%;
+  width: 56%;
+  height: 7%;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(0, 0, 0, 0.75), transparent);
+  animation: chair-shadow 7s ease-in-out infinite;
+}
+
+@keyframes chair-shadow {
+  0%,
+  100% {
+    scale: 1;
+    opacity: 0.9;
+  }
+  50% {
+    scale: 0.9;
+    opacity: 0.65;
+  }
+}
+
+.zoomable:hover .chair-float,
+.group:hover .zoomable .chair-float {
+  transform: translateY(-3%) scale(1.03);
+}
+
+/* Sonsuz kumaş şeridi */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+/* Açılıştaki kumaş orbları */
+.orb {
+  animation: orb-float 9s ease-in-out infinite;
+}
+
+@keyframes orb-float {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  33% {
+    translate: 6px -14px;
+  }
+  66% {
+    translate: -8px 8px;
+  }
+}
+
+/* Açılış girişleri: CSS ile, JavaScript beklemeden */
+.hero-enter {
+  animation: hero-enter 1800ms var(--ease) 250ms both;
+}
+
+.word-rise {
+  animation: word-rise 1100ms var(--ease) both;
+  animation-delay: var(--d, 0ms);
+}
+
+.orb-enter {
+  animation: orb-enter 1200ms var(--ease) both;
+  animation-delay: var(--d, 0ms);
+}
+
+html.intro-on .hero-enter {
+  animation-delay: 950ms;
+}
+
+html.intro-on .word-rise,
+html.intro-on .orb-enter {
+  animation-delay: calc(var(--d, 0ms) + 700ms);
+}
+
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: perspective(1600px) rotateY(-48deg) scale(0.82);
+    filter: blur(14px);
+  }
+}
+
+@keyframes word-rise {
+  from {
+    transform: translateY(105%);
+  }
+}
+
+@keyframes orb-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+
+@keyframes scroll-hint {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  51% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
 }
 }
 
