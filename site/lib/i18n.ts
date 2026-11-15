@@ -1,5 +1,3 @@
-import collectionsData from "@/content/collections.json";
-import piecesData from "@/content/pieces.json";
 
 /**
  * Diller. Arapça (dir: "rtl") ve Rusça eklemek için buraya bir giriş,
@@ -35,13 +33,18 @@ type Slugged = { slug: { tr: string; en: string } };
 export const collectionHref = (lang: Lang, col: Slugged) =>
   `${ROUTES.collections[lang]}/${col.slug[lang]}`;
 
-export const pieceHref = (lang: Lang, piece: Slugged & { collection: string }) => {
-  const col = (collectionsData as (Slugged & { id: string })[]).find((c) => c.id === piece.collection)!;
-  return `${collectionHref(lang, col)}/${piece.slug[lang]}`;
+/** Parça adresi: parça, koleksiyonunun bağlantı parçasını (`colSlug`) yanında taşır. */
+export const pieceHref = (lang: Lang, piece: Slugged & { colSlug: { tr: string; en: string } }) =>
+  `${ROUTES.collections[lang]}/${piece.colSlug[lang]}/${piece.slug[lang]}`;
+
+/** Koleksiyon ve parça bağlantı parçaları (katalogdan gelir: `catalog.slugs`). */
+export type SlugMap = {
+  collections: { id: string; slug: { tr: string; en: string } }[];
+  pieces: { collection: string; slug: { tr: string; en: string } }[];
 };
 
 /** Verilen yolun diğer dildeki karşılığını bulur (dil seçici ve hreflang için). */
-export function translatePath(pathname: string, to: Lang): string {
+export function translatePath(pathname: string, to: Lang, slugs?: SlugMap): string {
   const clean = pathname.replace(/\/+$/, "") || "/";
   const from: Lang = clean === "/en" || clean.startsWith("/en/") ? "en" : "tr";
 
@@ -51,14 +54,13 @@ export function translatePath(pathname: string, to: Lang): string {
 
   const base = ROUTES.collections[from];
   if (clean.startsWith(base + "/")) {
+    if (!slugs) return ROUTES.collections[to];
     const [colSlug, pieceSlug] = clean.slice(base.length + 1).split("/");
-    const col = (collectionsData as (Slugged & { id: string })[]).find((c) => c.slug[from] === colSlug);
+    const col = slugs.collections.find((c) => c.slug[from] === colSlug);
     if (!col) return ROUTES.collections[to];
     if (!pieceSlug) return collectionHref(to, col);
-    const piece = (piecesData as (Slugged & { collection: string })[]).find(
-      (p) => p.collection === col.id && p.slug[from] === pieceSlug,
-    );
-    return piece ? pieceHref(to, piece) : collectionHref(to, col);
+    const piece = slugs.pieces.find((p) => p.collection === col.id && p.slug[from] === pieceSlug);
+    return piece ? `${collectionHref(to, col)}/${piece.slug[to]}` : collectionHref(to, col);
   }
   return ROUTES.home[to];
 }

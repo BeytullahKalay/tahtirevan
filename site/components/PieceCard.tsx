@@ -1,12 +1,16 @@
+"use client";
+
 import Link from "next/link";
-import { getCollection, getFabric, typeLabel, type Piece } from "@/lib/content";
+import type { Piece } from "@/lib/catalog";
 import { pieceHref, type Lang } from "@/lib/i18n";
+import { useCatalog } from "./CatalogProvider";
 import { Media } from "./Media";
 
 type Props = { piece: Piece; lang: Lang; aspect?: string; sizes?: string; priority?: boolean };
 
 /** Kartta yalnızca görsel, ad ve koleksiyon adı. Fiyat yok. */
 export function PieceCard({ piece, lang, aspect = "aspect-[4/5]", sizes = "(min-width: 1024px) 50vw, 100vw", priority }: Props) {
+  const { getCollection, getFabric, typeLabel } = useCatalog();
   const col = getCollection(piece.collection);
   const fabric = getFabric(piece.fabric);
   return (
@@ -17,6 +21,7 @@ export function PieceCard({ piece, lang, aspect = "aspect-[4/5]", sizes = "(min-
         subject={`${piece.name} ${typeLabel(piece.type, lang).toLocaleLowerCase(lang)}, ${fabric.name}`}
         colors={fabric.colors}
         fabric={fabric.id}
+        photo={piece.photo}
         className={`w-full ${aspect}`}
         sizes={sizes}
         priority={priority}

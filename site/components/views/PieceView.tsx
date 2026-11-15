@@ -1,16 +1,6 @@
 import Link from "next/link";
-import {
-  cmToIn,
-  getCode,
-  getCollection,
-  getFabric,
-  getFinish,
-  getWood,
-  kgToLb,
-  piecesByCollection,
-  typeLabel,
-  type Piece,
-} from "@/lib/content";
+import { cmToIn, kgToLb, type Piece } from "@/lib/catalog";
+import { getCatalog } from "@/lib/catalog.server";
 import { collectionHref, ROUTES, pieceHref, type Lang } from "@/lib/i18n";
 import { SITE_URL } from "@/lib/seo";
 import { Customizer } from "../Customizer";
@@ -80,7 +70,8 @@ const COPY = {
   },
 };
 
-export function PieceView({ lang, piece }: { lang: Lang; piece: Piece }) {
+export async function PieceView({ lang, piece }: { lang: Lang; piece: Piece }) {
+  const { getCode, getCollection, getFabric, getFinish, getWood, piecesByCollection, typeLabel } = await getCatalog();
   const c = COPY[lang];
   const col = getCollection(piece.collection);
   const code = getCode(col.code);
@@ -134,6 +125,7 @@ export function PieceView({ lang, piece }: { lang: Lang; piece: Piece }) {
             subject={`${piece.name} ${lower}, ${fabric.name} · ${lang === "tr" ? "boş mekânda, tek yönden ışık" : "empty room, single light source"}`}
             colors={fabric.colors}
             fabric={fabric.id}
+            photo={piece.photo}
             className="absolute inset-0"
             priority
             labelPosition="top-right"

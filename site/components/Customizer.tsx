@@ -3,9 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { fabrics, getCode, options, patternCodes, type Piece } from "@/lib/content";
+import type { Piece } from "@/lib/catalog";
 import { ROUTES, type Lang } from "@/lib/i18n";
-import { fabricSwatch, prefetchFabric } from "@/lib/media";
+import { prefetchTexture } from "@/lib/media";
+import { useCatalog } from "./CatalogProvider";
 import { ChairStudio } from "./ChairStudio";
 
 const COPY = {
@@ -45,22 +46,23 @@ const COPY = {
   },
 };
 
-function Swatch({ id }: { id: string }) {
+function Swatch({ src }: { src: string }) {
   return (
     <span aria-hidden="true" className="relative block h-full w-full">
-      <Image src={fabricSwatch(id)} alt="" fill unoptimized className="object-cover transition-transform duration-700 group-hover:scale-125" />
+      <Image src={src} alt="" fill unoptimized className="object-cover transition-transform duration-700 group-hover:scale-125" />
     </span>
   );
 }
 
 export function Customizer({ lang, piece }: { lang: Lang; piece: Piece }) {
   const t = COPY[lang];
+  const { fabrics, getCode, options, codes: patternCodes, getFabric } = useCatalog();
   const [fabric, setFabric] = useState(piece.fabric);
   const [wood, setWood] = useState(piece.wood);
   const [finish, setFinish] = useState(piece.finish);
   const [size, setSize] = useState("standart");
 
-  const chosenFabric = fabrics.find((f) => f.id === fabric)!;
+  const chosenFabric = getFabric(fabric);
   const woods = options.woods.filter((w) => piece.woods.includes(w.id));
 
   const query = useMemo(() => {
@@ -77,7 +79,7 @@ export function Customizer({ lang, piece }: { lang: Lang; piece: Piece }) {
           style={{ background: `radial-gradient(55% 50% at 50% 55%, ${chosenFabric.colors[0]}55 0%, transparent 72%)` }}
         >
           <ChairStudio
-            fabricId={fabric}
+            fabric={chosenFabric}
             className="h-[34svh] w-full lg:aspect-square lg:h-auto"
             label={`${t.aria}: ${chosenFabric.name}`}
             loadingLabel={t.loading}
@@ -121,9 +123,9 @@ export function Customizer({ lang, piece }: { lang: Lang; piece: Piece }) {
                         role="radio"
                         aria-checked={on}
                         onClick={() => setFabric(f.id)}
-                        onPointerEnter={() => prefetchFabric(f.id)}
-                        onFocus={() => prefetchFabric(f.id)}
-                        onTouchStart={() => prefetchFabric(f.id)}
+                        onPointerEnter={() => prefetchTexture(f.tex)}
+                        onFocus={() => prefetchTexture(f.tex)}
+                        onTouchStart={() => prefetchTexture(f.tex)}
                         className="group flex w-[92px] shrink-0 flex-col items-start gap-2 text-left"
                       >
                         <span
@@ -131,7 +133,7 @@ export function Customizer({ lang, piece }: { lang: Lang; piece: Piece }) {
                             on ? "outline-altin" : "outline-transparent group-hover:outline-tas/60"
                           }`}
                         >
-                          <Swatch id={f.id} />
+                          <Swatch src={f.swatch} />
                         </span>
                         <span className={`text-[13px] leading-tight ${on ? "text-fildisi" : "text-tas"}`}>{f.name}</span>
                         {suits && <span className="sr-only">{t.suits}</span>}

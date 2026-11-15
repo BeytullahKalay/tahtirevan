@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
-import { collections, fabrics, getPiece, options, piecesByCollection, typeLabel } from "@/lib/content";
+import type { Catalog } from "@/lib/catalog";
+import { useCatalog } from "./CatalogProvider";
 import { href, type Lang } from "@/lib/i18n";
 import { parseConsultation, type FieldErrors } from "@/lib/forms";
 import { track } from "./Consent";
@@ -92,6 +93,8 @@ const field =
 
 export function ConsultationForm({ lang }: { lang: Lang }) {
   const c = COPY[lang];
+  const cat = useCatalog();
+  const { collections, fabrics, getPiece, options, piecesByCollection, typeLabel } = cat;
   const params = useSearchParams();
   const [startedAt] = useState(() => Date.now());
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -116,7 +119,7 @@ export function ConsultationForm({ lang }: { lang: Lang }) {
       request: talep === "katalog" ? "katalog" : talep === "basin" ? "basin" : "gorusme",
       projectType: proje === "ic-mimar" || proje === "otel" ? proje : "konut",
     };
-  }, [params, lang]);
+  }, [params, lang, getPiece, fabrics, options, typeLabel]);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -127,7 +130,7 @@ export function ConsultationForm({ lang }: { lang: Lang }) {
     payload.elapsed = Date.now() - startedAt;
 
     const interestVal = String(fd.get("interest") || "");
-    payload.interest = interestLabel(interestVal, lang, c.undecided, c.collection);
+    payload.interest = interestLabel(cat, interestVal, lang, c.undecided, c.collection);
     if (pre.selection && interestVal === pre.interest) {
       payload.note = `${c.selection}: ${pre.selection}\n\n${payload.note || ""}`.trim();
     }
@@ -308,7 +311,8 @@ export function ConsultationForm({ lang }: { lang: Lang }) {
   );
 }
 
-function interestLabel(v: string, lang: Lang, undecided: string, whole: string) {
+function interestLabel(cat: Catalog, v: string, lang: Lang, undecided: string, whole: string) {
+  const { getPiece, typeLabel, collections } = cat;
   if (!v) return undecided;
   const [kind, id] = v.split(":");
   if (kind === "piece") {

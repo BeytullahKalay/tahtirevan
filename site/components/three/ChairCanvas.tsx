@@ -4,17 +4,17 @@ import * as THREE from "three";
 import { Suspense, useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { ContactShadows, Environment, Lightformer, PerformanceMonitor, RoundedBox } from "@react-three/drei";
-import { VELVET, fabricTex } from "@/lib/media";
-import type { ChairCtrl } from "./ctrl";
+import type { ChairCtrl, ChairFabric } from "./ctrl";
 
 /* ---------- Kumaş dokuları: tek tek, gerektiğinde yüklenir ve oturum boyunca saklanır ---------- */
 const textureCache = new Map<string, Promise<THREE.Texture>>();
 const loader = new THREE.TextureLoader();
 
-function loadFabricTexture(id: string) {
-  let p = textureCache.get(id);
+/** Kumaşın 3B dokusu: seçilen kumaşın `tex` adresi (oturum boyunca önbellekte). */
+function loadFabricTexture(url: string) {
+  let p = textureCache.get(url);
   if (!p) {
-    p = loader.loadAsync(fabricTex(id)).then((t) => {
+    p = loader.loadAsync(url).then((t) => {
       const img = t.image as { width: number; height: number };
       const W = 0.52; // dokunun bir tekrarı kaç metreye yayılır
       const H = W * (img.height / img.width);
@@ -26,8 +26,8 @@ function loadFabricTexture(id: string) {
       t.needsUpdate = true;
       return t;
     });
-    p.catch(() => textureCache.delete(id));
-    textureCache.set(id, p);
+    p.catch(() => textureCache.delete(url));
+    textureCache.set(url, p);
   }
   return p;
 }
@@ -188,7 +188,7 @@ const SEAT = { w: 0.6, h: 0.12, d: 0.47, y: RAIL_Y + TUBE + 0.06, z: -0.005 };
 
 type Status = { onReady?: () => void; onLoading?: (loading: boolean) => void };
 
-function Chair({ fabricId, ctrl, onReady, onLoading }: { fabricId: string; ctrl: MutableRefObject<ChairCtrl> } & Status) {
+function Chair({ fabric, ctrl, onReady, onLoading }: { fabric: ChairFabric; ctrl: MutableRefObject<ChairCtrl> } & Status) {
   const shell = useShell();
   const frame = useFrameGeometry();
   const piping = useMemo(() => seatPiping(SEAT.w / 2 + 0.001, SEAT.d / 2 + 0.001, 0.045, SEAT.y + SEAT.h / 2 - 0.03), []);
@@ -207,7 +207,7 @@ function Chair({ fabricId, ctrl, onReady, onLoading }: { fabricId: string; ctrl:
   const velvetMat = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
-        color: VELVET.rossaria,
+        color: fabric.velvet,
         roughness: 0.92,
         sheen: 0.7,
         sheenRoughness: 0.32,
@@ -218,7 +218,7 @@ function Chair({ fabricId, ctrl, onReady, onLoading }: { fabricId: string; ctrl:
   const metalMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#0c0c0e", metalness: 0.55, roughness: 0.34 }), []);
   const pipeMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#0e0d0c", roughness: 0.55 }), []);
 
-  const velvetTarget = useRef(new THREE.Color(VELVET.rossaria));
+  const velvetTarget = useRef(new THREE.Color(fabric.velvet));
   const sheenTarget = useRef(new THREE.Color("#a04a52"));
   const first = useRef(true);
 
@@ -228,12 +228,12 @@ function Chair({ fabricId, ctrl, onReady, onLoading }: { fabricId: string; ctrl:
   useEffect(() => {
     let alive = true;
     status.current.onLoading?.(true);
-    loadFabricTexture(fabricId)
+    loadFabricTexture(fabric.tex)
       .then((tex) => {
         if (!alive) return;
         fabricMat.map = tex;
         fabricMat.needsUpdate = true;
-        const v = new THREE.Color(VELVET[fabricId] ?? VELVET.rossaria);
+        const v = new THREE.Color(fabric.velvet);
         velvetTarget.current.copy(v);
         sheenTarget.current.copy(v).lerp(new THREE.Color("#ffffff"), 0.22);
         if (first.current) {
@@ -253,7 +253,7 @@ function Chair({ fabricId, ctrl, onReady, onLoading }: { fabricId: string; ctrl:
     return () => {
       alive = false;
     };
-  }, [fabricId, fabricMat, velvetMat, ctrl]);
+  }, [fabric.tex, fabric.velvet, fabricMat, velvetMat, ctrl]);
 
   useFrame((_, dt) => {
     velvetMat.color.lerp(velvetTarget.current, 1 - Math.pow(0.002, dt));
@@ -343,13 +343,13 @@ function Rig({ ctrl, children, shadow }: { ctrl: MutableRefObject<ChairCtrl>; ch
 }
 
 export default function ChairCanvas({
-  fabricId,
+  fabric,
   ctrl,
   active,
   onReady,
   onLoading,
 }: {
-  fabricId: string;
+  fabric: ChairFabric;
   ctrl: MutableRefObject<ChairCtrl>;
   active: boolean;
 } & Status) {
@@ -391,7 +391,7 @@ export default function ChairCanvas({
             />
           }
         >
-          <Chair fabricId={fabricId} ctrl={ctrl} onReady={onReady} onLoading={onLoading} />
+          <Chair fabric={fabric} ctrl={ctrl} onReady={onReady} onLoading={onLoading} />
         </Rig>
       </Suspense>
     </Canvas>

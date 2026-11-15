@@ -14,16 +14,16 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { CHAIR, fabricSrc, fabricSwatch } from "@/lib/media";
+import { CHAIR } from "@/lib/media";
 
-type Orb = { id: string; name: string; href: string; x: number; y: number; size: number; depth: number; mobile?: boolean };
+type Orb = { id: string; name: string; href: string; swatch: string; x: number; y: number; size: number; depth: number; mobile?: boolean };
 
 type Props = {
   title: string;
   cta: string;
   ctaHref: string;
   chairAlt: string;
-  fabric: { id: string; name: string; code: string; motif: string };
+  fabric: { id: string; name: string; code: string; motif: string; image: string };
   orbs: Orb[];
   scrollHint: string;
 };
@@ -131,7 +131,7 @@ export function HeroChair({ title, cta, ctaHref, chairAlt, fabric, orbs, scrollH
         {/* Kumaşın içine giriş */}
         <motion.div className="absolute inset-0" style={{ clipPath: clip }} aria-hidden="true">
           <motion.div className="absolute inset-0" style={{ scale: fabricScale }}>
-            {fabricOn && <Image src={fabricSrc(fabric.id)} alt="" fill sizes="100vw" className="object-cover" />}
+            {fabricOn && <Image src={fabric.image} alt="" fill sizes="100vw" className="object-cover" />}
           </motion.div>
           <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(20,17,15,0.85), rgba(20,17,15,0.15) 55%, rgba(20,17,15,0.35))" }} />
         </motion.div>
@@ -211,7 +211,7 @@ function OrbView({
           aria-label={orb.name}
         >
           <span className="relative block aspect-square overflow-hidden rounded-full outline outline-1 outline-offset-4 outline-altin/30 transition-[outline-color,transform] duration-700 group-hover:scale-110 group-hover:outline-altin">
-            <Image src={fabricSwatch(orb.id)} alt="" fill unoptimized className="object-cover transition-transform duration-[1.2s] group-hover:scale-125" />
+            <Image src={orb.swatch} alt="" fill unoptimized className="object-cover transition-transform duration-[1.2s] group-hover:scale-125" />
           </span>
           <span className="label absolute left-1/2 top-full mt-3 -translate-x-1/2 whitespace-nowrap !text-[10px] opacity-0 transition-opacity duration-500 group-hover:opacity-100">
             {orb.name}

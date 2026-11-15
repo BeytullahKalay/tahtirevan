@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
-import { collections, pieces } from "@/lib/content";
+import { getCatalog } from "@/lib/catalog.server";
 import { ROUTES, collectionHref, pieceHref, type RouteKey } from "@/lib/i18n";
 import { SITE_URL } from "@/lib/seo";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const { collections, pieces } = await getCatalog();
   const entry = (tr: string, en: string, priority = 0.7): MetadataRoute.Sitemap => {
     const alternates = { languages: { tr: SITE_URL + tr, en: SITE_URL + en } };
     return [

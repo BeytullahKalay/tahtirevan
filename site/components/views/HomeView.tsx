@@ -1,8 +1,8 @@
 import Link from "next/link";
-import siteData from "@/content/site.json";
-import { collections, fabrics, getFabric, patternCodes, piecesByCollection, getCode } from "@/lib/content";
+import { getCatalog } from "@/lib/catalog.server";
 import { collectionHref, href, ROUTES, type Lang } from "@/lib/i18n";
-import { chairAlt, leadFabric } from "@/lib/media";
+import { chairAlt } from "@/lib/media";
+import { countWord } from "@/lib/words";
 import { ChairShowroom } from "../ChairShowroom";
 import { CountUp } from "../CountUp";
 import { FabricMarquee } from "../FabricMarquee";
@@ -33,8 +33,9 @@ const COPY = {
     sealLabel: "Numaralı ve imzalı",
     sealTitle: "Her parça bir numara ve bir imza taşır.",
     codesLabel: "Desen kodları",
-    codesTitle: "Dört dünya.",
-    codesLine: "On bir kumaş, dört kod. Her kod kendi rengini ve kendi hikâyesini taşır.",
+    codesTitle: (codes: number) => `${countWord(codes, "tr", true)} dünya.`,
+    codesLine: (fabrics: number, codes: number) =>
+      `${countWord(fabrics, "tr", true)} kumaş, ${countWord(codes, "tr")} kod. Her kod kendi rengini ve kendi hikâyesini taşır.`,
     seePatterns: "Desenleri gör",
     bespokeTitle: "Her Tahtırevan sahibine göre yapılır.",
     bespokeLine: "Ölçüsü odanıza, kumaşı zevkinize, ahşabı elinize göre. İlk adım bir görüşmedir.",
@@ -61,8 +62,9 @@ const COPY = {
     sealLabel: "Numbered and signed",
     sealTitle: "Every piece carries a number and a signature.",
     codesLabel: "Pattern codes",
-    codesTitle: "Four worlds.",
-    codesLine: "Eleven fabrics, four codes. Each code carries its own colour and its own story.",
+    codesTitle: (codes: number) => `${countWord(codes, "en", true)} worlds.`,
+    codesLine: (fabrics: number, codes: number) =>
+      `${countWord(fabrics, "en", true)} fabrics, ${countWord(codes, "en")} codes. Each code carries its own colour and its own story.`,
     seePatterns: "See the patterns",
     bespokeTitle: "Made for its owner, and no one else.",
     bespokeLine: "Sized to your room, dressed to your taste, finished in the wood you choose. It begins with a conversation.",
@@ -71,22 +73,26 @@ const COPY = {
   },
 };
 
-export function HomeView({ lang }: { lang: Lang }) {
+export async function HomeView({ lang }: { lang: Lang }) {
   const c = COPY[lang];
+  const cat = await getCatalog();
+  const { collections, fabrics, getFabric, codes: patternCodes, piecesByCollection, getCode, site: siteData } = cat;
   const featured = collections.find((col) => col.featured) ?? collections[0];
   const featuredCode = getCode(featured.code);
   const featuredPieces = piecesByCollection(featured.id);
-  const heroFabric = getFabric(featuredPieces[0].fabric);
-  const rossaria = getFabric("rossaria");
+  const heroFabric = getFabric(featuredPieces[0]?.fabric ?? "");
+  const rossaria = getFabric(siteData.hero.fabric);
   const codeHref = (codeId: string) => `${ROUTES.patterns[lang]}#${getCode(codeId).slug[lang]}`;
-  const orbs = [
-    { id: "mayura", x: -31, y: -20, size: 128, depth: 1.2 },
-    { id: "soraya", x: 32, y: -24, size: 104, depth: 0.8 },
-    { id: "simur", x: -35, y: 17, size: 92, depth: 1.6 },
-    { id: "colibri", x: 36, y: 14, size: 136, depth: 1 },
-  ].map((o) => {
-    const f = getFabric(o.id);
-    return { ...o, name: f.name, href: codeHref(f.code) };
+  // Daire konumları tasarımın parçası (kodda); hangi kumaşların görüneceği site ayarlarından gelir.
+  const ORB_SLOTS = [
+    { x: -31, y: -20, size: 128, depth: 1.2 },
+    { x: 32, y: -24, size: 104, depth: 0.8 },
+    { x: -35, y: 17, size: 92, depth: 1.6 },
+    { x: 36, y: 14, size: 136, depth: 1 },
+  ];
+  const orbs = siteData.hero.orbs.slice(0, ORB_SLOTS.length).map((id, i) => {
+    const f = getFabric(id);
+    return { ...ORB_SLOTS[i], id: f.id, name: f.name, swatch: f.swatch, href: codeHref(f.code) };
   });
 
   return (
@@ -102,6 +108,7 @@ export function HomeView({ lang }: { lang: Lang }) {
           name: rossaria.name,
           code: `${lang === "tr" ? "Desen kodu" : "Pattern code"} · ${getCode(rossaria.code).name[lang]}`,
           motif: rossaria.motif[lang],
+          image: rossaria.image.src,
         }}
         orbs={orbs}
         scrollHint={lang === "tr" ? "Kaydır" : "Scroll"}
@@ -124,7 +131,7 @@ export function HomeView({ lang }: { lang: Lang }) {
       {/* 2b. Kumaş şeridi: kaydırma hızıyla akar */}
       <FabricMarquee
         label={lang === "tr" ? "Kumaş kütüphanesi" : "Fabric library"}
-        items={fabrics.map((f) => ({ id: f.id, name: f.name, code: getCode(f.code).name[lang], href: codeHref(f.code) }))}
+        items={fabrics.map((f) => ({ id: f.id, name: f.name, code: getCode(f.code).name[lang], href: codeHref(f.code), tile: f.tile }))}
       />
 
       {/* 2c. Kumaş stüdyosu: 3B koltuk */}
@@ -139,9 +146,10 @@ export function HomeView({ lang }: { lang: Lang }) {
                 <Media
                   lang={lang}
                   shot="space"
-                  subject={`${featuredPieces[0].name}, ${heroFabric.name} · ${lang === "tr" ? "taş konakta" : "in a stone mansion"}`}
+                  subject={`${featuredPieces[0]?.name ?? featured.name[lang]}, ${heroFabric.name} · ${lang === "tr" ? "taş konakta" : "in a stone mansion"}`}
                   colors={heroFabric.colors}
                   fabric={heroFabric.id}
+                  photo={featuredPieces[0]?.photo}
                   className="absolute inset-0"
                   cursor={false}
                   sizes="(min-width: 1024px) 66vw, 100vw"
@@ -225,9 +233,9 @@ export function HomeView({ lang }: { lang: Lang }) {
           <Reveal className="grid gap-6 md:grid-cols-12 md:items-end">
             <div className="md:col-span-7">
               <p className="label">{c.codesLabel}</p>
-              <h2 id="codes-title" className="display mt-4">{c.codesTitle}</h2>
+              <h2 id="codes-title" className="display mt-4">{c.codesTitle(patternCodes.length)}</h2>
             </div>
-            <p className="max-w-[40ch] text-tas md:col-span-5">{c.codesLine}</p>
+            <p className="max-w-[40ch] text-tas md:col-span-5">{c.codesLine(fabrics.length, patternCodes.length)}</p>
           </Reveal>
         </div>
         <div>
@@ -238,7 +246,7 @@ export function HomeView({ lang }: { lang: Lang }) {
                 shot="fabric"
                 subject={`${code.name[lang]} · ${lang === "tr" ? "kumaş yakın çekim" : "fabric close-up"}`}
                 colors={code.colors}
-                fabric={leadFabric(code.id)}
+                fabric={code.lead}
                 className="absolute inset-0"
                 labelPosition="top-right"
                 sizes="100vw"

@@ -1,4 +1,7 @@
 @import "tailwindcss";
+/* Admin paneli (Payload) kendi stilini kullanır; site sınıfları için taranmaz. */
+@source not "./(payload)";
+@source not "../payload";
 
 /* Marka token'ları: Tailwind teması (bg-gece, text-altin, font-serif ...) */
 @theme {

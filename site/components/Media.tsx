@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
+import type { Img } from "@/lib/catalog";
 import type { Lang } from "@/lib/i18n";
-import { getFabric } from "@/lib/content";
-import { DETAILS, detailFor, fabricSrc } from "@/lib/media";
+import { DETAILS, detailFor } from "@/lib/media";
+import { useCatalog } from "./CatalogProvider";
 import { ChairScene } from "./ChairScene";
 
 export type Shot = "portrait" | "macro" | "fabric" | "craft" | "space" | "video";
@@ -24,6 +27,8 @@ type Props = {
   src?: string;
   /** Kumaş kimliği: kumaş çekimlerinde görseli, ürün çekimlerinde arka planı belirler. */
   fabric?: string;
+  /** Ürün/mekân çekimlerinde parçanın kendi fotoğrafı (yoksa geçici koltuk fotoğrafı). */
+  photo?: Img;
   /** Makro/zanaat çekimlerinde hangi yakın kırpımın kullanılacağı (yoksa konudan seçilir). */
   detail?: number;
   colors?: string[];
@@ -49,6 +54,7 @@ export function Media({
   alt,
   src,
   fabric,
+  photo,
   detail,
   className = "",
   sizes = "100vw",
@@ -56,6 +62,7 @@ export function Media({
   zoom = true,
   cursor = true,
 }: Props) {
+  const { getFabric } = useCatalog();
   const label = SHOT_LABEL[shot][lang];
   const wrap = `media ${zoom ? "zoomable" : ""} ${className}`;
   const cursorAttr = cursor ? "explore" : undefined;
@@ -71,12 +78,12 @@ export function Media({
   }
 
   if (shot === "fabric") {
-    const f = getFabric(fabric ?? "rossaria");
+    const f = getFabric(fabric ?? "");
     return (
       <div className={wrap} data-cursor={cursorAttr}>
         <div className="media-inner">
           <Image
-            src={fabricSrc(f.id)}
+            src={f.image.src}
             alt={alt ?? `${f.name} · ${f.motif[lang]}`}
             fill
             sizes={sizes}
@@ -102,7 +109,7 @@ export function Media({
   return (
     <div className={wrap} data-cursor={cursorAttr}>
       <div className="media-inner">
-        <ChairScene lang={lang} fabric={fabric ?? "rossaria"} sizes={sizes} priority={priority} alt={alt} />
+        <ChairScene lang={lang} fabric={getFabric(fabric ?? "")} photo={photo} sizes={sizes} priority={priority} alt={alt} />
       </div>
     </div>
   );

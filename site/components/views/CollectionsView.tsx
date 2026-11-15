@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { collections, getCode, piecesByCollection, typeLabel, type PieceType } from "@/lib/content";
+import type { PieceType } from "@/lib/catalog";
 import { collectionHref, href, ROUTES, type Lang } from "@/lib/i18n";
+import { useCatalog } from "../CatalogProvider";
 import { PieceCard } from "../PieceCard";
 import { Reveal } from "../Reveal";
 
@@ -43,8 +44,9 @@ const LAYOUT = [
 
 export function CollectionsView({ lang, only }: { lang: Lang; only?: string }) {
   const c = COPY[lang];
+  const { collections, getCode, piecesByCollection, typeLabel, options } = useCatalog();
   const [tab, setTab] = useState<Tab>("all");
-  const tabs: Tab[] = ["koltuk", "kanepe", "sedir", "all"];
+  const tabs: Tab[] = [...options.typeOrder, "all"];
   const list = only ? collections.filter((col) => col.id === only) : collections;
   const single = only ? list[0] : undefined;
 

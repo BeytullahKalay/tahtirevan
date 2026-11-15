@@ -3,8 +3,10 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "framer-motion";
-import { fabrics, getCode, getFabric, patternCodes } from "@/lib/content";
-import { fabricSwatch, prefetchFabric } from "@/lib/media";
+import type { Fabric } from "@/lib/catalog";
+import { prefetchTexture } from "@/lib/media";
+import { countWord } from "@/lib/words";
+import { useCatalog } from "./CatalogProvider";
 import type { Lang } from "@/lib/i18n";
 import { ChairStudio } from "./ChairStudio";
 import { newCtrl } from "./three/ctrl";
@@ -12,7 +14,7 @@ import { newCtrl } from "./three/ctrl";
 const COPY = {
   tr: {
     label: "Kumaş stüdyosu",
-    title: "Bir koltuk, on bir kumaş.",
+    title: (n: number) => `Bir koltuk, ${countWord(n, "tr")} kumaş.`,
     line: "Bir kumaşa dokunun, koltuk onu giysin. Sürükleyerek çevirin; kaydırdıkça yaklaşın.",
     drag: "Sürükle · çevir",
     code: "Desen kodu",
@@ -21,7 +23,7 @@ const COPY = {
   },
   en: {
     label: "Fabric studio",
-    title: "One chair, eleven fabrics.",
+    title: (n: number) => `One chair, ${countWord(n, "en")} fabrics.`,
     line: "Touch a fabric and the chair puts it on. Drag to turn it; scroll to come closer.",
     drag: "Drag · turn",
     code: "Pattern code",
@@ -37,7 +39,8 @@ export function ChairShowroom({ lang }: { lang: Lang }) {
   const ref = useRef<HTMLElement>(null);
   const ctrl = useRef(newCtrl());
   const reduce = useReducedMotion();
-  const [fabricId, setFabricId] = useState("rossaria");
+  const { fabrics, codes: patternCodes, getCode, getFabric } = useCatalog();
+  const [fabricId, setFabricId] = useState(() => patternCodes[0]?.lead ?? fabrics[0].id);
   const fabric = getFabric(fabricId);
   const code = getCode(fabric.code);
 
@@ -79,7 +82,7 @@ export function ChairShowroom({ lang }: { lang: Lang }) {
           <div className="flex flex-col px-[var(--gutter)] pt-24 lg:w-[40%] lg:justify-center lg:pt-0">
             <p className="label">{t.label}</p>
             <h2 id="studio-title" className="display-md mt-3 max-w-[14ch]">
-              {t.title}
+              {t.title(fabrics.length)}
             </h2>
             <p className="mt-4 hidden max-w-[40ch] text-tas md:block">{t.line}</p>
 
@@ -109,7 +112,7 @@ export function ChairShowroom({ lang }: { lang: Lang }) {
                     {fabrics
                       .filter((f) => f.code === c.id)
                       .map((f) => (
-                        <Swatch key={f.id} id={f.id} name={f.name} on={f.id === fabricId} onPick={setFabricId} />
+                        <Swatch key={f.id} fabric={f} on={f.id === fabricId} onPick={setFabricId} />
                       ))}
                   </div>
                 </div>
@@ -120,7 +123,7 @@ export function ChairShowroom({ lang }: { lang: Lang }) {
           {/* 3B koltuk */}
           <div className="relative min-h-0 flex-1">
             <ChairStudio
-              fabricId={fabricId}
+              fabric={fabric}
               ctrl={ctrl}
               className="absolute inset-0"
               label={`${t.aria}, ${fabric.name}`}
@@ -139,7 +142,7 @@ export function ChairShowroom({ lang }: { lang: Lang }) {
           aria-label={t.label}
         >
           {fabrics.map((f) => (
-            <Swatch key={f.id} id={f.id} name={f.name} on={f.id === fabricId} onPick={setFabricId} />
+            <Swatch key={f.id} fabric={f} on={f.id === fabricId} onPick={setFabricId} />
           ))}
         </div>
 
@@ -149,7 +152,8 @@ export function ChairShowroom({ lang }: { lang: Lang }) {
   );
 }
 
-function Swatch({ id, name, on, onPick }: { id: string; name: string; on: boolean; onPick: (id: string) => void }) {
+function Swatch({ fabric, on, onPick }: { fabric: Fabric; on: boolean; onPick: (id: string) => void }) {
+  const { id, name } = fabric;
   return (
     <button
       type="button"
@@ -158,15 +162,15 @@ function Swatch({ id, name, on, onPick }: { id: string; name: string; on: boolea
       aria-label={name}
       title={name}
       onClick={() => onPick(id)}
-      onPointerEnter={() => prefetchFabric(id)}
-      onFocus={() => prefetchFabric(id)}
-      onTouchStart={() => prefetchFabric(id)}
+      onPointerEnter={() => prefetchTexture(fabric.tex)}
+      onFocus={() => prefetchTexture(fabric.tex)}
+      onTouchStart={() => prefetchTexture(fabric.tex)}
       className={`group relative h-12 w-12 shrink-0 overflow-hidden rounded-full outline outline-1 outline-offset-[3px] transition-[outline-color,transform] duration-500 hover:scale-110 lg:h-11 lg:w-11 ${
         on ? "scale-110 outline-altin" : "outline-transparent hover:outline-tas/60"
       }`}
     >
       <Image
-        src={fabricSwatch(id)}
+        src={fabric.swatch}
         alt=""
         fill
         unoptimized

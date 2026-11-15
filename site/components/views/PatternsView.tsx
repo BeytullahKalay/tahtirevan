@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { fabricsByCode, patternCodes, piecesByCode, typeLabel } from "@/lib/content";
+import { getCatalog } from "@/lib/catalog.server";
 import { pieceHref, type Lang } from "@/lib/i18n";
-import { leadFabric } from "@/lib/media";
+import { countWord } from "@/lib/words";
 import { Media } from "../Media";
 import { Reveal } from "../Reveal";
 
@@ -9,7 +9,8 @@ const COPY = {
   tr: {
     label: "Desen kütüphanesi",
     title: "Cesur desen, sessiz zanaat.",
-    line: "Tahtırevan'ın on bir kumaşı dört desen kodunda toplanır. Desenlerin kökeni tek bir ülke değildir; buta, damask, botanik ve fauna dünyanın ortak desen geleneğinden gelir.",
+    line: (fabrics: number, codes: number) =>
+      `Tahtırevan'ın ${countWord(fabrics, "tr")} kumaşı ${countWord(codes, "tr")} desen kodunda toplanır. Desenlerin kökeni tek bir ülke değildir; buta, damask, botanik ve fauna dünyanın ortak desen geleneğinden gelir.`,
     honestTitle: "Kumaş nasıl yapılır",
     honest:
       "Her desen yalnızca Tahtırevan için çizilir ve kumaşa yüksek çözünürlüklü baskıyla aktarılır. Elde yapılan kısım gövdedir: oyma, kakma, lake ve ahşap işçiliği. Döşemeyi de ustalarımız elle kurar.",
@@ -23,7 +24,8 @@ const COPY = {
   en: {
     label: "Pattern library",
     title: "Bold pattern, quiet craft.",
-    line: "Tahtırevan's eleven fabrics gather into four pattern codes. They belong to no single country: paisley, damask, botanicals and fauna come from the world's shared tradition of pattern.",
+    line: (fabrics: number, codes: number) =>
+      `Tahtırevan's ${countWord(fabrics, "en")} fabrics gather into ${countWord(codes, "en")} pattern codes. They belong to no single country: paisley, damask, botanicals and fauna come from the world's shared tradition of pattern.`,
     honestTitle: "How the fabric is made",
     honest:
       "Every pattern is drawn for Tahtırevan alone and printed onto the cloth in high resolution. What is made by hand is the frame: the carving, the inlay, the lacquer and the joinery. The upholstery is built by hand as well.",
@@ -36,7 +38,8 @@ const COPY = {
   },
 };
 
-export function PatternsView({ lang }: { lang: Lang }) {
+export async function PatternsView({ lang }: { lang: Lang }) {
+  const { fabrics, fabricsByCode, codes: patternCodes, piecesByCode, typeLabel } = await getCatalog();
   const c = COPY[lang];
   return (
     <>
@@ -46,7 +49,7 @@ export function PatternsView({ lang }: { lang: Lang }) {
             <p className="label">{c.label}</p>
             <h1 className="display mt-4">{c.title}</h1>
           </div>
-          <p className="lede !text-tas lg:col-span-5">{c.line}</p>
+          <p className="lede !text-tas lg:col-span-5">{c.line(fabrics.length, patternCodes.length)}</p>
         </Reveal>
         <nav aria-label={c.code} className="mt-14 flex flex-wrap gap-x-10 gap-y-3 border-t hairline pt-6">
           {patternCodes.map((code, i) => (
@@ -69,7 +72,7 @@ export function PatternsView({ lang }: { lang: Lang }) {
                 shot="fabric"
                 subject={`${code.name[lang]} · ${list.map((f) => f.name).join(", ")}`}
                 colors={code.colors}
-                fabric={leadFabric(code.id)}
+                fabric={code.lead}
                 className="absolute inset-0"
                 labelPosition="top-right"
                 sizes="100vw"

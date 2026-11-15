@@ -1,5 +1,7 @@
 {
   "hero": {
+    "fabric": "rossaria",
+    "orbs": ["mayura", "soraya", "simur", "colibri"],
     "video": null,
     "poster": null,
     "subject": { "tr": "Ustanın eli, gerilen kumaş", "en": "The master's hand, fabric drawn taut" }

@@ -1,10 +1,9 @@
-import { fabrics } from "./content";
 import type { Lang } from "./i18n";
 
 /**
- * Geçici görsel kütüphanesi: tek bir ürün fotoğrafı (Serir, Rossaria sırtlı) ve
- * GRAND kataloğundan kesilen kumaş görselleri. Gerçek çekimler geldiğinde
- * yalnızca bu dosya ve `public/` güncellenir.
+ * Geçici ürün görselleri: tek bir ürün fotoğrafı (Serir, Rossaria sırtlı) ve ondan alınan
+ * yakın kırpımlar. Bir parçanın kendi fotoğrafı yoksa bunlar kullanılır.
+ * Kumaş görselleri ve adresleri katalogdan gelir (Fabric.image / tex / swatch / tile).
  */
 
 /** Arka planı temizlenmiş ürün fotoğrafı (şeffaf PNG). */
@@ -38,41 +37,15 @@ export const DETAILS = [
   },
 ] as const;
 
-/** Büyük, duyarlı kullanım için kaynak kumaş (Next/Image ile boyutlanır). */
-export const fabricSrc = (id: string) => `/fabrics/${id}.jpg`;
-/** Hazır küçük sürümler: optimizasyon sunucusunu yormadan doğrudan sunulur. */
-export const fabricTex = (id: string) => `/fabrics/tex/${id}.webp`; // 3B doku, en uzun kenar 1024
-export const fabricSwatch = (id: string) => `/fabrics/sw/${id}.webp`; // kare numune, 256
-export const fabricTile = (id: string) => `/fabrics/tile/${id}.webp`; // dikey şerit karosu, 440 genişlik
-
 /** Seçilmeden önce (üzerine gelince, dokununca) 3B dokusunu tarayıcı önbelleğine alır. */
 const prefetched = new Set<string>();
-export function prefetchFabric(id: string) {
-  if (typeof window === "undefined" || prefetched.has(id)) return;
-  prefetched.add(id);
+export function prefetchTexture(url: string) {
+  if (typeof window === "undefined" || prefetched.has(url)) return;
+  prefetched.add(url);
   const img = new window.Image();
   img.decoding = "async";
-  img.src = fabricTex(id);
+  img.src = url;
 }
-
-/** Her desen kodunu temsil eden kumaş. */
-const LEAD: Record<string, string> = { bahce: "rossaria", fauna: "mayura", susleme: "soraya", ruya: "simur" };
-export const leadFabric = (codeId: string) => LEAD[codeId] ?? fabrics.find((f) => f.code === codeId)?.id ?? "rossaria";
-
-/** 3B önizlemede oturak kadifesinin rengi: kumaşın baskın koyu tonuyla eşleşir. */
-export const VELVET: Record<string, string> = {
-  rossaria: "#6e1a24",
-  colibri: "#1d4a3a",
-  sahara: "#7a3a1c",
-  ardente: "#4a2416",
-  panthera: "#5e1a1f",
-  mayura: "#163845",
-  soraya: "#5a2318",
-  mirza: "#4a2e1c",
-  zafran: "#7a2e14",
-  sapphire: "#142a4e",
-  simur: "#1d3f33",
-};
 
 /** Konu metninden kararlı bir detay görseli seçer. */
 export function detailFor(seed: string) {

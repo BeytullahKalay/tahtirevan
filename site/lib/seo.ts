@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { LOCALES, ROUTES, type Lang, type RouteKey, translatePath } from "./i18n";
+import { LOCALES, ROUTES, type Lang, type RouteKey, type SlugMap, translatePath } from "./i18n";
 
 export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || "https://tahtirevan.com").replace(/\/$/, "");
 
@@ -9,9 +9,11 @@ export function pageMeta(
   path: string,
   title: string | null,
   description: string,
+  /** Koleksiyon/parça sayfalarında diğer dilin adresini bulmak için. */
+  slugs?: SlugMap,
 ): Metadata {
-  const tr = lang === "tr" ? path : translatePath(path, "tr");
-  const en = lang === "en" ? path : translatePath(path, "en");
+  const tr = lang === "tr" ? path : translatePath(path, "tr", slugs);
+  const en = lang === "en" ? path : translatePath(path, "en", slugs);
   const ogTitle = title ? `${title} · Tahtırevan` : "Tahtırevan · A throne, made for one";
   return {
     ...(title ? { title } : {}),

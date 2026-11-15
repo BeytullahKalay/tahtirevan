@@ -14,9 +14,8 @@ import {
   useTransform,
   useVelocity,
 } from "framer-motion";
-import { fabricTile } from "@/lib/media";
 
-type Item = { id: string; name: string; code: string; href: string };
+type Item = { id: string; name: string; code: string; href: string; tile: string };
 
 const wrap = (min: number, max: number, v: number) => {
   const r = max - min;
@@ -74,7 +73,7 @@ function Row({ items, base, small, active }: { items: Item[]; base: number; smal
             className={`relative block overflow-hidden ${small ? "h-[22vh] w-[17vh] md:h-[26vh] md:w-[20vh]" : "h-[34vh] w-[26vh] md:h-[42vh] md:w-[32vh]"}`}
           >
             <Image
-              src={fabricTile(it.id)}
+              src={it.tile}
               alt={i >= items.length ? "" : it.name}
               fill
               unoptimized

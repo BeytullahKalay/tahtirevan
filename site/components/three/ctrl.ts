@@ -10,3 +10,6 @@ export type ChairCtrl = {
 };
 
 export const newCtrl = (): ChairCtrl => ({ rot: 0, zoom: 0, drag: 0, vel: 0, dragging: false, idle: 0, pulse: 0 });
+
+/** 3B koltuğun giydiği kumaş: doku adresi ve oturak kadifesinin rengi. */
+export type ChairFabric = { id: string; tex: string; velvet: string };

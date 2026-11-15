@@ -6,3 +6,8 @@ out
 *.tsbuildinfo
 next-env.d.ts
 .vercel
+
+# Admin paneli verisi (yedek: npm run backup)
+/data/
+/media/
+/backups/

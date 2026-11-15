@@ -4,10 +4,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { LANGS, LOCALES, UI, href, translatePath, type Lang } from "@/lib/i18n";
+import { useCatalog } from "./CatalogProvider";
 
 export function Header({ lang }: { lang: Lang }) {
   const t = UI[lang];
   const pathname = usePathname() || "/";
+  const { slugs } = useCatalog();
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -92,7 +94,7 @@ export function Header({ lang }: { lang: Lang }) {
               {LANGS.map((l) => (
                 <Link
                   key={l}
-                  href={translatePath(pathname, l)}
+                  href={translatePath(pathname, l, slugs)}
                   hrefLang={LOCALES[l].htmlLang}
                   lang={LOCALES[l].htmlLang}
                   className={`label link-gold ${l === lang ? "!text-fildisi" : ""}`}
@@ -154,7 +156,7 @@ export function Header({ lang }: { lang: Lang }) {
             {LANGS.map((l) => (
               <Link
                 key={l}
-                href={translatePath(pathname, l)}
+                href={translatePath(pathname, l, slugs)}
                 hrefLang={LOCALES[l].htmlLang}
                 className={`label tap ${l === lang ? "!text-fildisi" : ""}`}
               >

@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LANGS, LOCALES, UI, href, translatePath, type Lang } from "@/lib/i18n";
+import { useCatalog } from "./CatalogProvider";
 import { Monogram } from "./Monogram";
 import { Newsletter } from "./Newsletter";
 
 export function Footer({ lang }: { lang: Lang }) {
   const t = UI[lang];
   const pathname = usePathname() || "/";
+  const { slugs } = useCatalog();
   const year = new Date().getFullYear();
 
   return (
@@ -51,7 +53,7 @@ export function Footer({ lang }: { lang: Lang }) {
               {LANGS.map((l) => (
                 <Link
                   key={l}
-                  href={translatePath(pathname, l)}
+                  href={translatePath(pathname, l, slugs)}
                   hrefLang={LOCALES[l].htmlLang}
                   className={`link-gold tap ${l === lang ? "text-fildisi" : "text-tas"}`}
                   aria-current={l === lang ? "true" : undefined}

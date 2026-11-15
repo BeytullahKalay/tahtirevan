@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState, type MutableRefObject } from "react";
 import { CHAIR } from "@/lib/media";
-import { newCtrl, type ChairCtrl } from "./three/ctrl";
+import { newCtrl, type ChairCtrl, type ChairFabric } from "./three/ctrl";
 
 const ChairCanvas = dynamic(() => import("./three/ChairCanvas"), { ssr: false });
 
@@ -27,7 +27,7 @@ function hasWebGL() {
 }
 
 type Props = {
-  fabricId: string;
+  fabric: ChairFabric;
   /** Dışarıdan sürülecekse (kaydırma) aynı ref verilir. */
   ctrl?: MutableRefObject<ChairCtrl>;
   className?: string;
@@ -39,7 +39,7 @@ type Props = {
  * 3B koltuk: sürükleyerek çevrilir, kumaşı dışarıdan değişir.
  * Görünür değilken çizim durur; WebGL yoksa ürün fotoğrafı kalır.
  */
-export function ChairStudio({ fabricId, ctrl: outer, className = "", label, loadingLabel = "…" }: Props) {
+export function ChairStudio({ fabric, ctrl: outer, className = "", label, loadingLabel = "…" }: Props) {
   const own = useRef<ChairCtrl>(newCtrl());
   const ctrl = outer ?? own;
   const box = useRef<HTMLDivElement>(null);
@@ -124,7 +124,7 @@ export function ChairStudio({ fabricId, ctrl: outer, className = "", label, load
       </div>
       {webgl && mounted && (
         <div className={`absolute inset-0 transition-opacity duration-1000 ${ready ? "opacity-100" : "opacity-0"}`}>
-          <ChairCanvas fabricId={fabricId} ctrl={ctrl} active={active} onReady={onReady} onLoading={onLoading} />
+          <ChairCanvas fabric={{ id: fabric.id, tex: fabric.tex, velvet: fabric.velvet }} ctrl={ctrl} active={active} onReady={onReady} onLoading={onLoading} />
         </div>
       )}
       {/* Yükleniyor: ilk açılışta ve kumaş değişirken */}
