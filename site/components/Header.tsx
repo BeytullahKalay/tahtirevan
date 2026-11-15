@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { LANGS, LOCALES, UI, href, translatePath, type Lang } from "@/lib/i18n";
+import { Mark } from "./Brand";
 import { useCatalog } from "./CatalogProvider";
 
 export function Header({ lang }: { lang: Lang }) {
@@ -75,11 +76,16 @@ export function Header({ lang }: { lang: Lang }) {
         } ${scrolled && !open ? "bg-gece/85 backdrop-blur-md" : "bg-transparent"}`}
       >
         <div className="flex h-[72px] items-center justify-between px-[var(--gutter)] lg:h-[88px]">
-          <Link href={href(lang, "home")} className="wordmark tap relative z-10" aria-label="Tahtırevan">
-            Tahtırevan
+          <Link
+            href={href(lang, "home")}
+            className="tap relative z-10 flex items-center gap-3 lg:gap-3.5"
+            aria-label="Tahtırevan"
+          >
+            <Mark className="h-8 w-8 shrink-0 text-altin lg:h-9 lg:w-9" />
+            <span className="wordmark">Tahtırevan</span>
           </Link>
 
-          <nav aria-label={lang === "tr" ? "Ana menü" : "Main menu"} className="hidden items-center gap-10 lg:flex">
+          <nav aria-label={lang === "tr" ? "Ana menü" : "Main menu"} className="hidden items-center gap-8 lg:flex xl:gap-10">
             {links.map((l) => (
               <Link
                 key={l.href}

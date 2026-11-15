@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: "Tahtırevan · A throne, made for one", template: "%s · Tahtırevan" },
   description: "Armchairs, sofas and daybeds with hand-built frames, each made to order for one owner.",
-  icons: { icon: "/monogram.svg" },
+  icons: { icon: "/brand/icon.svg", apple: "/brand/apple-touch-icon.png" },
 };
 
 export const viewport: Viewport = { themeColor: "#14110F", width: "device-width", initialScale: 1 };

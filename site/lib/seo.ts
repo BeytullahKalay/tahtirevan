@@ -74,7 +74,7 @@ export const organizationLd = (lang: Lang) => ({
   "@type": "Organization",
   name: "Tahtırevan",
   url: SITE_URL,
-  logo: `${SITE_URL}/monogram.svg`,
+  logo: `${SITE_URL}/brand/logo-512.png`,
   slogan: "A throne, made for one.",
   description:
     lang === "tr"

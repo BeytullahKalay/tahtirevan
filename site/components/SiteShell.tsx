@@ -10,6 +10,7 @@ import { Cursor } from "./Cursor";
 import { Intro, introScript } from "./Intro";
 import { Consent } from "./Consent";
 import { JsonLd } from "./JsonLd";
+import { StatusNotice } from "./StatusNotice";
 import "@/app/globals.css";
 
 /** Her dilin kök düzeni bunu kullanır; html lang ve dir dilden gelir. */
@@ -43,6 +44,7 @@ export async function SiteShell({ lang, children }: { lang: Lang; children: Reac
         <Footer lang={lang} />
         <Cursor label={t.explore} />
         <Consent lang={lang} />
+        <StatusNotice mode={catalog.site.mode} lang={lang} />
         </CatalogProvider>
       </body>
     </html>

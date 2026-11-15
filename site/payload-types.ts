@@ -78,6 +78,7 @@ export interface Config {
     'fabric-images': FabricImage;
     media: Media;
     models: Model;
+    signups: Signup;
     users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -97,6 +98,7 @@ export interface Config {
     'fabric-images': FabricImagesSelect<false> | FabricImagesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     models: ModelsSelect<false> | ModelsSelect<true>;
+    signups: SignupsSelect<false> | SignupsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -108,9 +110,11 @@ export interface Config {
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('tr' | 'en') | ('tr' | 'en')[];
   globals: {
+    'site-status': SiteStatus;
     'site-settings': SiteSetting;
   };
   globalsSelect: {
+    'site-status': SiteStatusSelect<false> | SiteStatusSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
   };
   locale: 'tr' | 'en';
@@ -481,6 +485,19 @@ export interface Size {
   createdAt: string;
 }
 /**
+ * Emails left on the Coming soon page. Download the whole list at /api/signups/csv.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "signups".
+ */
+export interface Signup {
+  id: number;
+  email: string;
+  lang?: ('tr' | 'en') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
@@ -578,6 +595,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'models';
         value: number | Model;
+      } | null)
+    | ({
+        relationTo: 'signups';
+        value: number | Signup;
       } | null)
     | ({
         relationTo: 'users';
@@ -882,6 +903,16 @@ export interface ModelsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "signups_select".
+ */
+export interface SignupsSelect<T extends boolean = true> {
+  email?: T;
+  lang?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
@@ -946,6 +977,51 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
+ * Close the site to visitors and show a Coming soon or Maintenance page. Logged-in panel users still see the full site.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-status".
+ */
+export interface SiteStatus {
+  id: number;
+  /**
+   * Preview: open /durum?onizle=yakinda or /durum?onizle=bakim.
+   */
+  mode: 'live' | 'soon' | 'maintenance';
+  /**
+   * Empty fields use the default text.
+   */
+  soon?: {
+    title?: string | null;
+    message?: string | null;
+    /**
+     * Optional. Shown on the page.
+     */
+    launchDate?: string | null;
+    /**
+     * Addresses are saved under Settings → Opening list.
+     */
+    showForm?: boolean | null;
+  };
+  /**
+   * Empty fields use the default text.
+   */
+  maintenance?: {
+    title?: string | null;
+    message?: string | null;
+    /**
+     * Optional. Shown on the page.
+     */
+    returnAt?: string | null;
+  };
+  /**
+   * Optional. Shown on both pages.
+   */
+  contactEmail?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * The home page opening and craft numbers.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -975,6 +1051,32 @@ export interface SiteSetting {
     | null;
   updatedAt?: string | null;
   createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-status_select".
+ */
+export interface SiteStatusSelect<T extends boolean = true> {
+  mode?: T;
+  soon?:
+    | T
+    | {
+        title?: T;
+        message?: T;
+        launchDate?: T;
+        showForm?: T;
+      };
+  maintenance?:
+    | T
+    | {
+        title?: T;
+        message?: T;
+        returnAt?: T;
+      };
+  contactEmail?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

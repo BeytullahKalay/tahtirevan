@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm.cmd",
       "runtimeArgs": ["--prefix", "site", "run", "dev", "--", "-p", "3100"],
       "port": 3100
+    },
+    {
+      "name": "coming-soon",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["coming-soon/dev-server.mjs"],
+      "port": 3200
     }
   ]
 }

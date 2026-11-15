@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LANGS, LOCALES, UI, href, translatePath, type Lang } from "@/lib/i18n";
 import { useCatalog } from "./CatalogProvider";
-import { Monogram } from "./Monogram";
+import { Emblem } from "./Brand";
 import { Newsletter } from "./Newsletter";
 
 export function Footer({ lang }: { lang: Lang }) {
@@ -68,7 +68,7 @@ export function Footer({ lang }: { lang: Lang }) {
 
       <div className="mt-24 flex flex-col items-start justify-between gap-6 border-t hairline pt-8 sm:flex-row sm:items-center">
         <div className="flex items-center gap-4 text-altin">
-          <Monogram size={36} />
+          <Emblem className="h-auto w-[72px] shrink-0" />
           <span className="wordmark text-fildisi">Tahtırevan</span>
         </div>
         <p className="label">

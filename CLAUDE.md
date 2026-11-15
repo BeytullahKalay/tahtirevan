@@ -2,6 +2,8 @@
 
 Site `site/` klasöründe: Next.js 15 (App Router), Tailwind v4, Framer Motion, three.js (@react-three/fiber + drei). Yerel sunucu `.claude/launch.json` içindeki `tahtirevan` ayarıyla 3100 portunda çalışır. Aşağıdakiler bu projede gerçekten yaşanmış hatalardan çıkarıldı; her maddenin yanında nedeni var.
 
+İçerik artık admin panelinden (Payload CMS, `/admin`, veri `site/data/` + `site/media/`) yönetiliyor. Panelle, içerikle, yedekle ya da `site/payload/` koduyla ilgili her işte önce `admin-panel` skill'ini (`.claude/skills/admin-panel/SKILL.md`) yükle.
+
 ## Geliştirme sunucusu
 
 - **Sunucu açıkken `npm run build` çalıştırma.** İkisi de `site/.next` klasörüne yazar; build, açık sunucunun dosyalarını bozar ve site "efektler yok, bölümler boş" halde görünür. Doğru sıra: sunucuyu durdur → `npm run build` → `site/.next` klasörünü sil → sunucuyu yeniden başlat.

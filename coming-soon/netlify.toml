@@ -1,0 +1,36 @@
+# tahtirevan.com geçici "Yakında" sayfası (Netlify)
+# "Haber ver" formu Netlify Forms ile çalışır (index.html: data-netlify).
+# Kayıtlar: Netlify > Forms > acilis-listesi
+[build]
+  publish = "."
+
+# Yalnızca yerelde kullanılan dosyalar canlıda görünmesin
+[[redirects]]
+  from = "/dev-server.mjs"
+  to = "/"
+  status = 302
+  force = true
+
+[[redirects]]
+  from = "/package.json"
+  to = "/"
+  status = 302
+  force = true
+
+# Bilinmeyen her adres ana sayfaya gider (dosya varsa dosya sunulur)
+[[redirects]]
+  from = "/*"
+  to = "/"
+  status = 302
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"

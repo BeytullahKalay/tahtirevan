@@ -90,6 +90,8 @@ export type Options = {
 };
 
 export type SiteSettings = {
+  /** Panel → Site durumu. "live" dışındaysa ziyaretçiler /durum sayfasını görür (proxy.ts). */
+  mode: "live" | "soon" | "maintenance";
   hero: {
     /** Açılışta yaklaşılan ve tam ekrana açılan kumaş. */
     fabric: string;

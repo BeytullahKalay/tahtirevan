@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
+import { Emblem } from "./Brand";
 
-/** Oturumdaki ilk girişte bir saniyeyi geçmeyen monogram animasyonu. */
+/** Oturumdaki ilk girişte bir saniyeyi geçmeyen amblem animasyonu. */
 export const introScript = `try{if(!sessionStorage.getItem('tr-intro')){document.documentElement.classList.add('intro-on')}}catch(e){}`;
 
 export function Intro() {
@@ -18,19 +19,7 @@ export function Intro() {
 
   return (
     <div className="intro" aria-hidden="true">
-      <svg width="92" height="92" viewBox="0 0 100 100" className="text-altin">
-        <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" strokeWidth="1" />
-        <text
-          x="50"
-          y="51"
-          textAnchor="middle"
-          dominantBaseline="central"
-          fill="#E9E1D3"
-          style={{ fontFamily: "var(--font-serif)", fontSize: 34, letterSpacing: "0.06em" }}
-        >
-          TR
-        </text>
-      </svg>
+      <Emblem className="h-auto w-[132px] text-altin" />
     </div>
   );
 }

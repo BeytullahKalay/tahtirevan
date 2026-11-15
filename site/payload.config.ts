@@ -13,8 +13,10 @@ import sharp from "sharp";
 import { Fabrics, PatternCodes, PieceCollections, Pieces } from "./payload/collections/catalog";
 import { Finishes, PieceTypes, Sizes, Woods } from "./payload/collections/options";
 import { FabricImages, Media, Models } from "./payload/collections/uploads";
+import { Signups } from "./payload/collections/signups";
 import { Users } from "./payload/collections/users";
 import { SiteSettings } from "./payload/globals/siteSettings";
+import { SiteStatus } from "./payload/globals/siteStatus";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 fs.mkdirSync(path.resolve(dirname, "data"), { recursive: true });
@@ -28,8 +30,8 @@ export default buildConfig({
     meta: { titleSuffix: " · Tahtırevan Panel" },
     dateFormat: "d MMMM yyyy HH:mm",
   },
-  collections: [Pieces, Fabrics, PieceCollections, PatternCodes, PieceTypes, Woods, Finishes, Sizes, FabricImages, Media, Models, Users],
-  globals: [SiteSettings],
+  collections: [Pieces, Fabrics, PieceCollections, PatternCodes, PieceTypes, Woods, Finishes, Sizes, FabricImages, Media, Models, Signups, Users],
+  globals: [SiteStatus, SiteSettings],
   localization: {
     locales: [
       { code: "tr", label: "Türkçe" },

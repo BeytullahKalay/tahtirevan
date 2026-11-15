@@ -55,7 +55,7 @@ async function load(): Promise<CatalogData> {
       })
     ).docs as unknown as Doc[];
 
-  const [codesD, fabricsD, colsD, piecesD, typesD, woodsD, finishesD, sizesD, fimgD, mediaD, modelsD, siteD] = await Promise.all([
+  const [codesD, fabricsD, colsD, piecesD, typesD, woodsD, finishesD, sizesD, fimgD, mediaD, modelsD, siteD, statusD] = await Promise.all([
     all("pattern-codes", { published: true, sort: "_order" }),
     all("fabrics", { published: true, sort: "_order" }),
     all("piece-collections", { published: true, sort: "_order" }),
@@ -68,6 +68,7 @@ async function load(): Promise<CatalogData> {
     all("media"),
     all("models"),
     payload.findGlobal({ slug: "site-settings", locale: "all", depth: 0 }) as unknown as Promise<Doc>,
+    payload.findGlobal({ slug: "site-status", depth: 0 }) as unknown as Promise<Doc>,
   ]);
 
   const keyOf = (docs: Doc[]) => new Map(docs.map((d) => [d.id, d.key as string]));
@@ -190,7 +191,9 @@ async function load(): Promise<CatalogData> {
     const k = fabricKey.get(id(v) as number);
     return k && liveFabric.has(k) ? k : undefined;
   };
+  const mode = statusD?.mode;
   const site: SiteSettings = {
+    mode: mode === "soon" || mode === "maintenance" ? mode : "live",
     hero: {
       fabric: live(hero.fabric) ?? codes[0]?.lead ?? fabrics[0]?.id ?? "",
       orbs: (hero.orbs ?? []).map(live).filter((k): k is string => !!k),
