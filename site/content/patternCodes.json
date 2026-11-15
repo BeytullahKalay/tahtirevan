@@ -1,0 +1,62 @@
+[
+  {
+    "id": "bahce",
+    "order": 1,
+    "slug": { "tr": "bahce", "en": "garden" },
+    "name": { "tr": "Bahçe", "en": "Garden" },
+    "line": {
+      "tr": "Koyu zeminde açan çiçekler.",
+      "en": "Flowers that open on a dark ground."
+    },
+    "description": {
+      "tr": "Gül, sarmaşık ve canlı karo yamaları, koyu bir zemin üzerinde kalabalık bir bahçe gibi bir araya gelir. Gövdenin sade çizgisi bu kalabalığı dengeler.",
+      "en": "Roses, climbing vines and bright tiled patches crowd together on a dark ground. A plain frame keeps the garden in balance."
+    },
+    "colors": ["#7a1e2c", "#c9733a", "#2f5a3a", "#d8a24a"]
+  },
+  {
+    "id": "fauna",
+    "order": 2,
+    "slug": { "tr": "fauna", "en": "fauna" },
+    "name": { "tr": "Fauna", "en": "Fauna" },
+    "line": {
+      "tr": "Halının üzerinde pars, rüzgârda at sürüsü.",
+      "en": "A leopard on a carpet. A herd in full stride."
+    },
+    "description": {
+      "tr": "Atlar, pars ve tavus kuşu. Hayvan bu desenlerde bir post değil, bir figürdür: koşar, bakar, bekler.",
+      "en": "Horses, a leopard, a peacock. Here the animal is a figure, never a hide: it runs, it watches, it waits."
+    },
+    "colors": ["#8a5a2b", "#1f3d4f", "#b88a3b", "#2c5f55"]
+  },
+  {
+    "id": "susleme",
+    "order": 3,
+    "slug": { "tr": "susleme", "en": "ornament" },
+    "name": { "tr": "Süsleme", "en": "Ornament" },
+    "line": {
+      "tr": "Buta, madalyon ve damask.",
+      "en": "Paisley, medallion, damask."
+    },
+    "description": {
+      "tr": "Saray kumaşlarının, halıların ve tezhipli sayfaların ortak dili. Buta kıvrılır, madalyon merkezi tutar, damask tekrar eder.",
+      "en": "The shared grammar of palace silks, carpets and illuminated pages. The paisley curls, the medallion holds the centre, the damask repeats."
+    },
+    "colors": ["#5a1a2a", "#b07a2a", "#1b3a5c", "#8c2f1f"]
+  },
+  {
+    "id": "ruya",
+    "order": 4,
+    "slug": { "tr": "ruya", "en": "dream" },
+    "name": { "tr": "Rüya", "en": "Dream" },
+    "line": {
+      "tr": "Altın, yeşil ve kızıl. Efsaneden bir karışım.",
+      "en": "Gold, green and crimson, mixed like a myth."
+    },
+    "description": {
+      "tr": "Simurg'un kanatlarından ödünç alınmış gibi duran soyut bir renk akışı. Figür yok; yalnızca hareket ve ışık var.",
+      "en": "An abstract current of colour, as if borrowed from the Simurgh's wings. No figure. Only movement and light."
+    },
+    "colors": ["#b08d3c", "#1f5a44", "#8e1f22", "#d1a54a"]
+  }
+]

@@ -1,0 +1,271 @@
+[
+  {
+    "id": "serir",
+    "collection": "bahce",
+    "type": "koltuk",
+    "featured": true,
+    "slug": { "tr": "serir-koltuk", "en": "serir-armchair" },
+    "name": "Serir",
+    "story": {
+      "tr": "Serir, eski dilde taht demektir. Yüksek sırtı ve geniş kolları, oturanı bir odanın merkezine yerleştirir. Rossaria'nın iri gülleri sırtın tamamına tek parça olarak serilir; dikiş, çiçeği hiçbir yerde bölmez.",
+      "en": "Serir is an old word for throne. Its tall back and wide arms set the sitter at the centre of a room. Rossaria's full roses are laid across the back in one piece, and no seam ever cuts a flower."
+    },
+    "fabric": "rossaria",
+    "wood": "ceviz",
+    "finish": "yag",
+    "woods": ["ceviz", "mese", "disbudak"],
+    "dims": { "w": 82, "d": 86, "h": 108, "seat": 45 },
+    "weightKg": 36,
+    "hours": 420,
+    "leadWeeks": [14, 18],
+    "techniques": [
+      { "tr": "Ceviz gövdede el oyması", "en": "Hand carving on the walnut frame" },
+      { "tr": "Geleneksel sekiz düğüm yay bağlama", "en": "Traditional eight-way hand-tied springs" },
+      { "tr": "Desen eşleştirmeli el dikişi", "en": "Pattern-matched hand stitching" }
+    ]
+  },
+  {
+    "id": "kasr",
+    "collection": "bahce",
+    "type": "kanepe",
+    "featured": true,
+    "slug": { "tr": "kasr-kanepe", "en": "kasr-sofa" },
+    "name": "Kasr",
+    "story": {
+      "tr": "Kasr, bahçe içindeki köşkün adıdır. Üç kişilik bu kanepe alçak ve derin oturur; Colibri'nin sarmaşıkları sırttan oturağa kesintisiz iner. Kolların ucundaki oyma, bir yaprağın kıvrımını izler.",
+      "en": "A kasr is the pavilion at the heart of a garden. This three-seat sofa sits low and deep, and Colibri's vines run unbroken from back to seat. The carving at the end of each arm follows the curl of a single leaf."
+    },
+    "fabric": "colibri",
+    "wood": "ceviz",
+    "finish": "lake",
+    "woods": ["ceviz", "disbudak"],
+    "dims": { "w": 228, "d": 96, "h": 86, "seat": 42 },
+    "weightKg": 92,
+    "hours": 610,
+    "leadWeeks": [18, 24],
+    "techniques": [
+      { "tr": "Kol ucunda yaprak oyması", "en": "Leaf carving at the arm ends" },
+      { "tr": "El ile bağlanan yay sistemi", "en": "Hand-tied spring system" },
+      { "tr": "Çift sıra el dikişi pervaz", "en": "Double-row hand-stitched welt" }
+    ]
+  },
+  {
+    "id": "sahra",
+    "collection": "bahce",
+    "type": "sedir",
+    "slug": { "tr": "sahra-sedir", "en": "sahra-daybed" },
+    "name": "Sahra",
+    "story": {
+      "tr": "Sahra, pencere önü için düşünülmüş uzun bir sedirdir. Sahara'nın karo yamaları minderlerin üzerinde küçük bir avlu kurar. Ayaklar alçaktır; sedir yere yakın, ışığa yakın durur.",
+      "en": "Sahra is a long daybed made for the window. Sahara's tiled patches set out a small courtyard across the cushions. The legs are low, so it sits close to the floor and close to the light."
+    },
+    "fabric": "sahara",
+    "wood": "mese",
+    "finish": "yag",
+    "woods": ["mese", "ceviz"],
+    "dims": { "w": 196, "d": 84, "h": 72, "seat": 40 },
+    "weightKg": 68,
+    "hours": 360,
+    "leadWeeks": [16, 20],
+    "techniques": [
+      { "tr": "Geçmeli masif meşe çatkı", "en": "Joined solid oak frame" },
+      { "tr": "Karo eşleştirmeli minder dikişi", "en": "Tile-matched cushion stitching" },
+      { "tr": "Elde şekillendirilen kenar", "en": "Hand-shaped edge" }
+    ]
+  },
+  {
+    "id": "rahvan",
+    "collection": "fauna",
+    "type": "koltuk",
+    "featured": true,
+    "slug": { "tr": "rahvan-koltuk", "en": "rahvan-armchair" },
+    "name": "Rahvan",
+    "story": {
+      "tr": "Rahvan, atın sarsmadan yürüdüğü yumuşak adımın adıdır. Bu koltuk da öyle oturur: geniş, dengeli, sarsıntısız. Ardente'nin at sürüsü sırtın genişliği boyunca dörtnala koşar.",
+      "en": "Rahvan is the name of a horse's smooth, ambling gait. The chair sits the same way: broad, balanced, steady. Ardente's herd gallops across the full width of the back."
+    },
+    "fabric": "ardente",
+    "wood": "ceviz",
+    "finish": "yag",
+    "woods": ["ceviz", "mese"],
+    "dims": { "w": 88, "d": 90, "h": 98, "seat": 44 },
+    "weightKg": 38,
+    "hours": 380,
+    "leadWeeks": [14, 18],
+    "techniques": [
+      { "tr": "Ön ayaklarda el oyması", "en": "Hand carving on the front legs" },
+      { "tr": "Geleneksel yay bağlama", "en": "Traditional hand-tied springs" },
+      { "tr": "Figür ortalamalı döşeme", "en": "Figure-centred upholstery" }
+    ]
+  },
+  {
+    "id": "pars",
+    "collection": "fauna",
+    "type": "koltuk",
+    "slug": { "tr": "pars-koltuk", "en": "pars-armchair" },
+    "name": "Pars",
+    "story": {
+      "tr": "Pars, tek kişilik bir okuma koltuğudur. Panthera'nın parsı sırtın ortasına, halının üzerinde uzanır halde yerleştirilir. Her koltukta figür elle ortalanır; iki Pars birbirinin aynısı olmaz.",
+      "en": "Pars is a reading chair for one. Panthera's leopard is placed at the centre of the back, resting on its carpet. The figure is centred by hand on every chair, so no two are quite the same."
+    },
+    "fabric": "panthera",
+    "wood": "disbudak",
+    "finish": "lake",
+    "woods": ["disbudak", "ceviz"],
+    "dims": { "w": 76, "d": 82, "h": 102, "seat": 45 },
+    "weightKg": 31,
+    "hours": 340,
+    "leadWeeks": [14, 18],
+    "techniques": [
+      { "tr": "Yedi kat el sürmesi lake", "en": "Seven coats of hand-applied lacquer" },
+      { "tr": "Elle ortalanan figür", "en": "Figure centred by hand" },
+      { "tr": "Gizli el dikişi", "en": "Concealed hand stitching" }
+    ]
+  },
+  {
+    "id": "tavus",
+    "collection": "fauna",
+    "type": "kanepe",
+    "slug": { "tr": "tavus-kanepe", "en": "tavus-sofa" },
+    "name": "Tavus",
+    "story": {
+      "tr": "Tavus'un sırtı, açılan bir kuyruk gibi hafifçe kavislenir. Mayura bu kavisin üzerine yerleşir; tüylerin göz desenleri sırtın tepesinde toplanır. Gövde, kumaşın hareketine eşlik edecek kadar sade tutulur.",
+      "en": "Tavus has a back that curves gently, like a tail opening. Mayura sits on that curve, and the eyes of the feathers gather at the crest. The frame is kept plain enough to follow the fabric's movement."
+    },
+    "fabric": "mayura",
+    "wood": "ceviz",
+    "finish": "lake",
+    "woods": ["ceviz", "disbudak"],
+    "dims": { "w": 214, "d": 92, "h": 94, "seat": 43 },
+    "weightKg": 84,
+    "hours": 560,
+    "leadWeeks": [18, 24],
+    "techniques": [
+      { "tr": "Buhar ile bükülmüş kavisli sırt", "en": "Steam-bent curved back" },
+      { "tr": "El ile bağlanan yay sistemi", "en": "Hand-tied spring system" },
+      { "tr": "Desen eşleştirmeli el dikişi", "en": "Pattern-matched hand stitching" }
+    ]
+  },
+  {
+    "id": "divan",
+    "collection": "susleme",
+    "type": "kanepe",
+    "featured": true,
+    "slug": { "tr": "divan-kanepe", "en": "divan-sofa" },
+    "name": "Divan",
+    "story": {
+      "tr": "Divan, kararların verildiği meclisin ve o meclisin oturağının adıdır. Soraya'nın madalyonu kanepenin tam ortasına denk gelir; oda, bu merkezin etrafında düzenlenir.",
+      "en": "The divan was both the council where decisions were made and the seat it sat on. Soraya's medallion falls at the exact centre of the sofa, and the room arranges itself around it."
+    },
+    "fabric": "soraya",
+    "wood": "ceviz",
+    "finish": "varak",
+    "woods": ["ceviz", "disbudak"],
+    "dims": { "w": 240, "d": 98, "h": 88, "seat": 43 },
+    "weightKg": 96,
+    "hours": 640,
+    "leadWeeks": [20, 24],
+    "techniques": [
+      { "tr": "Gövdede ceviz kakma", "en": "Walnut inlay on the frame" },
+      { "tr": "Altın varak detay", "en": "Gold leaf detail" },
+      { "tr": "Madalyon ortalamalı döşeme", "en": "Medallion-centred upholstery" }
+    ]
+  },
+  {
+    "id": "nakkas",
+    "collection": "susleme",
+    "type": "koltuk",
+    "slug": { "tr": "nakkas-koltuk", "en": "nakkas-armchair" },
+    "name": "Nakkaş",
+    "story": {
+      "tr": "Nakkaş, sayfaları ve tavanları süsleyen ustanın adıdır. Bu koltukta süsleme kumaştadır, ustalık gövdede: Mirza'nın butaları, kolların ucundaki ince oymayla aynı kıvrımı paylaşır.",
+      "en": "A nakkaş was the master who painted pages and ceilings. On this chair the ornament lives in the fabric and the mastery in the frame: Mirza's paisleys share their curl with the fine carving at the arm ends."
+    },
+    "fabric": "mirza",
+    "wood": "ceviz",
+    "finish": "yag",
+    "woods": ["ceviz", "mese", "disbudak"],
+    "dims": { "w": 80, "d": 84, "h": 100, "seat": 45 },
+    "weightKg": 33,
+    "hours": 400,
+    "leadWeeks": [14, 18],
+    "techniques": [
+      { "tr": "Kol ucunda buta oyması", "en": "Paisley carving at the arm ends" },
+      { "tr": "Geleneksel yay bağlama", "en": "Traditional hand-tied springs" },
+      { "tr": "El dikişi pervaz", "en": "Hand-stitched welt" }
+    ]
+  },
+  {
+    "id": "kosk",
+    "collection": "susleme",
+    "type": "sedir",
+    "slug": { "tr": "kosk-sedir", "en": "kosk-daybed" },
+    "name": "Köşk",
+    "story": {
+      "tr": "Köşk, yalı odalarının duvar boyu sedirlerinden gelir. Zafran'ın safran zemini odaya sıcak bir ışık verir. Arka minderler ayrı ayrı yapılır ve istenen uzunlukta dizilir.",
+      "en": "Köşk descends from the wall-length divans of waterside mansions. Zafran's saffron ground lends the room a warm light. The back cushions are made one by one and set out to any length."
+    },
+    "fabric": "zafran",
+    "wood": "mese",
+    "finish": "lake",
+    "woods": ["mese", "ceviz"],
+    "dims": { "w": 210, "d": 88, "h": 76, "seat": 41 },
+    "weightKg": 72,
+    "hours": 380,
+    "leadWeeks": [16, 20],
+    "techniques": [
+      { "tr": "Geçmeli masif meşe çatkı", "en": "Joined solid oak frame" },
+      { "tr": "Ayrı ayrı dolgulanan minderler", "en": "Individually filled cushions" },
+      { "tr": "El sürmesi lake", "en": "Hand-applied lacquer" }
+    ]
+  },
+  {
+    "id": "simurg",
+    "collection": "ruya",
+    "type": "koltuk",
+    "featured": true,
+    "slug": { "tr": "simurg-koltuk", "en": "simurg-armchair" },
+    "name": "Simurg",
+    "story": {
+      "tr": "Simurg, Kaf Dağı'nın ardında yaşayan ve onu arayanlara kendi yüzlerini gösteren kuştur. Koltuğun kanat gibi açılan sırtı Simur'un altın, yeşil ve kızılını taşır. Her parçada renk akışı farklı bir noktadan başlar.",
+      "en": "The Simurgh is the bird beyond Mount Qaf that shows its seekers their own faces. The chair's back opens like a wing and carries Simur's gold, green and crimson. On every piece the flow of colour begins at a different point."
+    },
+    "fabric": "simur",
+    "wood": "disbudak",
+    "finish": "varak",
+    "woods": ["disbudak", "ceviz"],
+    "dims": { "w": 92, "d": 88, "h": 112, "seat": 44 },
+    "weightKg": 39,
+    "hours": 460,
+    "leadWeeks": [16, 20],
+    "techniques": [
+      { "tr": "Kanat formunda elle şekillendirilen sırt", "en": "Hand-shaped wing back" },
+      { "tr": "Altın varak detay", "en": "Gold leaf detail" },
+      { "tr": "Yedi kat el sürmesi lake", "en": "Seven coats of hand-applied lacquer" }
+    ]
+  },
+  {
+    "id": "kaf",
+    "collection": "ruya",
+    "type": "kanepe",
+    "slug": { "tr": "kaf-kanepe", "en": "kaf-sofa" },
+    "name": "Kaf",
+    "story": {
+      "tr": "Kaf, efsanelerde dünyanın sonundaki dağdır. Bu kanepe geniş ve yüksek sırtlıdır; Simur'un renkleri bir dağ silueti gibi sırttan yükselir. Rüya kodunun ikinci ve son parçasıdır.",
+      "en": "In the old stories, Qaf is the mountain at the edge of the world. This sofa is wide and high-backed, and Simur's colours rise along it like a ridge. It is the second, and last, piece of the Dream code."
+    },
+    "fabric": "simur",
+    "wood": "ceviz",
+    "finish": "lake",
+    "woods": ["ceviz", "disbudak"],
+    "dims": { "w": 236, "d": 100, "h": 96, "seat": 43 },
+    "weightKg": 98,
+    "hours": 620,
+    "leadWeeks": [20, 24],
+    "techniques": [
+      { "tr": "Ceviz gövdede el oyması", "en": "Hand carving on the walnut frame" },
+      { "tr": "El ile bağlanan yay sistemi", "en": "Hand-tied spring system" },
+      { "tr": "Renk akışı eşleştirmeli döşeme", "en": "Colour-matched upholstery" }
+    ]
+  }
+]

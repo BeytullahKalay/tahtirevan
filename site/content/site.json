@@ -1,0 +1,12 @@
+{
+  "hero": {
+    "video": null,
+    "poster": null,
+    "subject": { "tr": "Ustanın eli, gerilen kumaş", "en": "The master's hand, fabric drawn taut" }
+  },
+  "craftNumbers": [
+    { "value": "420", "tr": "saat, tek bir Serir koltuk için", "en": "hours for a single Serir armchair" },
+    { "value": "7", "tr": "el tekniği: oyma, kakma, lake, varak, çatkı, yay bağlama, el dikişi", "en": "hand techniques: carving, inlay, lacquer, gilding, joinery, spring tying, hand stitching" },
+    { "value": "1", "tr": "usta, ilk kesimden son dikişe kadar", "en": "master, from the first cut to the last stitch" }
+  ]
+}

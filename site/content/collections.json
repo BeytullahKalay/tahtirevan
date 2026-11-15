@@ -1,0 +1,43 @@
+[
+  {
+    "id": "bahce",
+    "code": "bahce",
+    "featured": true,
+    "slug": { "tr": "bahce", "en": "garden" },
+    "name": { "tr": "Bahçe", "en": "Garden" },
+    "line": {
+      "tr": "Üç parça, üç kumaş. Hepsi koyu zeminde açar.",
+      "en": "Three pieces, three fabrics. Each one blooms on a dark ground."
+    }
+  },
+  {
+    "id": "fauna",
+    "code": "fauna",
+    "slug": { "tr": "fauna", "en": "fauna" },
+    "name": { "tr": "Fauna", "en": "Fauna" },
+    "line": {
+      "tr": "Atlar koşar, pars bekler. Gövde sessiz kalır.",
+      "en": "The horses run, the leopard waits. The frame stays quiet."
+    }
+  },
+  {
+    "id": "susleme",
+    "code": "susleme",
+    "slug": { "tr": "susleme", "en": "ornament" },
+    "name": { "tr": "Süsleme", "en": "Ornament" },
+    "line": {
+      "tr": "Buta, madalyon, damask. Saray kumaşlarının hafızası.",
+      "en": "Paisley, medallion, damask. The memory of palace silks."
+    }
+  },
+  {
+    "id": "ruya",
+    "code": "ruya",
+    "slug": { "tr": "ruya", "en": "dream" },
+    "name": { "tr": "Rüya", "en": "Dream" },
+    "line": {
+      "tr": "Tek kumaş, iki parça. Efsaneye yakın.",
+      "en": "One fabric, two pieces. Close to a myth."
+    }
+  }
+]

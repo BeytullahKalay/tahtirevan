@@ -1,0 +1,21 @@
+{
+  "woods": [
+    { "id": "ceviz", "tr": "Elde oyulmuş ceviz", "en": "Hand-carved walnut" },
+    { "id": "mese", "tr": "Masif meşe", "en": "Solid oak" },
+    { "id": "disbudak", "tr": "Abanoz tonlu lake dişbudak", "en": "Ebony-toned lacquered ash" }
+  ],
+  "finishes": [
+    { "id": "yag", "tr": "Doğal yağ", "en": "Natural oil" },
+    { "id": "lake", "tr": "El sürmesi lake", "en": "Hand-applied lacquer" },
+    { "id": "varak", "tr": "Altın varak detay", "en": "Gold leaf detail" }
+  ],
+  "sizes": [
+    { "id": "standart", "tr": "Atölye ölçüsü", "en": "Atelier dimensions" },
+    { "id": "ozel", "tr": "Mekâna göre ölçü", "en": "Made to your room" }
+  ],
+  "types": {
+    "koltuk": { "tr": "Koltuk", "en": "Armchair", "trPlural": "Koltuklar", "enPlural": "Armchairs" },
+    "kanepe": { "tr": "Kanepe", "en": "Sofa", "trPlural": "Kanepeler", "enPlural": "Sofas" },
+    "sedir": { "tr": "Sedir", "en": "Daybed", "trPlural": "Sedirler", "enPlural": "Daybeds" }
+  }
+}

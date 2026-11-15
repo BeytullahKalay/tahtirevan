@@ -1,0 +1,113 @@
+[
+  {
+    "id": "rossaria",
+    "name": "Rossaria",
+    "code": "bahce",
+    "colors": ["#7a1e2c", "#d0614a", "#2f5a3a"],
+    "colorNotes": { "tr": "Bordo, mercan, yaprak yeşili", "en": "Oxblood, coral, leaf green" },
+    "motif": { "tr": "Koyu zeminde iri güller", "en": "Full-blown roses on a dark ground" },
+    "scale": { "tr": "Büyük ölçek · 64 cm rapor", "en": "Large scale · 64 cm repeat" },
+    "suitableFor": ["koltuk", "kanepe"]
+  },
+  {
+    "id": "colibri",
+    "name": "Colibri",
+    "code": "bahce",
+    "colors": ["#1f5a44", "#b23a6e", "#d8a24a"],
+    "colorNotes": { "tr": "Zümrüt, fuşya, altın sarısı", "en": "Emerald, fuchsia, marigold" },
+    "motif": { "tr": "Sarmaşık arasında kolibriler", "en": "Hummingbirds among climbing vines" },
+    "scale": { "tr": "Orta ölçek · 36 cm rapor", "en": "Medium scale · 36 cm repeat" },
+    "suitableFor": ["koltuk", "kanepe", "sedir"]
+  },
+  {
+    "id": "sahara",
+    "name": "Sahara",
+    "code": "bahce",
+    "colors": ["#c9733a", "#1b3a5c", "#3f8f8a"],
+    "colorNotes": { "tr": "Safran, kiremit, lacivert, turkuaz", "en": "Saffron, terracotta, indigo, turquoise" },
+    "motif": { "tr": "Canlı karo yamaları ve çöl çiçekleri", "en": "Bright tiled patches and desert flowers" },
+    "scale": { "tr": "Küçük ölçek · 18 cm karo", "en": "Small scale · 18 cm tile" },
+    "suitableFor": ["sedir", "koltuk"]
+  },
+  {
+    "id": "ardente",
+    "name": "Ardente",
+    "code": "fauna",
+    "colors": ["#6b3b22", "#c08a3e", "#1c2c44"],
+    "colorNotes": { "tr": "Kestane, kehribar, gece mavisi", "en": "Chestnut, amber, night blue" },
+    "motif": { "tr": "Dörtnala koşan at sürüsü", "en": "A herd of horses at full gallop" },
+    "scale": { "tr": "Büyük ölçek · 90 cm rapor", "en": "Large scale · 90 cm repeat" },
+    "suitableFor": ["kanepe", "koltuk"]
+  },
+  {
+    "id": "panthera",
+    "name": "Panthera",
+    "code": "fauna",
+    "colors": ["#b88a3b", "#7d2228", "#4a5232"],
+    "colorNotes": { "tr": "Eski altın, lal, zeytin", "en": "Old gold, garnet, olive" },
+    "motif": { "tr": "Halının üzerinde uzanan pars", "en": "A leopard resting on a carpet" },
+    "scale": { "tr": "Büyük ölçek · 70 cm figür", "en": "Large scale · 70 cm figure" },
+    "suitableFor": ["koltuk"]
+  },
+  {
+    "id": "mayura",
+    "name": "Mayura",
+    "code": "fauna",
+    "colors": ["#1f4f5f", "#2c6b4f", "#9a6a34"],
+    "colorNotes": { "tr": "Petrol mavisi, zümrüt, bronz", "en": "Petrol blue, emerald, bronze" },
+    "motif": { "tr": "Kuyruğunu açan tavus kuşu", "en": "A peacock opening its tail" },
+    "scale": { "tr": "Orta-büyük ölçek · 54 cm rapor", "en": "Medium to large scale · 54 cm repeat" },
+    "suitableFor": ["kanepe", "sedir"]
+  },
+  {
+    "id": "soraya",
+    "name": "Soraya",
+    "code": "susleme",
+    "colors": ["#1b3a5c", "#b0673a", "#d9cdb4"],
+    "colorNotes": { "tr": "Lacivert, bakır, fildişi", "en": "Indigo, copper, ivory" },
+    "motif": { "tr": "Merkezde büyük madalyon", "en": "A large central medallion" },
+    "scale": { "tr": "Büyük ölçek · 60 cm madalyon", "en": "Large scale · 60 cm medallion" },
+    "suitableFor": ["kanepe", "koltuk"]
+  },
+  {
+    "id": "mirza",
+    "name": "Mirza",
+    "nameStatus": "provisional",
+    "code": "susleme",
+    "colors": ["#a84a2a", "#d0952e", "#4a5d74"],
+    "colorNotes": { "tr": "Kiremit, safran, kurşuni mavi", "en": "Brick, saffron, slate blue" },
+    "motif": { "tr": "Sık dizilmiş buta", "en": "Close-set paisley" },
+    "scale": { "tr": "Orta ölçek · 28 cm rapor", "en": "Medium scale · 28 cm repeat" },
+    "suitableFor": ["koltuk", "sedir"]
+  },
+  {
+    "id": "zafran",
+    "name": "Zafran",
+    "code": "susleme",
+    "colors": ["#c98a1e", "#6a1f2a", "#3a2a1c"],
+    "colorNotes": { "tr": "Safran zemin, bordo, koyu tütün", "en": "Saffron ground, oxblood, dark tobacco" },
+    "motif": { "tr": "Safran zeminde damask", "en": "Damask on a saffron ground" },
+    "scale": { "tr": "Orta ölçek · 32 cm rapor", "en": "Medium scale · 32 cm repeat" },
+    "suitableFor": ["sedir", "kanepe"]
+  },
+  {
+    "id": "sapphire",
+    "name": "Sapphire",
+    "code": "susleme",
+    "colors": ["#163a6e", "#7a8592", "#2a2f45"],
+    "colorNotes": { "tr": "Safir, gümüş gri, mürekkep", "en": "Sapphire, silver grey, ink" },
+    "motif": { "tr": "Madalyonlu damask", "en": "Damask with medallions" },
+    "scale": { "tr": "Orta ölçek · 40 cm rapor", "en": "Medium scale · 40 cm repeat" },
+    "suitableFor": ["koltuk", "kanepe"]
+  },
+  {
+    "id": "simur",
+    "name": "Simur",
+    "code": "ruya",
+    "colors": ["#b08d3c", "#1f5a44", "#8e1f22"],
+    "colorNotes": { "tr": "Altın, zümrüt, kızıl", "en": "Gold, emerald, crimson" },
+    "motif": { "tr": "Soyut, yönsüz renk akışı", "en": "An abstract, directionless flow of colour" },
+    "scale": { "tr": "Büyük ölçek · yönsüz", "en": "Large scale · non-directional" },
+    "suitableFor": ["koltuk", "kanepe", "sedir"]
+  }
+]
