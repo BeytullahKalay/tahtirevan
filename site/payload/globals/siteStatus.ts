@@ -56,7 +56,7 @@ export const SiteStatus: GlobalConfig = {
           type: "text",
           localized: true,
           label: L("Başlık", "Heading"),
-          admin: { placeholder: "A throne, made for one." },
+          admin: { placeholder: "Bir taht, tek bir kişi için. / A throne, made for one." },
         },
         {
           name: "message",

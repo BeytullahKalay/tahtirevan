@@ -79,6 +79,12 @@ async function load(): Promise<CatalogData> {
   const fimg = byId(fimgD);
   const media = byId(mediaD);
   const models = byId(modelsD);
+  /** 3B modelin adresi; `?v=` model her yeniden hazırlandığında değişir, tarayıcı eskisini göstermez. */
+  const modelUrl = (v: unknown) => {
+    const m = models.get(id(v) as number);
+    const url = m?.url as string | undefined;
+    return url ? `${url}?v=${encodeURIComponent(String(m?.updatedAt ?? ""))}` : undefined;
+  };
 
   const option = (d: Doc): Option => {
     const n = loc(d.name);
@@ -181,7 +187,7 @@ async function load(): Promise<CatalogData> {
         leadWeeks: [lead.min ?? 0, lead.max ?? 0],
         techniques: ((p.techniques as { text: unknown }[]) ?? []).map((t) => loc(t.text)),
         photo: imgOf(media.get(id(p.photo) as number)),
-        model: (models.get(id(p.model) as number)?.url as string | undefined) || undefined,
+        model: modelUrl(p.model),
       },
     ];
   });
@@ -198,6 +204,7 @@ async function load(): Promise<CatalogData> {
       fabric: live(hero.fabric) ?? codes[0]?.lead ?? fabrics[0]?.id ?? "",
       orbs: (hero.orbs ?? []).map(live).filter((k): k is string => !!k),
     },
+    studioModel: modelUrl((siteD.studio as { model?: unknown } | undefined)?.model),
     craftNumbers: ((siteD.craftNumbers as { value: string; label: unknown }[]) ?? []).map((n) => {
       const l = loc(n.label);
       return { value: n.value, tr: l.tr, en: l.en };

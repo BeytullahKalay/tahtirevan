@@ -39,7 +39,7 @@ export function ChairShowroom({ lang }: { lang: Lang }) {
   const ref = useRef<HTMLElement>(null);
   const ctrl = useRef(newCtrl());
   const reduce = useReducedMotion();
-  const { fabrics, codes: patternCodes, getCode, getFabric } = useCatalog();
+  const { fabrics, codes: patternCodes, getCode, getFabric, site } = useCatalog();
   const [fabricId, setFabricId] = useState(() => patternCodes[0]?.lead ?? fabrics[0].id);
   const fabric = getFabric(fabricId);
   const code = getCode(fabric.code);
@@ -124,6 +124,7 @@ export function ChairShowroom({ lang }: { lang: Lang }) {
           <div className="relative min-h-0 flex-1">
             <ChairStudio
               fabric={fabric}
+              model={site.studioModel}
               ctrl={ctrl}
               className="absolute inset-0"
               label={`${t.aria}, ${fabric.name}`}

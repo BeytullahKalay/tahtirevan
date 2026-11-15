@@ -29,7 +29,7 @@ type SP = Promise<{ lang?: string; onizle?: string }>;
 const DEFAULTS = {
   soon: {
     label: { tr: "Yakında", en: "Coming soon" },
-    title: { tr: "A throne, made for one.", en: "A throne, made for one." },
+    title: { tr: "Bir taht, tek bir kişi için.", en: "A throne, made for one." },
     message: {
       tr: "Her parça sahibi için, tek bir ustanın elinde yapılır. Atölyenin kapılarını çok yakında açıyoruz.",
       en: "Every piece is made for its owner, by a single master. The atelier opens its doors soon.",

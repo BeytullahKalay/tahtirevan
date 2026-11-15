@@ -43,11 +43,28 @@ Oturum 7 gün açık kalır. 8 yanlış denemede hesap 15 dakika kilitlenir.
 | Seçenekler | Parça türleri, Ahşaplar, Kaplamalar, Ölçüler | Kişiselleştirmede sunulan seçenek listeleri |
 | Medya | Kumaş görselleri (`fabric-images`) | Düz kumaş görseli; yükleyince 3B doku (1024), numune (256) ve şerit (440×575) WebP sürümleri **kendiliğinden** üretilir |
 | Medya | Fotoğraflar (`media`) | Ürün fotoğrafları; portre için şeffaf PNG en iyisi |
-| Medya | 3B modeller (`models`) | Yalnızca `.glb`. Kumaş malzemesinin adı `Kumas`, oturak kadifesininki `Kadife` olmalı |
+| Medya | 3B modeller (`models`) | Yalnızca `.glb`. Fotoğraftan yapay zekâyla üretilmiş ham dosya olduğu gibi yüklenir; sırt kumaşı / oturak kadifesi / metal **kendiliğinden** ayrılır (bkz. "3B modeller") |
 | Ayarlar | Site durumu (global `site-status`) | Site açık / "Yakında" / "Bakımdayız"; iki sayfanın metinleri, açılış tarihi, tahmini dönüş, iletişim e-postası |
 | Ayarlar | Açılış listesi (`signups`) | "Yakında" sayfasındaki "Haber ver" formundan gelen e-postalar; CSV: `/api/signups/csv` |
-| Ayarlar | Site ayarları (global) | Ana sayfa açılışı (en fazla 4 kumaş), sayaçtaki 3 sayı |
+| Ayarlar | Site ayarları (global) | Ana sayfa açılışı (en fazla 4 kumaş), kumaş stüdyosundaki 3B model, sayaçtaki 3 sayı |
 | Ayarlar | Kullanıcılar | Panel hesapları |
+
+## 3B modeller
+
+Kullanıcının yolu (kod gerekmez):
+1. Koltuk fotoğrafından ücretsiz bir araçla (Hugging Face'te TRELLIS ya da Hunyuan3D) `.glb` üretir. Ticari kullanım için TRELLIS (MIT lisansı) daha güvenli.
+2. Panel → Medya › **3B modeller** → Create New → dosya, **Gerçek yükseklik (cm)** → Kaydet. (Parçanın "Görsel ve 3B" sekmesinden de doğrudan yüklenebilir.)
+3. Sayfadaki **Önizleme** › "Parçalar" görünümünde yeşil = kumaş (sırt), kırmızı = kadife (oturak), sarı = siyah biye (kenar şeridi), gri = metal. Sırtın altı kırmızıysa **Sırtın başladığı yükseklik (%)** küçültülür, oturak yeşilse büyütülür → Kaydet (dosyayı yeniden yüklemek gerekmez).
+4. Modeli bağla: ürün sayfası için Parçalar › Görsel ve 3B › 3B model; ana sayfa için Site ayarları › Kumaş stüdyosu › 3B koltuk. Boşsa sitedeki hazır koltuk (`public/models/koltuk-3.glb`) görünür.
+
+Nasıl çalışır (Claude için):
+- Hazırlama `payload/chairModel.ts`, kancalar `payload/collections/uploads.ts` (`Models`). Yeni dosya `beforeOperation`'da `req.file.data` değiştirilerek hazırlanır (Payload dosyayı ondan sonra diske yazar). Ham dosya `media/models/kaynak/<dosya adı>` altında saklanır; ayar değişince `beforeChange` buradan yeniden hazırlar ve dosyanın üzerine yazar. Silinince kaynak da silinir.
+- Ayrım renge dayanır: desenli (yeşil/altın/mavi tonlar) yüzler ve yüksekliği sınırın üstündekiler kumaş, kırmızı ve altındakiler kadife, nötr/koyu olanlar metal. Kırmızı olmayan oturak ya da desensiz (düz renk) sırt iyi ayrılmaz; "sırt kumaşı bulunamadı" hatası panelde Türkçe çıkar.
+- Biye: `buildPiping()` oturağın üst yüzünün (Kadife) ve sırt kumaşının sınır kenarlarını zincirleyip yumuşatır, üstüne 3,5 mm yarıçaplı ince bir boru (`Biye` parçası) koyar; 60 cm'den kısa çizgiler (desen adacıkları) atlanır. Sitede `ChairCanvas` bunu mat siyah giydirir.
+- İçinde `Kumas` adlı malzeme olan (tasarımcının hazırladığı) model olduğu gibi bırakılır.
+- Sitede adres `?v=<updatedAt>` ile verilir (`lib/catalog.server.ts` → `modelUrl`), yeniden hazırlanan model tarayıcı önbelleğinden gelmez. Model açılamazsa `ChairCanvas` hazır koltuğa döner; her model kadraja sığdırılır.
+- Panelde önizleme bileşeni: `payload/components/ModelPreview.tsx` (değişirse `generate:importmap`).
+- **`npm run seed` ya da `payload run` sunucu açıkken çalıştırma:** şemayı yeniden uygulamaya çalışıp "index … already exists" hatasıyla duruyor. Test için geçici bir Next route (klasör adı `_` ile başlamasın; Next onları adres saymaz) ya da sunucuyu durdurmak gerekir.
 
 ## Site durumu: Yakında / Bakımdayız
 
@@ -127,5 +144,6 @@ Seed tekrar çalıştırılabilir: kayıtları `key` alanıyla bulur ve güncell
 | `/admin` açılmıyor, "PAYLOAD_SECRET tanımlı değil" | `site/.env` dosyası eksik ya da değer boş |
 | "Another next dev server is already running" | Sunucu zaten açık; mevcut olanı kullan (http://localhost:3100) |
 | Silme "hâlâ kullanılıyor" hatası veriyor | Hata mesajında yazan kayıtlardaki bağlantıyı değiştir, sonra sil |
-| GLB yüklenmiyor | Uzantı `.glb` mi? Malzeme adları `Kumas` / `Kadife` mi? |
+| GLB yüklenmiyor / hata veriyor | Uzantı `.glb` mi? Dokusu dosyanın içinde mi? "Sırt kumaşı bulunamadı" ise "Sırtın başladığı yükseklik"i küçült |
+| 3B modeli yükledim, sitede yok | Model bir parçaya (Görsel ve 3B) ya da Site ayarları › Kumaş stüdyosu'na bağlandı mı? Parça yayında mı? |
 | Yüklenen görsel eski görünüyor | Yeni adla yükle ya da `site/.next/cache/images` klasörünü sil |

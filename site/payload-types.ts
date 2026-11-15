@@ -170,7 +170,7 @@ export interface Piece {
    */
   photo?: (number | null) | Media;
   /**
-   * Optional. The site's 3D chair is used if empty.
+   * Optional. Upload the AI-generated .glb here; parts are separated automatically. The built-in chair is used if empty.
    */
   model?: (number | null) | Model;
   wood: number | Wood;
@@ -414,13 +414,26 @@ export interface Media {
   };
 }
 /**
- * The piece's own 3D model (.glb). Name the fabric material "Kumas" and the seat velvet "Kadife".
+ * Upload the AI-generated .glb as is: the back fabric, seat velvet and metal frame are separated automatically. Then link it to a piece.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "models".
  */
 export interface Model {
   id: number;
+  /**
+   * Filled in automatically on save.
+   */
+  report?: string | null;
+  /**
+   * Floor to top. Sets the real size of the fabric pattern.
+   */
+  heightCm?: number | null;
+  /**
+   * The line between seat and back. Lower it if the bottom of the back looks like velvet; raise it if the seat shows fabric.
+   */
+  backStart?: number | null;
+  prepared?: boolean | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -889,6 +902,10 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "models_select".
  */
 export interface ModelsSelect<T extends boolean = true> {
+  report?: T;
+  heightCm?: T;
+  backStart?: T;
+  prepared?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1022,7 +1039,7 @@ export interface SiteStatus {
   createdAt?: string | null;
 }
 /**
- * The home page opening and craft numbers.
+ * The home page opening, the studio's 3D chair and craft numbers.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -1038,6 +1055,12 @@ export interface SiteSetting {
      * Up to 4; order sets their positions.
      */
     orbs?: (number | Fabric)[] | null;
+  };
+  studio?: {
+    /**
+     * The 3D model on the home page fabric studio. The built-in chair is used if empty.
+     */
+    model?: (number | null) | Model;
   };
   /**
    * Three numbers that count up on the home page.
@@ -1088,6 +1111,11 @@ export interface SiteSettingsSelect<T extends boolean = true> {
     | {
         fabric?: T;
         orbs?: T;
+      };
+  studio?:
+    | T
+    | {
+        model?: T;
       };
   craftNumbers?:
     | T

@@ -268,7 +268,12 @@ export const Pieces: CollectionConfig = {
               type: "upload",
               relationTo: "models",
               label: L("3B model (.glb)", "3D model (.glb)"),
-              admin: { description: L("İsteğe bağlı. Boşsa sitedeki 3B koltuk kullanılır.", "Optional. The site's 3D chair is used if empty.") },
+              admin: {
+                description: L(
+                  "İsteğe bağlı. Yapay zekâdan çıkan .glb'yi buradan da yükleyebilirsiniz; kumaş, kadife ve metal kendiliğinden ayrılır. Boşsa sitedeki hazır koltuk kullanılır.",
+                  "Optional. Upload the AI-generated .glb here; parts are separated automatically. The built-in chair is used if empty.",
+                ),
+              },
             },
           ],
         },

@@ -74,7 +74,7 @@ export type Piece = {
   techniques: Localized[];
   /** Parçanın kendi ürün fotoğrafı (arka planı temiz PNG önerilir). Yoksa geçici koltuk fotoğrafı. */
   photo?: Img;
-  /** Parçanın kendi 3B modeli (GLB). Yoksa kodla çizilen koltuk. */
+  /** Parçanın kendi 3B modeli (GLB adresi). Yoksa sitedeki hazır koltuk. */
   model?: string;
 };
 
@@ -98,6 +98,8 @@ export type SiteSettings = {
     /** Açılışta koltuğun çevresinde süzülen kumaşlar (en fazla 4). */
     orbs: string[];
   };
+  /** Ana sayfadaki kumaş stüdyosunun 3B modeli (GLB adresi). Yoksa sitedeki hazır koltuk. */
+  studioModel?: string;
   craftNumbers: { value: string; tr: string; en: string }[];
 };
 

@@ -80,6 +80,8 @@ export function Customizer({ lang, piece }: { lang: Lang; piece: Piece }) {
         >
           <ChairStudio
             fabric={chosenFabric}
+            model={piece.model}
+            photo={piece.photo?.src}
             className="h-[34svh] w-full lg:aspect-square lg:h-auto"
             label={`${t.aria}: ${chosenFabric.name}`}
             loadingLabel={t.loading}

@@ -33,13 +33,17 @@ type Props = {
   className?: string;
   label: string;
   loadingLabel?: string;
+  /** 3B model (GLB adresi, panelden). Yoksa sitedeki hazır koltuk. */
+  model?: string;
+  /** 3B açılana kadar (ya da WebGL yoksa) görünen fotoğraf. */
+  photo?: string;
 };
 
 /**
  * 3B koltuk: sürükleyerek çevrilir, kumaşı dışarıdan değişir.
  * Görünür değilken çizim durur; WebGL yoksa ürün fotoğrafı kalır.
  */
-export function ChairStudio({ fabric, ctrl: outer, className = "", label, loadingLabel = "…" }: Props) {
+export function ChairStudio({ fabric, ctrl: outer, className = "", label, loadingLabel = "…", model, photo = CHAIR.src }: Props) {
   const own = useRef<ChairCtrl>(newCtrl());
   const ctrl = outer ?? own;
   const box = useRef<HTMLDivElement>(null);
@@ -120,11 +124,18 @@ export function ChairStudio({ fabric, ctrl: outer, className = "", label, loadin
       style={{ touchAction: "pan-y" }}
     >
       <div className={`pointer-events-none absolute inset-[10%] transition-opacity duration-700 ${show3d ? "opacity-0" : "opacity-100"}`} aria-hidden="true">
-        <Image src={CHAIR.src} alt="" fill sizes="(min-width: 1024px) 40vw, 80vw" className="object-contain" />
+        <Image src={photo} alt="" fill sizes="(min-width: 1024px) 40vw, 80vw" className="object-contain" />
       </div>
       {webgl && mounted && (
         <div className={`absolute inset-0 transition-opacity duration-1000 ${ready ? "opacity-100" : "opacity-0"}`}>
-          <ChairCanvas fabric={{ id: fabric.id, tex: fabric.tex, velvet: fabric.velvet }} ctrl={ctrl} active={active} onReady={onReady} onLoading={onLoading} />
+          <ChairCanvas
+            fabric={{ id: fabric.id, tex: fabric.tex, velvet: fabric.velvet }}
+            model={model}
+            ctrl={ctrl}
+            active={active}
+            onReady={onReady}
+            onLoading={onLoading}
+          />
         </div>
       )}
       {/* Yükleniyor: ilk açılışta ve kumaş değişirken */}
