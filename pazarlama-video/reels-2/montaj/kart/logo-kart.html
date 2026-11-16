@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&display=block" rel="stylesheet">
+<style>
+  html, body { margin: 0; width: 1080px; height: 1920px; background: transparent; overflow: hidden; }
+  .grup {
+    position: absolute; left: 0; right: 0; top: 50%;
+    transform: translateY(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 56px;
+  }
+  img { width: 360px; height: auto; display: block; }
+  .wordmark {
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    margin-right: -0.3em; /* sitedeki gibi optik denge */
+    font-size: 58px;
+    line-height: 1;
+    color: #E9E1D3;
+  }
+</style>
+</head>
+<body>
+  <div class="grup">
+    <img id="amblem" src="../../../../site/public/brand/emblem.svg" alt="">
+    <div id="yazi" class="wordmark">TAHTIREVAN</div>
+  </div>
+  <script>
+    // #amblem -> yalnızca amblem, #yazi -> yalnızca yazı (konumlar aynı kalır)
+    if (location.hash === "#amblem") document.getElementById("yazi").style.visibility = "hidden";
+    if (location.hash === "#yazi") document.getElementById("amblem").style.visibility = "hidden";
+  </script>
+</body>
+</html>
