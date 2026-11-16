@@ -6,8 +6,17 @@ import type { Lang } from "./i18n";
  * Kumaş görselleri ve adresleri katalogdan gelir (Fabric.image / tex / swatch / tile).
  */
 
+/**
+ * Geçici koltuk görseli ve 3B koltuk yapay zekâyla üretildi; üzerindeki kumaş gerçek.
+ * Bu görsellerin göründüğü her yerde bu not yazılır (yanıltıcı reklam sayılmasın diye).
+ */
+export const PREVIEW_NOTE = {
+  tr: "Tasarım önizlemesi · Kumaş gerçek",
+  en: "Design preview · Real fabric",
+} as const;
+
 /** Arka planı temizlenmiş ürün fotoğrafı (şeffaf PNG). */
-export const CHAIR = { src: "/chair/serir.png", width: 1009, height: 1128 };
+export const CHAIR = { src: "/chair/serir-hd.png", width: 2018, height: 2256 };
 
 /** Aynı fotoğraftan makro kırpımlar. */
 export const DETAILS = [
@@ -37,6 +46,39 @@ export const DETAILS = [
   },
 ] as const;
 
+type Detail = { src: string; width: number; height: number; alt: { tr: string; en: string } };
+
+/**
+ * Sırtı başka kumaşla giydirilmiş koltuğun yakın çekimleri (3B koltuktan alındı). Sıra DETAILS ile aynı:
+ * sırt, kol kemeri, oturak, yakın motif. Burada olmayan kumaşlarda Rossaria kırpımları kullanılır.
+ */
+const FABRIC_DETAILS: Record<string, readonly Detail[]> = {
+  panthera: [
+    {
+      src: "/chair/details/panthera-back-2.jpg",
+      width: 640,
+      height: 800,
+      alt: { tr: "Sırtın ortasına yerleştirilmiş Panthera parsı", en: "The Panthera leopard centred on the back" },
+    },
+    {
+      src: "/chair/details/panthera-arch-2.jpg",
+      width: 640,
+      height: 800,
+      alt: { tr: "Kol kemerinin Panthera sırtla buluştuğu nokta", en: "Where the arm arch meets the Panthera back" },
+    },
+    DETAILS[2],
+    {
+      src: "/chair/details/panthera-head-2.jpg",
+      width: 800,
+      height: 550,
+      alt: { tr: "Panthera parsının yakın çekimi", en: "Close-up of the Panthera leopard" },
+    },
+  ],
+};
+
+/** Kumaşa göre yakın çekim seti; o kumaş için çekim yoksa geçici (Rossaria) kırpımlar. */
+export const detailsFor = (fabric?: string): readonly Detail[] => (fabric && FABRIC_DETAILS[fabric]) || DETAILS;
+
 /** Seçilmeden önce (üzerine gelince, dokununca) 3B dokusunu tarayıcı önbelleğine alır. */
 const prefetched = new Set<string>();
 export function prefetchTexture(url: string) {
@@ -48,10 +90,10 @@ export function prefetchTexture(url: string) {
 }
 
 /** Konu metninden kararlı bir detay görseli seçer. */
-export function detailFor(seed: string) {
+export function detailFor(seed: string, set: readonly Detail[] = DETAILS) {
   let h = 0;
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
-  return DETAILS[h % DETAILS.length];
+  return set[h % set.length];
 }
 
 export const chairAlt = (lang: Lang, fabricName?: string) =>

@@ -149,7 +149,7 @@ async function main() {
   log(cols.map((c) => c.id).join(", "));
 
   console.log("Parçalar");
-  const serirPhoto = await uploadOnce("media", path.join(ROOT, "public", "chair", "serir.png"), {
+  const serirPhoto = await uploadOnce("media", path.join(ROOT, "public", "chair", "serir-hd.png"), {
     tr: "Serir koltuk, Rossaria sırt ve kadife oturak",
     en: "Serir armchair, Rossaria back and velvet seat",
   });

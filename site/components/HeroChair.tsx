@@ -23,6 +23,8 @@ type Props = {
   cta: string;
   ctaHref: string;
   chairAlt: string;
+  /** Koltuk görseli yapay zekâ ile üretildi: altında "Tasarım önizlemesi" notu. */
+  previewNote: string;
   fabric: { id: string; name: string; code: string; motif: string; image: string };
   orbs: Orb[];
   scrollHint: string;
@@ -34,7 +36,7 @@ const seg = (v: number, a: number, b: number) => Math.min(1, Math.max(0, (v - a)
  * Açılış sahnesi: koltuk karanlıktan döne döne gelir, imleçle eğilir.
  * Aşağı kaydırdıkça döner, sırtındaki kumaşa yaklaşır ve kumaşın içine girer.
  */
-export function HeroChair({ title, cta, ctaHref, chairAlt, fabric, orbs, scrollHint }: Props) {
+export function HeroChair({ title, cta, ctaHref, chairAlt, previewNote, fabric, orbs, scrollHint }: Props) {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion() ?? false;
   const { scrollYProgress: p } = useScroll({ target: ref, offset: ["start start", "end end"] });
@@ -127,6 +129,14 @@ export function HeroChair({ title, cta, ctaHref, chairAlt, fabric, orbs, scrollH
             aria-hidden="true"
           />
         </div>
+
+        {/* Koltuk görseli yapay zekâ ile üretildi: başlığa binmesin diye telefonda üstte, genişte sol altta */}
+        <motion.p
+          className="label pointer-events-none absolute left-[var(--gutter)] top-[calc(72px+0.75rem)] !text-[10px] !text-fildisi/75 [text-shadow:0_1px_10px_rgba(10,8,6,0.95)] lg:bottom-[5svh] lg:top-auto"
+          style={{ opacity: chairOpacity }}
+        >
+          {previewNote}
+        </motion.p>
 
         {/* Kumaşın içine giriş */}
         <motion.div className="absolute inset-0" style={{ clipPath: clip }} aria-hidden="true">

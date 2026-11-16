@@ -391,6 +391,10 @@ export interface Media {
    * Short description for people who cannot see the image.
    */
   alt?: string | null;
+  /**
+   * Tick for AI or 3D generated images; the site labels them "Design preview · Real fabric". Leave empty for real product photos.
+   */
+  preview?: boolean | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -871,6 +875,7 @@ export interface FabricImagesSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  preview?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

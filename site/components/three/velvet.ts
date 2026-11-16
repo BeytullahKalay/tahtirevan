@@ -63,15 +63,16 @@ let maps: { crush: THREE.DataTexture; tone: THREE.DataTexture; pile: THREE.DataT
 /** Oturum boyunca bir kez üretilir. */
 function velvetMaps() {
   if (maps) return maps;
-  // Ezik hav: hafif yatay uzamış lekeler (bir tekrarı ~12 cm)
+  // Ezik hav: geniş, yumuşak, belli belirsiz dalgalar (bir tekrarı ~12 cm). Eskiden kontrastlı ve
+  // benekliydi (ton %60–90, parlama %20–100); oturak lekeli, "kirli" görünüyordu. Kadife temiz durmalı.
   const S1 = 256;
-  const n = tileNoise(S1, 4, 5, 11, 1.2);
+  const n = tileNoise(S1, 2, 2, 11, 1.2);
   const crush = new Uint8Array(S1 * S1 * 4);
   const tone = new Uint8Array(S1 * S1 * 4);
   for (let i = 0; i < S1 * S1; i++) {
-    const v = Math.min(1, Math.max(0, (n[i] - 0.5) * 2.3 + 0.5)); // kontrastı artır
-    const c = Math.round(255 * (0.2 + 0.8 * v)); // parlamanın gücü: koyu lekelerde zayıf
-    const t = Math.round(255 * (0.6 + 0.3 * v)); // renk tonu: fotoğraftaki gibi seçilir
+    const v = Math.min(1, Math.max(0, n[i]));
+    const c = Math.round(255 * (0.8 + 0.2 * v)); // parlamanın gücü: hafif oynar
+    const t = Math.round(255 * (0.93 + 0.07 * v)); // renk tonu: neredeyse düz
     crush.set([c, c, c, 255], i * 4);
     tone.set([t, t, t, 255], i * 4);
   }

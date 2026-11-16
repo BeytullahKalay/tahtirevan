@@ -158,7 +158,15 @@ async function load(): Promise<CatalogData> {
   const colByDbId = new Map(colsD.map((c) => [c.id, collections.find((x) => x.id === c.key)]));
 
   const imgOf = (doc: Doc | undefined): Img | undefined =>
-    doc?.url ? { src: doc.url as string, width: (doc.width as number) ?? 1000, height: (doc.height as number) ?? 1000, alt: loc(doc.alt) } : undefined;
+    doc?.url
+      ? {
+          src: doc.url as string,
+          width: (doc.width as number) ?? 1000,
+          height: (doc.height as number) ?? 1000,
+          alt: loc(doc.alt),
+          preview: Boolean(doc.preview),
+        }
+      : undefined;
 
   const pieces: Piece[] = piecesD.flatMap((p) => {
     const col = colByDbId.get(id(p.collection) as number);

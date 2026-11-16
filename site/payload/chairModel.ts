@@ -222,6 +222,59 @@ export async function prepareChairModel(input: Buffer, opts: PrepareOptions): Pr
   const yCut = opts.height * opts.cut;
   const faceY = (f: number) => (Y(IDX[f * 3]) + Y(IDX[f * 3 + 1]) + Y(IDX[f * 3 + 2])) / 3;
 
+  /** Gövde borusunun çapı bu aralıkta sayılır (m); eksen bu kalınlıktaki yüzlerden bulunur. */
+  const TUBE_MIN = 0.015;
+  const TUBE_MAX = 0.045;
+  /**
+   * Seçilen yüzlerin kalınlığı (m): yüzün ortasından içeri (normalin tersine) giden ışının modele
+   * ilk çarptığı yere uzaklık ve ışının orta noktası: [kalınlık, x, y, z]. Hiçbir yere çarpmayan yüz listeye girmez.
+   */
+  function thicknessOf(pick: (f: number) => boolean) {
+    const V = new Float64Array(F * 9);
+    for (let f = 0; f < F; f++)
+      for (let e = 0; e < 3; e++) {
+        const i = IDX[f * 3 + e];
+        V[f * 9 + e * 3] = X(i);
+        V[f * 9 + e * 3 + 1] = Y(i);
+        V[f * 9 + e * 3 + 2] = Z(i);
+      }
+    const out = new Map<number, number[]>();
+    for (let f = 0; f < F; f++) {
+      if (!pick(f)) continue;
+      const o = f * 9;
+      const e1 = [V[o + 3] - V[o], V[o + 4] - V[o + 1], V[o + 5] - V[o + 2]];
+      const e2 = [V[o + 6] - V[o], V[o + 7] - V[o + 1], V[o + 8] - V[o + 2]];
+      const n = [e1[1] * e2[2] - e1[2] * e2[1], e1[2] * e2[0] - e1[0] * e2[2], e1[0] * e2[1] - e1[1] * e2[0]];
+      const nl = Math.hypot(n[0], n[1], n[2]);
+      if (!nl) continue;
+      const d = [-n[0] / nl, -n[1] / nl, -n[2] / nl];
+      const org = [0, 1, 2].map((k) => (V[o + k] + V[o + 3 + k] + V[o + 6 + k]) / 3 + d[k] * 1e-5);
+      let best = Infinity;
+      for (let g = 0; g < F; g++) {
+        if (g === f) continue;
+        // Möller–Trumbore
+        const p = g * 9;
+        const a1 = V[p + 3] - V[p], a2 = V[p + 4] - V[p + 1], a3 = V[p + 5] - V[p + 2];
+        const b1 = V[p + 6] - V[p], b2 = V[p + 7] - V[p + 1], b3 = V[p + 8] - V[p + 2];
+        const h1 = d[1] * b3 - d[2] * b2, h2 = d[2] * b1 - d[0] * b3, h3 = d[0] * b2 - d[1] * b1;
+        const det = a1 * h1 + a2 * h2 + a3 * h3;
+        if (Math.abs(det) < 1e-12) continue;
+        const inv = 1 / det;
+        const s1 = org[0] - V[p], s2 = org[1] - V[p + 1], s3 = org[2] - V[p + 2];
+        const u = (s1 * h1 + s2 * h2 + s3 * h3) * inv;
+        if (u < 0 || u > 1) continue;
+        const q1 = s2 * a3 - s3 * a2, q2 = s3 * a1 - s1 * a3, q3 = s1 * a2 - s2 * a1;
+        const v = (d[0] * q1 + d[1] * q2 + d[2] * q3) * inv;
+        if (v < 0 || u + v > 1) continue;
+        const t = (b1 * q1 + b2 * q2 + b3 * q3) * inv;
+        if (t > 1e-6 && t < best) best = t;
+      }
+      // Kalınlık ve ışının orta noktası (boruysa eksenin üstündedir)
+      if (best < Infinity) out.set(f, [best, ...org.map((x, k) => x + d[k] * (best / 2))]);
+    }
+    return out;
+  }
+
   /* ---------- Yüz etiketleri ---------- */
   const METAL = 0, KUMAS = 1, KADIFE = 2;
   const label = new Uint8Array(F);
@@ -305,6 +358,89 @@ export async function prepareChairModel(input: Buffer, opts: PrepareOptions): Pr
     for (let f = 0; f < F; f++)
       if (comp[f] >= 0 && comp[f] !== seat && nbr[f].some((g) => label[g] === KUMAS)) touches.set(comp[f], true);
     for (let f = 0; f < F; f++) if (comp[f] >= 0 && comp[f] !== seat) label[f] = touches.get(comp[f]) ? KUMAS : METAL;
+  }
+
+  // Sırt kabuğunda metal sanılan koyu lekeler (dokudaki biye, gölge, desenin koyu zemini). Gövde ince
+  // bir borudur, kabuk kalındır. Önce borunun ekseni bulunur: içeri bakan ışını boru kalınlığında karşı
+  // duvara çarpan metal yüzlerde, ışının ortası eksen üzerindedir. Sonra sırttaki her metal yüz için
+  // eksene uzaklığa bakılır: boru yarıçapından uzaktaysa kabuğun parçasıdır, kumaş sayılır.
+  // (Yalnızca kalınlığa bakmak yetmez: borunun kabuğa kaynadığı yayda ışın kabuğun içine kaçar.)
+  {
+    const thick = thicknessOf((f) => label[f] === METAL);
+    const cand: number[][] = [];
+    for (const [t, mx, my, mz] of thick.values()) if (t >= TUBE_MIN && t <= TUBE_MAX) cand.push([mx, my, mz, t / 2]);
+    // Borunun eksen noktaları bir çizgi boyunca sık dizilir; kabuğun ince yerlerinden (kanat ucu, üst
+    // kenar) gelenler ise seyrek ve yüzeye yayılmıştır. Çevresindeki noktalar çizgi gibi dizilmeyen atılır.
+    const axis: number[] = [];
+    const radii: number[] = [];
+    const NR = 0.02;
+    for (const p of cand) {
+      const nb = cand.filter((q) => (q[0] - p[0]) ** 2 + (q[1] - p[1]) ** 2 + (q[2] - p[2]) ** 2 < NR * NR);
+      if (nb.length < 8) continue;
+      const m = [0, 1, 2].map((k) => nb.reduce((s, q) => s + q[k], 0) / nb.length);
+      const C = [0, 1, 2].map((i) => [0, 1, 2].map((j) => nb.reduce((s, q) => s + (q[i] - m[i]) * (q[j] - m[j]), 0) / nb.length));
+      // Ana yön (kuvvet yöntemi); o yöndeki yayılım toplamın çoğunu oluşturmalı
+      let v = [1, 0.7, 0.3];
+      for (let it = 0; it < 30; it++) {
+        const w = C.map((row) => row[0] * v[0] + row[1] * v[1] + row[2] * v[2]);
+        const l = Math.hypot(w[0], w[1], w[2]) || 1;
+        v = w.map((x) => x / l);
+      }
+      const along = C.reduce((s, row, i) => s + v[i] * (row[0] * v[0] + row[1] * v[1] + row[2] * v[2]), 0);
+      const total = C[0][0] + C[1][1] + C[2][2];
+      if (total && along / total < 0.8) continue;
+      axis.push(p[0], p[1], p[2]);
+      radii.push(p[3]);
+    }
+    // Sırtın ince üst kenarı da yuvarlak bir çubuk gibidir. Gerçek boru ise ayaklardan yere iner: birbirine
+    // değen eksen noktaları gruplanır, oturak çizgisinin altına inmeyen gruplar atılır.
+    {
+      const n = axis.length / 3;
+      const parent = Int32Array.from({ length: n }, (_, i) => i);
+      const find = (i: number): number => (parent[i] === i ? i : (parent[i] = find(parent[i])));
+      const LINK = 0.015;
+      const cell = new Map<string, number[]>();
+      const key = (x: number, y: number, z: number) => `${Math.floor(x / LINK)},${Math.floor(y / LINK)},${Math.floor(z / LINK)}`;
+      for (let i = 0; i < n; i++) {
+        const k = key(axis[i * 3], axis[i * 3 + 1], axis[i * 3 + 2]);
+        (cell.get(k) ?? cell.set(k, []).get(k)!).push(i);
+      }
+      for (let i = 0; i < n; i++) {
+        const [cx0, cy0, cz0] = [0, 1, 2].map((k) => Math.floor(axis[i * 3 + k] / LINK));
+        for (let dx = -1; dx <= 1; dx++)
+          for (let dy = -1; dy <= 1; dy++)
+            for (let dz = -1; dz <= 1; dz++)
+              for (const j of cell.get(`${cx0 + dx},${cy0 + dy},${cz0 + dz}`) ?? []) {
+                if (j <= i) continue;
+                const d2 = (axis[i * 3] - axis[j * 3]) ** 2 + (axis[i * 3 + 1] - axis[j * 3 + 1]) ** 2 + (axis[i * 3 + 2] - axis[j * 3 + 2]) ** 2;
+                if (d2 < LINK * LINK) parent[find(i)] = find(j);
+              }
+      }
+      const low = new Map<number, number>();
+      for (let i = 0; i < n; i++) low.set(find(i), Math.min(low.get(find(i)) ?? Infinity, axis[i * 3 + 1]));
+      const keep: number[] = [];
+      const keepR: number[] = [];
+      for (let i = 0; i < n; i++)
+        if (low.get(find(i))! < yCut) keep.push(axis[i * 3], axis[i * 3 + 1], axis[i * 3 + 2]), keepR.push(radii[i]);
+      axis.splice(0, axis.length, ...keep);
+      radii.splice(0, radii.length, ...keepR);
+    }
+    if (axis.length >= 30) {
+      radii.sort((a, b) => a - b);
+      const reach = radii[Math.floor(radii.length / 2)] * 1.5;
+      const near = (i: number) => {
+        const x = X(i), y = Y(i), z = Z(i);
+        for (let k = 0; k < axis.length; k += 3) {
+          const dx = axis[k] - x, dy = axis[k + 1] - y, dz = axis[k + 2] - z;
+          if (dx * dx + dy * dy + dz * dz < reach * reach) return true;
+        }
+        return false;
+      };
+      // Borunun yüzeyindeki üçgenin üç köşesi de eksene yakındır. Boru ile kabuk arasında uzanan ince
+      // üçgenlerin bir köşesi kabuktadır; bunlar metal sayılınca kenarda testere dişi kalıyordu.
+      for (let f = 0; f < F; f++)
+        if (label[f] === METAL && faceY(f) > yCut && ![0, 1, 2].every((e) => near(IDX[f * 3 + e]))) label[f] = KUMAS;
+    }
   }
 
   // Sırtın kenarında metal sanılan koyu şeritler: komşularının çoğu kumaşsa kumaş say (ince borular korunur)

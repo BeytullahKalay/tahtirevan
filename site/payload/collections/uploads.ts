@@ -75,7 +75,21 @@ export const Media: CollectionConfig = {
     adminThumbnail: "thumbnail",
     imageSizes: [{ name: "thumbnail", width: 320, height: 320, fit: "inside", formatOptions: { format: "webp", options: { quality: 75 } } }],
   },
-  fields: [altField],
+  fields: [
+    altField,
+    {
+      name: "preview",
+      type: "checkbox",
+      defaultValue: false,
+      label: L("Tasarım önizlemesi (gerçek fotoğraf değil)", "Design preview (not a real photo)"),
+      admin: {
+        description: L(
+          "Yapay zekâ ya da 3B ile üretilmiş görseller için işaretleyin; sitede üzerine \"Tasarım önizlemesi · Kumaş gerçek\" yazılır. Gerçek ürün fotoğrafında boş bırakın.",
+          "Tick for AI or 3D generated images; the site labels them \"Design preview · Real fabric\". Leave empty for real product photos.",
+        ),
+      },
+    },
+  ],
 };
 
 /* ---------- 3B modeller ---------- */

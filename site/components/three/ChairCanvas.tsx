@@ -11,18 +11,31 @@ import { createVelvetMaterial, velvetSheen } from "./velvet";
 const textureCache = new Map<string, Promise<THREE.Texture>>();
 const loader = new THREE.TextureLoader();
 
+/** Dokunun bir tekrarı kaç metreye yayılır (genişlik). */
+const REPEAT_W = 0.52;
+
+/**
+ * Tek bir figürün sırtın ortasına elle yerleştirildiği kumaşlar (döşemecinin "figür ortalama" işi).
+ * x, y: figürün (başın) görseldeki yeri, sol üstten oran; w: bir tekrarın genişliği (m), baş sırta sığsın diye.
+ * Bu kumaşlar ayna çevrilmeden döşenir: desen kusursuz tekrar eder, aynalamak hayvanı ortadan ikiye
+ * bölüp simetrik bir yüz yapıyordu.
+ */
+type Figure = { x: number; y: number; w: number };
+const FIGURES: Record<string, Figure> = {
+  panthera: { x: 0.42, y: 0.3, w: 0.42 },
+};
+
 /** Kumaşın 3B dokusu: seçilen kumaşın `tex` adresi (oturum boyunca önbellekte). */
 function loadFabricTexture(url: string) {
   let p = textureCache.get(url);
   if (!p) {
     p = loader.loadAsync(url).then((t) => {
       const img = t.image as { width: number; height: number };
-      const W = 0.52; // dokunun bir tekrarı kaç metreye yayılır
-      const H = W * (img.height / img.width);
+      const H = REPEAT_W * (img.height / img.width);
       t.wrapS = t.wrapT = THREE.MirroredRepeatWrapping;
       t.colorSpace = THREE.SRGBColorSpace;
       t.anisotropy = 8;
-      t.repeat.set(1 / W, 1 / H);
+      t.repeat.set(1 / REPEAT_W, 1 / H);
       t.offset.set(0, -YB / H + 0.08);
       t.needsUpdate = true;
       return t;
@@ -33,6 +46,21 @@ function loadFabricTexture(url: string) {
   return p;
 }
 
+/**
+ * Figürlü kumaşta dokunun bu koltuğa özel kopyası: ayna yok, figür sırtın tam ortasında.
+ * UV metre cinsinden: u = sırtın ortasından yay uzunluğu (0 = orta), v = yükseklik (alt kenar YB).
+ */
+function placeFigure(base: THREE.Texture, fig: Figure, backH: number) {
+  const t = base.clone();
+  const img = t.image as { width: number; height: number };
+  const H = fig.w * (img.height / img.width);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(1 / fig.w, 1 / H);
+  t.offset.set(fig.x, 1 - fig.y - (YB + backH / 2) / H);
+  t.needsUpdate = true;
+  return t;
+}
+
 /* ---------- Model ---------- */
 
 /**
@@ -40,7 +68,7 @@ function loadFabricTexture(url: string) {
  * metre ölçeğinde, tabanı y=0'da, önü +z; parçalar malzeme adıyla ayrılmış (Kumas = sırt, Kadife = oturak,
  * gerisi metal). Kumas parçasının UV'si metredir (u: sırtın ortasından yay uzunluğu, v: yükseklik).
  */
-export const DEFAULT_MODEL = "/models/koltuk-3.glb";
+export const DEFAULT_MODEL = "/models/koltuk-4.glb";
 /** Desenin başladığı yükseklik (m); her modelde sırt kumaşının alt kenarı buraya hizalanır. */
 const YB = 0.555;
 /** Kadraja sığma sınırı (m): kamera bu boydaki bir koltuğa göre ayarlı. */
@@ -84,8 +112,9 @@ function Chair({ fabric, ctrl, model, onReady, onLoading }: { fabric: ChairFabri
   const pipeMat = useMemo(() => new THREE.MeshStandardMaterial({ color: "#0b0a0a", metalness: 0, roughness: 0.5 }), []);
 
   // Modelin kopyası; parçalara sitenin malzemeleri giydirilir (kumaş, kadife, metal)
-  const chair = useMemo(() => {
+  const { chair, backH } = useMemo(() => {
     const root = scene.clone(true);
+    let backH = 0.25;
     const fabricMeshes: THREE.Mesh[] = [];
     root.traverse((o) => {
       const mesh = o as THREE.Mesh;
@@ -99,6 +128,7 @@ function Chair({ fabric, ctrl, model, onReady, onLoading }: { fabric: ChairFabri
     if (fabricMeshes.length) {
       const fb = new THREE.Box3();
       fabricMeshes.forEach((m) => fb.expandByObject(m));
+      backH = fb.max.y - fb.min.y;
       const shift = YB - fb.min.y;
       for (const m of fabricMeshes) {
         const uv = m.geometry.getAttribute("uv") as THREE.BufferAttribute | undefined;
@@ -117,7 +147,7 @@ function Chair({ fabric, ctrl, model, onReady, onLoading }: { fabric: ChairFabri
     root.position.set(-c.x, -b.min.y, -c.z);
     group.add(root);
     group.scale.setScalar(s);
-    return group;
+    return { chair: group, backH };
   }, [scene, fabricMat, velvetMat, metalMat, pipeMat]);
 
   const velvetTarget = useRef(new THREE.Color(fabric.velvet));
@@ -133,6 +163,13 @@ function Chair({ fabric, ctrl, model, onReady, onLoading }: { fabric: ChairFabri
     loadFabricTexture(fabric.tex)
       .then((tex) => {
         if (!alive) return;
+        const fig = FIGURES[fabric.id];
+        // Önceki figür kopyası bu koltuğa özeldi; yenisi gelince GPU'dan bırak
+        if (fabricMat.map && fabricMat.map.userData.figure) fabricMat.map.dispose();
+        if (fig) {
+          tex = placeFigure(tex, fig, backH);
+          tex.userData.figure = true;
+        }
         fabricMat.map = tex;
         fabricMat.needsUpdate = true;
         const v = new THREE.Color(fabric.velvet);
@@ -155,7 +192,7 @@ function Chair({ fabric, ctrl, model, onReady, onLoading }: { fabric: ChairFabri
     return () => {
       alive = false;
     };
-  }, [fabric.tex, fabric.velvet, fabricMat, velvetMat, ctrl]);
+  }, [fabric.id, fabric.tex, fabric.velvet, fabricMat, velvetMat, ctrl, backH]);
 
   useFrame((_, dt) => {
     velvetMat.color.lerp(velvetTarget.current, 1 - Math.pow(0.002, dt));

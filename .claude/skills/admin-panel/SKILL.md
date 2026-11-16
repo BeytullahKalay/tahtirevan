@@ -55,7 +55,7 @@ Kullanıcının yolu (kod gerekmez):
 1. Koltuk fotoğrafından ücretsiz bir araçla (Hugging Face'te TRELLIS ya da Hunyuan3D) `.glb` üretir. Ticari kullanım için TRELLIS (MIT lisansı) daha güvenli.
 2. Panel → Medya › **3B modeller** → Create New → dosya, **Gerçek yükseklik (cm)** → Kaydet. (Parçanın "Görsel ve 3B" sekmesinden de doğrudan yüklenebilir.)
 3. Sayfadaki **Önizleme** › "Parçalar" görünümünde yeşil = kumaş (sırt), kırmızı = kadife (oturak), sarı = siyah biye (kenar şeridi), gri = metal. Sırtın altı kırmızıysa **Sırtın başladığı yükseklik (%)** küçültülür, oturak yeşilse büyütülür → Kaydet (dosyayı yeniden yüklemek gerekmez).
-4. Modeli bağla: ürün sayfası için Parçalar › Görsel ve 3B › 3B model; ana sayfa için Site ayarları › Kumaş stüdyosu › 3B koltuk. Boşsa sitedeki hazır koltuk (`public/models/koltuk-3.glb`) görünür.
+4. Modeli bağla: ürün sayfası için Parçalar › Görsel ve 3B › 3B model; ana sayfa için Site ayarları › Kumaş stüdyosu › 3B koltuk. Boşsa sitedeki hazır koltuk (`public/models/koltuk-4.glb`) görünür.
 
 Nasıl çalışır (Claude için):
 - Hazırlama `payload/chairModel.ts`, kancalar `payload/collections/uploads.ts` (`Models`). Yeni dosya `beforeOperation`'da `req.file.data` değiştirilerek hazırlanır (Payload dosyayı ondan sonra diske yazar). Ham dosya `media/models/kaynak/<dosya adı>` altında saklanır; ayar değişince `beforeChange` buradan yeniden hazırlar ve dosyanın üzerine yazar. Silinince kaynak da silinir.

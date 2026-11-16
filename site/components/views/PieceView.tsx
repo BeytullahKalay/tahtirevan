@@ -9,6 +9,7 @@ import { JsonLd } from "../JsonLd";
 import { Media } from "../Media";
 import { Parallax } from "../Parallax";
 import { PieceCard } from "../PieceCard";
+import { PreviewTag } from "../PreviewTag";
 import { Reveal } from "../Reveal";
 
 const COPY = {
@@ -81,10 +82,11 @@ export async function PieceView({ lang, piece }: { lang: Lang; piece: Piece }) {
   const lower = type.toLocaleLowerCase(lang);
 
   const gallery = [
-    { shot: "macro" as const, subject: `${piece.techniques[0][lang]}` },
+    // Yakın çekimler parçanın kumaşına göre seçilir (lib/media.ts → detailsFor)
+    { shot: "macro" as const, subject: `${piece.techniques[0][lang]}`, fabric: fabric.id },
     { shot: "fabric" as const, subject: `${fabric.name} · ${fabric.motif[lang]}`, colors: fabric.colors, fabric: fabric.id },
-    { shot: "macro" as const, subject: `${piece.techniques[2]?.[lang] ?? piece.techniques[1][lang]}` },
-    { shot: "craft" as const, subject: `${piece.techniques[1][lang]}` },
+    { shot: "macro" as const, subject: `${piece.techniques[2]?.[lang] ?? piece.techniques[1][lang]}`, fabric: fabric.id },
+    { shot: "craft" as const, subject: `${piece.techniques[1][lang]}`, fabric: fabric.id },
   ];
 
   const dimRow = (label: string, cm: number) => (
@@ -130,15 +132,17 @@ export async function PieceView({ lang, piece }: { lang: Lang; piece: Piece }) {
             priority
             labelPosition="top-right"
             zoom={false}
+            hideLabel
           />
         </Parallax>
-        <div className="absolute inset-x-0 bottom-0 px-[var(--gutter)] pb-10">
+        <div className="absolute inset-x-0 bottom-0 flex flex-col items-start gap-3 px-[var(--gutter)] pb-10 md:flex-row md:items-end md:justify-between md:gap-6">
           <div className="rise">
             <Link href={collectionHref(lang, col)} className="label link-gold tap !text-fildisi/85">
               {col.name[lang]} · {type}
             </Link>
             <h1 className="display mt-2 [text-shadow:0_2px_30px_rgba(10,8,6,0.6)]">{piece.name}</h1>
           </div>
+          {(!piece.photo || piece.photo.preview) && <PreviewTag lang={lang} className="whitespace-nowrap md:mb-3" />}
         </div>
       </header>
 
