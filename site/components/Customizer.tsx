@@ -8,7 +8,6 @@ import { ROUTES, type Lang } from "@/lib/i18n";
 import { prefetchTexture } from "@/lib/media";
 import { useCatalog } from "./CatalogProvider";
 import { ChairStudio } from "./ChairStudio";
-import { PreviewTag } from "./PreviewTag";
 
 const COPY = {
   tr: {
@@ -95,8 +94,6 @@ export function Customizer({ lang, piece }: { lang: Lang; piece: Piece }) {
           </p>
           <p className="label !text-[10px]">{t.drag}</p>
         </div>
-        {/* 3B koltuk her zaman bir görselleştirme */}
-        <PreviewTag lang={lang} className="mt-1" />
       </div>
 
       <div className="min-w-0 lg:col-span-7">

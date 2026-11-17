@@ -9,7 +9,6 @@ import { countWord } from "@/lib/words";
 import { useCatalog } from "./CatalogProvider";
 import type { Lang } from "@/lib/i18n";
 import { ChairStudio } from "./ChairStudio";
-import { PreviewTag } from "./PreviewTag";
 import { newCtrl } from "./three/ctrl";
 
 const COPY = {
@@ -133,7 +132,6 @@ export function ChairShowroom({ lang }: { lang: Lang }) {
             />
             <div className="pointer-events-none absolute bottom-[calc(5.5rem+env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2 whitespace-nowrap text-center lg:bottom-10">
               <p className="label !text-[10px]">{t.drag}</p>
-              <PreviewTag lang={lang} className="mt-1" />
             </div>
           </div>
         </div>

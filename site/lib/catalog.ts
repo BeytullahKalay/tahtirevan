@@ -10,7 +10,7 @@ export type Localized = { tr: string; en: string };
 export type PieceType = string;
 
 /** Çözülmüş görsel: adres + boyut (Next/Image için). */
-/** `preview`: yapay zekâ/3B ile üretilmiş görsel; sitede "Tasarım önizlemesi" notuyla gösterilir. */
+/** `preview`: yapay zekâ/3B ile üretilmiş görsel; artık sitede not olarak gösterilmez. */
 export type Img = { src: string; width: number; height: number; alt?: Localized; preview?: boolean };
 
 export type PatternCode = {

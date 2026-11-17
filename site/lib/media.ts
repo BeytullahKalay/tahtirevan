@@ -6,15 +6,6 @@ import type { Lang } from "./i18n";
  * Kumaş görselleri ve adresleri katalogdan gelir (Fabric.image / tex / swatch / tile).
  */
 
-/**
- * Geçici koltuk görseli ve 3B koltuk yapay zekâyla üretildi; üzerindeki kumaş gerçek.
- * Bu görsellerin göründüğü her yerde bu not yazılır (yanıltıcı reklam sayılmasın diye).
- */
-export const PREVIEW_NOTE = {
-  tr: "Tasarım önizlemesi · Kumaş gerçek",
-  en: "Design preview · Real fabric",
-} as const;
-
 /** Arka planı temizlenmiş ürün fotoğrafı (şeffaf PNG). */
 export const CHAIR = { src: "/chair/serir-hd.png", width: 2018, height: 2256 };
 

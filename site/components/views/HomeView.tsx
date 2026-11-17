@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getCatalog } from "@/lib/catalog.server";
 import { collectionHref, href, ROUTES, type Lang } from "@/lib/i18n";
-import { chairAlt, PREVIEW_NOTE } from "@/lib/media";
+import { chairAlt } from "@/lib/media";
 import { countWord } from "@/lib/words";
 import { ChairShowroom } from "../ChairShowroom";
 import { CountUp } from "../CountUp";
@@ -103,7 +103,6 @@ export async function HomeView({ lang }: { lang: Lang }) {
         cta={c.discover}
         ctaHref={href(lang, "collections")}
         chairAlt={chairAlt(lang)}
-        previewNote={PREVIEW_NOTE[lang]}
         fabric={{
           id: rossaria.id,
           name: rossaria.name,

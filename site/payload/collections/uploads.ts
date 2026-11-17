@@ -84,8 +84,8 @@ export const Media: CollectionConfig = {
       label: L("Tasarım önizlemesi (gerçek fotoğraf değil)", "Design preview (not a real photo)"),
       admin: {
         description: L(
-          "Yapay zekâ ya da 3B ile üretilmiş görseller için işaretleyin; sitede üzerine \"Tasarım önizlemesi · Kumaş gerçek\" yazılır. Gerçek ürün fotoğrafında boş bırakın.",
-          "Tick for AI or 3D generated images; the site labels them \"Design preview · Real fabric\". Leave empty for real product photos.",
+          "Yapay zekâ ya da 3B ile üretilmiş görseller için işaretleyin (kayıt amaçlı; sitede not gösterilmez). Gerçek ürün fotoğrafında boş bırakın.",
+          "Tick for AI or 3D generated images (for record keeping; no label is shown on the site). Leave empty for real product photos.",
         ),
       },
     },

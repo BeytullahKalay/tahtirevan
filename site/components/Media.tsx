@@ -6,7 +6,6 @@ import type { Lang } from "@/lib/i18n";
 import { detailFor, detailsFor } from "@/lib/media";
 import { useCatalog } from "./CatalogProvider";
 import { ChairScene } from "./ChairScene";
-import { PreviewTag } from "./PreviewTag";
 
 export type Shot = "portrait" | "macro" | "fabric" | "craft" | "space" | "video";
 
@@ -40,8 +39,6 @@ type Props = {
   cursor?: boolean;
   /** Eski yer tutucu etiketinden kalan; uyumluluk için duruyor. */
   labelPosition?: "bottom-left" | "top-right" | "center";
-  /** "Tasarım önizlemesi" notunu çağıran kendisi yazacaksa (ör. parallax içindeki ana görsel). */
-  hideLabel?: boolean;
 };
 
 /**
@@ -63,7 +60,6 @@ export function Media({
   priority,
   zoom = true,
   cursor = true,
-  hideLabel,
 }: Props) {
   const { getFabric } = useCatalog();
   const label = SHOT_LABEL[shot][lang];
@@ -106,8 +102,6 @@ export function Media({
         <div className="media-inner">
           <Image src={d.src} alt={alt ?? d.alt[lang]} fill sizes={sizes} priority={priority} className="object-cover" />
         </div>
-        {/* Kırpımlar yapay zekâ ile üretilmiş koltuk görselinden */}
-        <PreviewTag lang={lang} className="absolute bottom-[4%] right-[4%]" />
       </div>
     );
   }
@@ -117,8 +111,6 @@ export function Media({
       <div className="media-inner">
         <ChairScene lang={lang} fabric={getFabric(fabric ?? "")} photo={photo} sizes={sizes} priority={priority} alt={alt} />
       </div>
-      {/* Geçici koltuk görseli ya da panelde "Tasarım önizlemesi" işaretli fotoğraf */}
-      {(!photo || photo.preview) && !hideLabel && <PreviewTag lang={lang} className="absolute bottom-[4%] right-[4%]" />}
     </div>
   );
 }

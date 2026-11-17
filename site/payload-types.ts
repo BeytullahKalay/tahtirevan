@@ -392,7 +392,7 @@ export interface Media {
    */
   alt?: string | null;
   /**
-   * Tick for AI or 3D generated images; the site labels them "Design preview · Real fabric". Leave empty for real product photos.
+   * Tick for AI or 3D generated images (for record keeping; no label is shown on the site). Leave empty for real product photos.
    */
   preview?: boolean | null;
   updatedAt: string;
