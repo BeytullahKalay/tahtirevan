@@ -34,6 +34,10 @@ description: Tahtırevan Reels/video montajı rehberi (ffmpeg ile yerelde). Kull
 ## Kurgu tuzakları
 
 - Her parçayı `-frames:v N` ile tam kare sayısına kes (24 kare/sn'de 2 sn = 48, 3 sn = 72). Sonra `ffprobe -count_frames` ile doğrula.
+- **Döngülü görsel girişine kare hızı ver:** `-framerate 24 -loop 1 -i maske.png`. Verilmezse 25 kare/sn okunur. 24 kare/sn videoyla `maskedmerge`/`overlay` her saniye bir kareyi tekrarlar, ardından bir kare atlar; video saniyede bir takılır (Reels 3 v2–v4). Denetim: `tblend=all_mode=difference,signalstats` ile YAVG < 0,05 olan kare kalmamalı.
+- **Kamera hareketine yumuşak başlangıç:** klibi `minterpolate=fps=96:mi_mode=mci` ile çoğalt, sonra `setpts='if(lt(T,a),sqrt(2*b*T),T+a)/TB',fps=24` ile yeniden zamanla (b = hızlanma süresi, a = b/2). Maskeyi aynı eğriyle `framerate=fps=96` üzerinden geçir.
+- **Koltuğu sabitlerken maskeyi küçültme, büyüt.** Kling koltuğunun kenarı birkaç px oynar; içe küçültülmüş (erosion) maskeyle donmuş koltuk konunca alttaki kenar ince bir şerit olarak görünür ve silüet "bozulur" (Reels 3 v7). Maskeyi ~12 px dışa büyüt (`dilation` ×12, `gblur=sigma=3`). Denetim: klibin 1. kareye en büyük farkı (`blend=difference:shortest=1,lagfun=decay=1`) haritasında koltuk konturu kalmamalı.
+- **Çime ffmpeg ile rüzgâr EKLEME.** `displace` ile ilerleyen dalga denendi (Reels 3 v5). Kullanıcının tepkisi: yapraklar tek tek değil, "video bükülüyormuş gibi" oynuyor, hiç doğal değil. Çim hareketi üretimden gelmeli. Kling'de kamera sabitken çim güzel sallandı; kamera hareket ederken sallanmadı.
 - `xfade` için iki girişe `fps=24,settb=AVTB,format=yuv420p`; offset = gövde kare sayısı/24 − geçiş süresi. Toplamı `-frames:v` ile sabitle.
 - Durağan görselden yaklaşma: görseli önce 4 kat büyüt (`scale=4320:7680`) sonra `zoompan`; yoksa titrer.
 - Kaynak klipte en parlak anı ya da sıçramayı tahminle değil ölçerek bul:
