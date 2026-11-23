@@ -31,6 +31,15 @@ if (!process.env.PAYLOAD_SECRET) throw new Error("PAYLOAD_SECRET tanımlı deği
 const postgresUrl =
   process.env.NETLIFY_DB_URL || (process.env.DATABASE_URI?.startsWith("postgres") ? process.env.DATABASE_URI : undefined);
 
+// Netlify'da SQLite'a düşmek veri kaybı demek (disk kalıcı değil): adres yoksa açıkça dur.
+// NETLIFY_DB_URL'yi Netlify, package.json'da @netlify/database paketi varsa verir.
+const onNetlifyPlatform = process.env.NETLIFY === "true" || Boolean(process.env.NETLIFY_BLOBS_CONTEXT);
+if (onNetlifyPlatform && !postgresUrl) {
+  throw new Error(
+    "Netlify'da veritabanı adresi (NETLIFY_DB_URL) yok. Projede Netlify Database açık mı, package.json'da @netlify/database var mı?",
+  );
+}
+
 const db = postgresUrl
   ? postgresAdapter({
       pool: { connectionString: postgresUrl },
