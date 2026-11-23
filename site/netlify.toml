@@ -4,8 +4,10 @@
 # Ayrıntı: .claude/skills/admin-panel/SKILL.md → "Netlify'da yayın".
 
 [build]
-  # Önce veritabanı şemasını günceller (migrations/), sonra siteyi derler.
-  command = "npx payload migrate && npm run build"
+  # 1) Veritabanı şemasını günceller (migrations/)
+  # 2) `npm run netlify:veri` ile bekleyen veri varsa yazar (scripts/netlify-veri-yukle.mjs; canlı veritabanına yazma izni yalnızca derlemede var)
+  # 3) Siteyi derler
+  command = "npx payload migrate && node scripts/netlify-veri-yukle.mjs && npm run build"
   publish = ".next"
 
 [build.environment]
