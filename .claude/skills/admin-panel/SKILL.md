@@ -38,7 +38,7 @@ Oturum 7 gün açık kalır. 8 yanlış denemede hesap 15 dakika kilitlenir.
 | --- | --- | --- |
 | Katalog | Parçalar (`pieces`) | Koltuklar ve diğer ürünler, kişiselleştirme seçenekleri, isteğe bağlı 3B model |
 | Katalog | Kumaşlar (`fabrics`) | Kumaş adı, açıklama, renk notları, ölçek, kadife rengi, görsel |
-| Katalog | Etütler (`studies`) | Kumaşla düşünülmüş, henüz üretilmemiş gövdeler (Reels koltukları). Kendi kumaşının sayfasında (`/desenler/<kumaş>`) görünür; "Ana sayfada göster" işaretliyse ana sayfadaki etüt şeridine girer (en fazla 3, şerit yalnızca yayında parça yokken görünür). Koleksiyona karışmaz |
+| Katalog | Etütler (`studies`) | Kumaşla düşünülmüş, henüz üretilmemiş gövdeler (Reels koltukları). Kendi kumaşının sayfasında (`/desenler/<kumaş>`) görünür; "Ana sayfada göster" işaretliyse ana sayfadaki etüt şeridine girer (en fazla 3, şerit yalnızca yayında parça yokken görünür). Koleksiyona karışmaz. Kartlarda (Etütler sayfası, ana sayfa şeridi) ana görselden sonra ek kareler sırayla geçer: bunlar panelde değil, `lib/studyGallery.ts` + `public/etutler/<key>-N.webp` (900×1200) içinde; yeni etüde kare eklemek kod değişikliğidir |
 | Katalog | Koleksiyonlar (`piece-collections`) | Yol üstündeki duraklar; yalnızca gerçekten yapılan parçalar bağlanır. "Durak", "Giriş metni" alanları var; desen kodu artık isteğe bağlı (eski). 23.11.2026 itibarıyla yayında yalnızca "Kuruluş serisi" var; eski 4 koleksiyon ve 11 hayali parça taslakta |
 | Katalog | Desen kodları (`pattern-codes`) | Bahçe, Fauna, Süsleme, Rüya gibi desen aileleri |
 | Seçenekler | Parça türleri, Ahşaplar, Kaplamalar, Ölçüler | Kişiselleştirmede sunulan seçenek listeleri |

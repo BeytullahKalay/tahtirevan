@@ -66,6 +66,8 @@ export type Study = {
   featured: boolean;
   line: Localized;
   image: Img;
+  /** Kartlarda sırayla geçen kareler: önce ana görsel, sonra lib/studyGallery.ts'teki ek kareler. */
+  gallery: Img[];
   video?: string;
 };
 

@@ -4,7 +4,7 @@ import { getCatalog } from "@/lib/catalog.server";
 import { fabricHref, href, pieceHref, ROUTES, type Lang } from "@/lib/i18n";
 import { Media } from "../Media";
 import { Reveal } from "../Reveal";
-import { StudyFilm } from "../StudyFilm";
+import { StudySlides } from "../StudySlides";
 
 const COPY = {
   tr: {
@@ -176,9 +176,10 @@ export async function FabricView({ lang, fabric }: { lang: Lang; fabric: Fabric 
                 className={`w-full lg:col-span-5 lg:mx-auto lg:max-w-[calc((100svh-150px)*0.72)] ${flip ? "lg:order-2 lg:col-start-7" : "lg:col-start-2"}`}
               >
                 <div className="border border-altin/25 bg-[#1b1612] p-[clamp(12px,2vw,26px)] shadow-[0_40px_80px_-40px_rgba(0,0,0,0.8)]">
-                  <StudyFilm
-                    image={s.image}
+                  <StudySlides
+                    images={s.gallery}
                     video={s.video}
+                    lang={lang}
                     alt={s.image.alt?.[lang] || `${s.name[lang]} · ${fabric.name}`}
                     sizes="(min-width: 1024px) 38vw, 100vw"
                     className="aspect-[3/4] w-full"

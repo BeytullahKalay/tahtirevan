@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { LANGS, LOCALES, UI, href, translatePath, type Lang } from "@/lib/i18n";
 import { useCatalog } from "./CatalogProvider";
 import { Emblem } from "./Brand";
-import { Newsletter } from "./Newsletter";
 
 export function Footer({ lang }: { lang: Lang }) {
   const t = UI[lang];
@@ -17,11 +16,11 @@ export function Footer({ lang }: { lang: Lang }) {
     <footer className="border-t hairline px-[var(--gutter)] pb-10 pt-20 lg:pt-28">
       <div className="grid gap-16 lg:grid-cols-12">
         <div className="lg:col-span-6">
-          <h2 className="display-sm">{t.footer.letters}</h2>
-          <p className="mt-4 max-w-[44ch] text-tas">{t.footer.lettersLine}</p>
-          <div className="mt-8">
-            <Newsletter lang={lang} />
-          </div>
+          <h2 className="display-sm">{t.footer.invite}</h2>
+          <p className="mt-4 max-w-[44ch] text-tas">{t.footer.inviteLine}</p>
+          <Link href={href(lang, "consultation")} className="btn mt-8">
+            {t.consult}
+          </Link>
         </div>
 
         <nav aria-label={lang === "tr" ? "Alt bilgi" : "Footer"} className="grid grid-cols-2 gap-10 lg:col-span-6 lg:grid-cols-3">

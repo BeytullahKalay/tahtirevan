@@ -128,7 +128,11 @@ node ".claude/skills/coming-soon/scripts/make-assets.cjs" "C:\Users\Beytullah KA
 - `/olmayan-sayfa` gibi var olmayan adresler, `netlify.toml` içindeki `/* → /` kuralına rağmen Netlify'ın kendi 404 sayfasını gösteriyor. Düzeltmek için `coming-soon/404.html` adında markaya uygun bir sayfa eklenebilir ya da yönlendirme kuralına `force = true` verilebilir; ancak `force` kullanılırsa `/` adresine yapılan form gönderimini (POST) bozmadığı kontrol edilmeli.
 - Paylaşım (Open Graph) etiketlerindeki adresler `https://tahtirevan.com/…` olarak sabit yazılı.
 
-## Tam siteye geçiş (ileride)
+## Tam siteye geçiş (YAPILDI, 23.11.2026)
+
+**tahtirevan.com artık tam siteyi (`site/`) gösteriyor: aynı Netlify projesi, panelde "Yakında" modu.** `coming-soon/` klasörü artık yayında değil. Oradan `npx netlify-cli deploy --prod` çalıştırma: tam sitenin üzerine yazar. Eski `acilis-listesi` kayıtları `site/backups/acilis-listesi-netlify.csv` dosyasında. Ayrıntı: admin-panel skill'i → Netlify.
+
+### Eski plan (arşiv)
 
 Tam sitenin kendi "Yakında" modu var: admin paneli → Ayarlar → **Site durumu** (ayrıntı: `admin-panel` skill'i). Aynı tasarımı `site/app/(durum)/` altında gösterir; "Haber ver" kayıtları Netlify'a değil panelin **Açılış listesi**ne gider. Böylece tam site, alan adına "Yakında" modunda taşınıp hazır olunca panelden açılabilir. Bu durumda Netlify'daki eski listeyi CSV olarak indirip saklamayı unutma.
 

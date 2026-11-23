@@ -3,7 +3,8 @@ import { studyNumeral } from "@/lib/catalog";
 import { getCatalog } from "@/lib/catalog.server";
 import { fabricHref, href, type Lang } from "@/lib/i18n";
 import { Reveal } from "../Reveal";
-import { StudyFilm } from "../StudyFilm";
+import { StudyCta } from "../StudyCta";
+import { StudySlides } from "../StudySlides";
 
 const COPY = {
   tr: {
@@ -12,7 +13,7 @@ const COPY = {
     intro: "Etüt, bir kumaşın hangi gövdede en iyi duracağını görmek için yaptığımız dijital çalışmadır. Hiçbiri henüz üretilmedi; beğendiğiniz etüt siparişle, sizin ölçünüzde yapılır.",
     study: "Etüt",
     fabric: "Kumaş",
-    see: "Etüdü ve kumaşı gör",
+    see: "Etüdü incele",
     empty: "Etütler hazırlanıyor.",
     outroTitle: "Aklınızda bir etüt mü var?",
     outroLine: "Gövdeyi, ölçüyü ve desenin yerleşimini birlikte seçeriz. Çizim onayından teslime yaklaşık 12 hafta.",
@@ -25,7 +26,7 @@ const COPY = {
     intro: "A study is a digital sketch we make to see which body a fabric suits best. None has been made yet; the one you choose is made to order, to your measurements.",
     study: "Study",
     fabric: "Fabric",
-    see: "See the study and the fabric",
+    see: "View the study",
     empty: "The studies are in preparation.",
     outroTitle: "Is there a study on your mind?",
     outroLine: "We choose the body, the size and the placement of the pattern together. About 12 weeks from approved drawing to delivery.",
@@ -62,11 +63,13 @@ export async function StudiesView({ lang }: { lang: Lang }) {
                 <Reveal as="li" key={s.id} delay={(i % 3) * 0.1} className={i % 3 === 1 ? "lg:mt-24" : ""}>
                   <Link href={`${fabricHref(lang, f.id)}#etut-${s.id}`} className="group block" data-cursor="explore" aria-label={`${c.study} ${studyNumeral(i + 1)} · ${s.name[lang]} · ${f.name}`}>
                     <div className="border border-altin/25 bg-[#1b1612] p-[clamp(10px,1.4vw,18px)] transition-colors duration-700 group-hover:border-altin/60">
-                      <StudyFilm
-                        image={s.image}
+                      <StudySlides
+                        images={s.gallery}
+                        lang={lang}
                         alt={s.image.alt?.[lang] || `${s.name[lang]} · ${f.name}`}
                         sizes="(min-width: 1024px) 30vw, (min-width: 640px) 46vw, 100vw"
                         priority={i < 3}
+                        offset={(i % 3) * 1200}
                         className="zoomable aspect-[3/4] w-full"
                       />
                     </div>
@@ -77,6 +80,7 @@ export async function StudiesView({ lang }: { lang: Lang }) {
                       <span className="link-gold">{s.name[lang]}</span>
                     </h2>
                     <p className="mt-4 max-w-[40ch] text-tas">{s.line[lang]}</p>
+                    <StudyCta text={c.see} />
                   </Link>
                 </Reveal>
               );

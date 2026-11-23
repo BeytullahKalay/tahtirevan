@@ -11,7 +11,8 @@ import { Reveal } from "../Reveal";
 import { RoadStops } from "../RoadStops";
 import { roadStops } from "@/lib/road";
 import { SealHold } from "../SealHold";
-import { StudyFilm } from "../StudyFilm";
+import { StudyCta } from "../StudyCta";
+import { StudySlides } from "../StudySlides";
 import { studyNumeral } from "@/lib/catalog";
 
 const COPY = {
@@ -26,6 +27,7 @@ const COPY = {
     studiesLabel: "Etütler",
     studyWord: "Etüt",
     allStudies: "Tüm etütleri görün",
+    openStudy: "Etüdü incele",
     studiesTitle: "Kumaştan gövdeye.",
     studiesLine: "Kumaşlarımızla düşünülmüş, henüz üretilmemiş gövdeler. Her biri siparişle, sizin ölçünüzde yapılabilir.",
     seeFabric: "Kumaşı ve etüdü gör",
@@ -57,6 +59,7 @@ const COPY = {
     studiesLabel: "Studies",
     studyWord: "Study",
     allStudies: "See all studies",
+    openStudy: "View the study",
     studiesTitle: "From fabric to form.",
     studiesLine: "Bodies imagined in our fabrics, not yet made. Each can be made to order, to your measurements.",
     seeFabric: "See the fabric and the study",
@@ -205,10 +208,12 @@ export async function HomeView({ lang }: { lang: Lang }) {
                     <div className="relative border border-altin/25 bg-[#1b1612] p-[clamp(10px,1.4vw,18px)] transition-colors duration-700 group-hover:border-altin/60">
                       {/* Kartın boyalı kenarı */}
                       <span aria-hidden="true" className="absolute inset-x-[-1px] bottom-[-1px] h-[3px] bg-lal" />
-                      <StudyFilm
-                        image={s.image}
+                      <StudySlides
+                        images={s.gallery}
+                        lang={lang}
                         alt={s.image.alt?.[lang] || `${s.name[lang]} · ${f.name}`}
                         sizes="(min-width: 640px) 30vw, 100vw"
+                        offset={i * 1200}
                         className="zoomable aspect-[3/4] w-full"
                       />
                     </div>
@@ -218,6 +223,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
                     <h3 className="mt-2 font-serif text-3xl font-light leading-none">
                       <span className="link-gold">{s.name[lang]}</span>
                     </h3>
+                    <StudyCta text={c.openStudy} />
                   </Link>
                 </Reveal>
               );

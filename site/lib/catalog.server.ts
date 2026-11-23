@@ -9,6 +9,7 @@
 import config from "@payload-config";
 import { getPayload, type CollectionSlug } from "payload";
 import { cache } from "react";
+import { STUDY_GALLERY } from "./studyGallery";
 import {
   withHelpers,
   type CatalogData,
@@ -223,6 +224,7 @@ async function load(): Promise<CatalogData> {
         featured: Boolean(s.featured),
         line: loc(s.line),
         image,
+        gallery: [image, ...(STUDY_GALLERY[s.key as string] ?? [])],
         video: (v?.url as string | undefined) || undefined,
       },
     ];

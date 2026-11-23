@@ -268,6 +268,16 @@ button:hover > .zoomable .media-inner,
   transform-origin: 40% 45%;
 }
 
+/* Etüt kartındaki kare sayacı: etkin çizgi soldan dolar (StudySlides) */
+@keyframes slide-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 @keyframes kenburns {
   from {
     transform: scale(1.04) translate3d(0, 0, 0);
@@ -608,15 +618,110 @@ html.intro-on .intro {
 
 /* ---------- Mühür (tek etkileşim anı) ---------- */
 
-.seal-ring {
-  transition: stroke 900ms var(--ease);
+/* Durumlar: button[data-state] = idle | pressing | done (SealHold.tsx) */
+.seal {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.seal[data-state="done"] {
+  cursor: default;
 }
 
-.seal-wax {
+/* Damga yüzü + amblem: üzerine gelince hafif kalkar, basılı tutunca gömülür */
+.seal-brass,
+.seal-emblem {
+  transform-box: fill-box;
+  transform-origin: center;
   transition:
-    opacity 900ms var(--ease),
-    transform 1100ms var(--ease);
-  transform-origin: 50% 50%;
+    transform 500ms var(--ease),
+    opacity 900ms var(--ease);
+}
+.seal-emblem {
+  color: var(--color-altin);
+  transition:
+    transform 500ms var(--ease),
+    color 900ms var(--ease),
+    filter 900ms var(--ease);
+}
+.seal[data-state="idle"]:hover .seal-brass,
+.seal[data-state="idle"]:hover .seal-emblem {
+  transform: scale(1.025);
+}
+.seal[data-state="pressing"] .seal-brass,
+.seal[data-state="pressing"] .seal-emblem {
+  transform: scale(0.95);
+}
+.seal[data-state="done"] .seal-brass {
+  opacity: 0;
+}
+
+/* Mum: basılınca hafif taşarak yayılır, sonra oturur */
+.seal-wax {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+  transform: scale(0.7);
+}
+.seal[data-state="done"] .seal-wax {
+  animation: seal-spread 1100ms var(--ease) forwards;
+}
+@keyframes seal-spread {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Mumda amblem ve yazı kabartma: koyu kırmızı çizgi, altta gölge, üstte ışık */
+.seal[data-state="done"] .seal-emblem {
+  color: #c4646a;
+  filter: drop-shadow(0 1.2px 0 rgba(30, 6, 8, 0.85)) drop-shadow(0 -0.6px 0 rgba(255, 200, 190, 0.35));
+}
+.seal-text {
+  fill: var(--color-altin);
+  fill-opacity: 0.8;
+  transition: fill 900ms var(--ease);
+}
+.seal[data-state="done"] .seal-text {
+  fill: #cf7a7f;
+  fill-opacity: 1;
+  paint-order: stroke;
+  stroke: rgba(40, 8, 10, 0.55);
+  stroke-width: 0.6px;
+}
+
+.seal-ring {
+  transition: opacity 900ms var(--ease);
+}
+.seal[data-state="done"] .seal-ring {
+  opacity: 0.45;
+}
+
+/* Bekleyen damga: yavaş bir nabız, "dokunulabilir" der */
+.seal-pulse {
+  opacity: 0;
+  pointer-events: none;
+}
+.seal[data-state="idle"] .seal-pulse {
+  animation: seal-pulse 2.8s var(--ease) infinite;
+}
+@keyframes seal-pulse {
+  0% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.12);
+  }
 }
 
 /* ---------- Hareket azaltma: yalnızca kararma kalır ---------- */

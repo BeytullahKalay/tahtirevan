@@ -8,7 +8,6 @@
  */
 export const netlifyForms = process.env.NEXT_PUBLIC_FORMS === "netlify";
 export const CONSULTATION_FORM = "gorusme-talebi";
-export const NEWSLETTER_FORM = "atolyeden-mektuplar";
 
 const LABELS = {
   request: { gorusme: "Özel görüşme", katalog: "Katalog", basin: "Basın" },
