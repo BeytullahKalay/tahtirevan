@@ -109,8 +109,8 @@ export async function StoryView({ lang }: { lang: Lang }) {
   const { collections, getFabric, site } = await getCatalog();
   const upcoming = Math.max(1, 4 - collections.length);
   // Bölüm görselleri kumaştan gelir (koltuk fotoğrafı ve ondan kırpımlar kullanıcı isteğiyle kaldırıldı).
-  // Kumaş yayından kalkarsa getFabric ilk kumaşa döner; sayfa boş kalmaz.
-  const shots = ["soraya", "ardente", "sapphire"].map((id) => getFabric(id));
+  // Kumaş yayından kalkarsa getFabric ilk kumaşa döner; hiç kumaş yoksa (boş veritabanı) görsel atlanır.
+  const shots = ["soraya", "ardente", "sapphire"].map((id) => getFabric(id) as ReturnType<typeof getFabric> | undefined);
   return (
     <>
       <section className="px-[var(--gutter)] pb-[10vh] pt-36 text-center lg:pt-48">
@@ -123,6 +123,8 @@ export async function StoryView({ lang }: { lang: Lang }) {
       {c.chapters.map((ch, i) => (
         <section key={ch.h} className="grid items-center gap-10 px-[var(--gutter)] py-[10vh] lg:grid-cols-12">
           <Reveal className={`lg:col-span-6 ${i % 2 ? "lg:order-2 lg:col-start-7" : ""}`}>
+            {shots[i] && (
+            <>
             <Media
               lang={lang}
               shot="fabric"
@@ -134,6 +136,8 @@ export async function StoryView({ lang }: { lang: Lang }) {
             <p className="label mt-4 !text-[10px]">
               {shots[i].name} · {shots[i].motif[lang]}
             </p>
+            </>
+            )}
           </Reveal>
           <Reveal className={`lg:col-span-5 ${i % 2 ? "lg:order-1" : "lg:col-start-8"}`} delay={0.12}>
             <p className="label">{String(i + 1).padStart(2, "0")}</p>

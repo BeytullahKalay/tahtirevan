@@ -10,5 +10,9 @@
   command = "npx payload migrate && node scripts/netlify-veri-yukle.mjs && npm run build"
   publish = ".next"
 
+# Blobs erişimini derleme komutuna aktarır (veri-yukle betiği için)
+[[plugins]]
+  package = "./netlify/plugins/veri-yukle"
+
 [build.environment]
   NODE_VERSION = "22"

@@ -24,12 +24,17 @@ let dump;
 if (localFile) {
   dump = JSON.parse(fs.readFileSync(localFile, "utf8"));
 } else {
-  if (!process.env.NETLIFY_BLOBS_CONTEXT) {
-    console.log("[veri-yukle] Netlify Blobs erişimi yok (yerel derleme?), atlandı.");
+  // Erişim netlify/plugins/veri-yukle eklentisinden gelir (derleme komutuna Netlify kendisi vermiyor).
+  const { VERI_SITE_ID: siteID, VERI_TOKEN: token, NETLIFY_BLOBS_CONTEXT: context } = process.env;
+  if (!context && !(siteID && token)) {
+    const where = process.env.NETLIFY === "true" ? "Netlify'da eklenti çalışmadı mı? (netlify.toml → [[plugins]])" : "yerel derleme";
+    console.log(`[veri-yukle] Netlify Blobs erişimi yok (${where}), atlandı.`);
     process.exit(0);
   }
   const { getStore } = await import("@netlify/blobs");
-  store = getStore({ name: "aktarim", consistency: "strong" });
+  store = context
+    ? getStore({ name: "aktarim", consistency: "strong" })
+    : getStore({ name: "aktarim", consistency: "strong", siteID, token });
   dump = await store.get("veri.json", { type: "json" });
   if (!dump) {
     console.log("[veri-yukle] Bekleyen veri yok.");
