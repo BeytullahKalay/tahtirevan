@@ -31,8 +31,8 @@ export function piecePage(lang: Lang, colKey: string, pieceKey: string) {
         pieceHref(lang, p),
         `${p.name} ${type}`,
         lang === "tr"
-          ? `${p.name} ${type.toLocaleLowerCase("tr")}, ${fabric.name} kumaşla. ${p.hours} saatlik el işçiliği, numaralı ve imzalı.`
-          : `The ${p.name} ${type.toLowerCase()} in ${fabric.name}. ${p.hours} hours of handwork, numbered and signed.`,
+          ? `${p.name} ${type.toLocaleLowerCase("tr")}, ${fabric.name} kumaşla. Siparişle yapılır, numaralıdır.`
+          : `The ${p.name} ${type.toLowerCase()} in ${fabric.name}. Made to order and numbered.`,
         slugs,
       );
     },

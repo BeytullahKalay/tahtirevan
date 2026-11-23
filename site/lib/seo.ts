@@ -57,8 +57,8 @@ export const META = {
     en: ["Collections", "The founding series and the stops on the road: numbered pieces, made to order."],
   },
   bespoke: {
-    tr: ["Size Özel", "Özel görüşmeden ömür boyu bakıma kadar, bir Tahtırevan'ın altı adımda yapılışı."],
-    en: ["Bespoke", "From a private consultation to lifetime care: how a Tahtırevan is made, in six steps."],
+    tr: ["Size Özel", "Özel görüşmeden teslimata kadar, bir Tahtırevan'ın altı adımda yapılışı."],
+    en: ["Bespoke", "From a private consultation to delivery: how a Tahtırevan is made, in six steps."],
   },
   patterns: {
     tr: ["Desenler", "Tahtırevan desen kütüphanesi: dört desen kodu, on bir kumaş, renk notları, ölçekler ve bu kumaşlarla düşünülmüş etütler."],

@@ -66,7 +66,7 @@ const DOCS: Record<LegalKey, Record<Lang, Doc>> = {
         ["Kumaş", "Haftada bir yumuşak bir fırçayla, desenin yönünde fırçalayın. Lekede ovalamayın; temiz, kuru bir bezle bastırarak alın ve bize yazın."],
         ["Ahşap", "Yağ kaplamalı gövdeleri yılda bir kez atölyenin gönderdiği yağ ile besleyin. Lake ve varak yüzeyleri yalnızca kuru, yumuşak bir bezle silin."],
         ["Ortam", "Gövde ahşabı nefes alır. Radyatör ve klima çıkışlarından en az bir metre uzakta, dengeli nemde en iyi hâlini korur."],
-        ["Ömür boyu hizmet", "Onarım, yeniden döşeme ve yerinde bakım için parça numaranızla bize ulaşın."],
+        ["Bakım ve yeniden döşeme", "Onarım, yeniden döşeme ya da bakım için parça numaranızla bize her zaman ulaşabilirsiniz."],
       ],
     },
     en: {
@@ -78,7 +78,7 @@ const DOCS: Record<LegalKey, Record<Lang, Doc>> = {
         ["Fabric", "Once a week, brush gently with a soft brush in the direction of the pattern. Never rub a stain: blot it with a clean, dry cloth and write to us."],
         ["Wood", "Feed oiled frames once a year with the oil the atelier sends you. Wipe lacquer and gold leaf with a dry, soft cloth only."],
         ["Surroundings", "The wood of the frame breathes. It keeps best at even humidity, at least a metre from radiators and air vents."],
-        ["Lifetime service", "For repairs, reupholstery or care in your home, contact us with your piece number."],
+        ["Care and reupholstery", "For repairs, reupholstery or care, you can always reach us with your piece number."],
       ],
     },
   },

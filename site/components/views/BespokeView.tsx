@@ -6,14 +6,14 @@ const COPY = {
   tr: {
     label: "Size özel",
     title: "Bir taht, tek bir kişi için.",
-    line: "Her Tahtırevan bir görüşmeyle başlar ve sahibinin evinde, ömür boyu sürecek bir bakım sözüyle biter. Arada altı adım vardır.",
+    line: "Her Tahtırevan bir görüşmeyle başlar ve sahibinin evinde biter. Arada altı adım vardır.",
     steps: [
       ["Özel görüşme", "Evinizde ya da video ile. Mekânı, ışığı ve parçanın nerede duracağını konuşuruz."],
       ["Gövde tasarımı ve desen seçimi", "Gövdeyi birlikte çizer, desenin gövde üzerindeki yerini işaretleriz. Çizim sizin onayınızla kesinleşir."],
       ["Malzeme ve kumaş", "Seçtiğiniz kumaşlar; nakış, püskül ve pirinç örnekleriyle birlikte bir numune kutusu olarak kapınıza gelir."],
       ["Atölyede yapım", "Parça, birlikte çalıştığımız atölyede ustaların elinde kurulur. İki haftada bir size ilerleme fotoğrafı ve videosu göndeririz."],
       ["Teslimat ve kurulum", "Parça size getirilir, yerine konur ve kurulur."],
-      ["Sertifika ve ömür boyu bakım", "Numaralı sertifikanız parçayla birlikte gelir. Bakım, onarım ve yeniden döşeme ömür boyu bizdedir."],
+      ["Sertifika ve bakım", "Numaralı sertifikanız parçayla birlikte gelir. Bakım ve yeniden döşeme için bize her zaman ulaşabilirsiniz."],
     ],
     projectsLabel: "Projeler",
     projectsTitle: "Projeler için Tahtırevan",
@@ -29,14 +29,14 @@ const COPY = {
   en: {
     label: "Bespoke",
     title: "A throne, for one person.",
-    line: "Every Tahtırevan begins with a conversation and ends in its owner's home, with a promise of care for life. Between the two are six steps.",
+    line: "Every Tahtırevan begins with a conversation and ends in its owner's home. Between the two are six steps.",
     steps: [
       ["A private consultation", "At your home, or by video. We talk about the room, the light and where the piece will stand."],
       ["Frame design and pattern", "We draw the body together and mark where the pattern will fall on it. The drawing is final only once you approve it."],
       ["Materials and fabric", "Your chosen fabrics arrive at your door in a sample box, with samples of the embroidery, the tassel and the brass."],
       ["Made in the atelier", "The piece is built by master upholsterers in a workshop we work with. Every two weeks we send you photographs and a short film of its progress."],
       ["Delivery and installation", "The piece is brought to you, placed and set up."],
-      ["Certificate and lifetime care", "Your numbered certificate arrives with the piece. Care, repair and reupholstery stay with us for life."],
+      ["Certificate and care", "Your numbered certificate arrives with the piece. For care and reupholstery, you can always reach us."],
     ],
     projectsLabel: "Projects",
     projectsTitle: "Tahtırevan for projects",

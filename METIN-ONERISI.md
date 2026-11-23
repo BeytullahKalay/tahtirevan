@@ -1,14 +1,14 @@
-# Site metinleri · öneri (onay bekliyor)
+# Site metinleri · öneri (uygulandı)
 
-23 Kasım 2026. Sitede bugün doğru olmayan ya da eski düzenden (dört desen kodu) kalan cümleler ve yerlerine önerdiğim metinler. Henüz hiçbiri uygulanmadı. Onaylarsanız Türkçeyi uygularım, İngilizceyi aynı sesle ayrıca yazarım.
+23 Kasım 2026. Sitede bugün doğru olmayan ya da eski düzenden (dört desen kodu) kalan cümleler ve yerlerine önerilen metinler. **Durum:** aşağıdakilerin hepsi TR ve EN olarak sitede ve panelde (sayaçlar) uygulandı.
 
 Kural: bugün doğru olmayan söz yazılmaz ("el oyması ceviz", "420 saat", "tek usta" gibi). Doğru olduğunda eklenir.
 
-## Önce cevabınız gereken üç soru
+## Üç sorunun cevabı (23 Kasım 2026)
 
-1. **"Her desen yalnızca Tahtırevan için çizilir."** Bu doğru mu, yoksa kumaşlar Mane Tex kataloğundan mı seçiliyor? Doğru değilse cümle "Kumaşlarımız ailemizin kumaş geleneğinden gelir" olur.
-2. **Beyaz eldivenli teslimat ve ömür boyu bakım** sözünü verebiliyor muyuz? Veremiyorsak "Parça yerine getirilir ve kurulur" ve "Bakım ve yeniden döşeme için bize her zaman ulaşabilirsiniz" yazarım.
-3. **"Yangın ve kullanım standartlarına uygun döşeme seçenekleri"** (iç mimarlar ve oteller bölümü). Bunu sunabiliyor muyuz? Sunamıyorsak madde kalkar.
+1. **Desenler:** kumaşların çoğu Mane Tex kataloğundan. "Yalnızca Tahtırevan için çizilir" denmez; "Kumaşlarımız ailemizin kumaş geleneğinden gelir" yazılır.
+2. **Beyaz eldivenli teslimat ve ömür boyu bakım:** ikisi de verilmiyor. "Parça size getirilir, yerine konur ve kurulur" ve "Bakım ve yeniden döşeme için bize her zaman ulaşabilirsiniz" yazılır (Size özel, Bakım kılavuzu, parça sayfası, arama motoru açıklaması).
+3. **Yangın standartlarına uygun döşeme:** şimdilik sunulmuyor, madde kaldırıldı. Belgeli kumaş bulununca geri eklenir.
 
 ## Ana sayfa
 
