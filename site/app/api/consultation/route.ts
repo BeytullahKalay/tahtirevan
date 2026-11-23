@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     .join("")}</table>`;
 
   const result = await sendMail({
-    to: process.env.CONSULTATION_TO_EMAIL,
+    to: process.env.CONSULTATION_TO_EMAIL || "hi@tahtirevan.com",
     subject: `Tahtırevan · ${data.request === "katalog" ? "Katalog talebi" : data.request === "basin" ? "Basın talebi" : "Özel görüşme talebi"} · ${data.name}`,
     html,
     replyTo: data.email,

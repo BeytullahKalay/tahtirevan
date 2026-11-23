@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   const lang = raw.lang === "en" ? "en" : "tr";
 
   const result = await sendMail({
-    to: process.env.NEWSLETTER_TO_EMAIL || process.env.CONSULTATION_TO_EMAIL,
+    to: process.env.NEWSLETTER_TO_EMAIL || process.env.CONSULTATION_TO_EMAIL || "hi@tahtirevan.com",
     subject: "Tahtırevan · Atölyeden mektuplar · yeni abone",
     html: `<p style="font-family:Georgia,serif">${escapeHtml(email)} (${lang})</p>`,
   });

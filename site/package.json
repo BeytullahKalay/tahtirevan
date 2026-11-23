@@ -12,11 +12,16 @@
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importmap",
     "seed": "payload run scripts/seed.ts",
-    "backup": "node scripts/backup.mjs"
+    "backup": "node scripts/backup.mjs",
+    "netlify:veri": "node scripts/netlify-veri-aktar.mjs",
+    "netlify:dosyalar": "node scripts/netlify-dosya-aktar.mjs"
   },
   "dependencies": {
+    "@netlify/blobs": "^11.1.10",
+    "@payloadcms/db-postgres": "^3.93.0",
     "@payloadcms/db-sqlite": "3.93.0",
     "@payloadcms/next": "3.93.0",
+    "@payloadcms/plugin-cloud-storage": "^3.93.0",
     "@payloadcms/richtext-lexical": "3.93.0",
     "@payloadcms/translations": "3.93.0",
     "@payloadcms/ui": "3.93.0",

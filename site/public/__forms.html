@@ -1,0 +1,32 @@
+<!doctype html>
+<!--
+  Netlify Forms tanımları. Bu sayfa ziyaretçiye gösterilmez; Netlify yayın sırasında buradaki
+  formları tanır ve sitedeki formlar başvuruları bu adrese gönderir (lib/forms.ts).
+  Alan adları lib/forms.ts → consultationFields ile aynı olmalı. Form adı değişirse Netlify'daki liste sıfırdan başlar.
+-->
+<html lang="tr">
+  <head><meta charset="utf-8" /><meta name="robots" content="noindex" /><title>Formlar</title></head>
+  <body>
+    <form name="gorusme-talebi" data-netlify="true" netlify-honeypot="website" hidden>
+      <input type="hidden" name="form-name" value="gorusme-talebi" />
+      <input name="website" />
+      <input name="talep" />
+      <input name="ad-soyad" />
+      <input name="e-posta" type="email" />
+      <input name="telefon" />
+      <input name="ulke-sehir" />
+      <input name="ilgi" />
+      <input name="proje-turu" />
+      <input name="gorusme-bicimi" />
+      <input name="dil" />
+      <textarea name="not"></textarea>
+      <input name="kvkk-onayi" />
+    </form>
+    <form name="atolyeden-mektuplar" data-netlify="true" netlify-honeypot="website" hidden>
+      <input type="hidden" name="form-name" value="atolyeden-mektuplar" />
+      <input name="website" />
+      <input name="e-posta" type="email" />
+      <input name="dil" />
+    </form>
+  </body>
+</html>

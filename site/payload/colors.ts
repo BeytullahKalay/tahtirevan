@@ -1,6 +1,7 @@
-import path from "node:path";
 import type { CollectionBeforeChangeHook } from "payload";
 import sharp from "sharp";
+import { readFile } from "./fileStore";
+import { mediaKey } from "./storageAdapter";
 
 type RGB = [number, number, number];
 
@@ -18,7 +19,7 @@ function hsl([r, g, b]: RGB) {
 }
 
 /** Görseli küçültüp basit k-ortalamayla baskın renkleri bulur. */
-export async function dominantColors(file: string, k = 6): Promise<{ rgb: RGB; weight: number }[]> {
+export async function dominantColors(file: string | Buffer, k = 6): Promise<{ rgb: RGB; weight: number }[]> {
   const { data } = await sharp(file).resize(48, 48, { fit: "cover" }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
   const px: RGB[] = [];
   for (let i = 0; i < data.length; i += 3) px.push([data[i], data[i + 1], data[i + 2]]);
@@ -74,7 +75,8 @@ export const suggestFabricColors: CollectionBeforeChangeHook = async ({ data, re
     const imageId = typeof data.image === "object" ? data.image.id : data.image;
     const img = await req.payload.findByID({ collection: "fabric-images", id: imageId, depth: 0, req });
     if (!img?.filename) return data;
-    const file = path.resolve(process.cwd(), "media", "fabrics", img.filename);
+    const file = await readFile(mediaKey("fabric-images", img.filename));
+    if (!file) return data;
     const { colors, velvet } = suggest(await dominantColors(file));
     if (needColors) data.colors = colors.map((color) => ({ color }));
     if (needVelvet) data.velvet = velvet;

@@ -378,6 +378,7 @@ export interface FabricImage {
    * Short description for people who cannot see the image.
    */
   alt?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -470,6 +471,7 @@ export interface Media {
    * Tick for AI or 3D generated images (for record keeping; no label is shown on the site). Leave empty for real product photos.
    */
   preview?: boolean | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -504,6 +506,7 @@ export interface Video {
    * Short description for people who cannot see the image.
    */
   alt?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -537,6 +540,7 @@ export interface Model {
    */
   backStart?: number | null;
   prepared?: boolean | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -951,6 +955,7 @@ export interface SizesSelect<T extends boolean = true> {
  */
 export interface FabricImagesSelect<T extends boolean = true> {
   alt?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1004,6 +1009,7 @@ export interface FabricImagesSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   preview?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1036,6 +1042,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface VideosSelect<T extends boolean = true> {
   alt?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -1057,6 +1064,7 @@ export interface ModelsSelect<T extends boolean = true> {
   heightCm?: T;
   backStart?: T;
   prepared?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

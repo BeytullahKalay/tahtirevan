@@ -132,7 +132,7 @@ node ".claude/skills/coming-soon/scripts/make-assets.cjs" "C:\Users\Beytullah KA
 
 Tam sitenin kendi "Yakında" modu var: admin paneli → Ayarlar → **Site durumu** (ayrıntı: `admin-panel` skill'i). Aynı tasarımı `site/app/(durum)/` altında gösterir; "Haber ver" kayıtları Netlify'a değil panelin **Açılış listesi**ne gider. Böylece tam site, alan adına "Yakında" modunda taşınıp hazır olunca panelden açılabilir. Bu durumda Netlify'daki eski listeyi CSV olarak indirip saklamayı unutma.
 
-1. **Barındırma seçimi:** Tam site (Next.js + Payload + SQLite) Netlify veya Vercel'in sunucusuz yapısına olduğu gibi uymaz. Kalıcı disk gerekir: Railway, Render ya da kendi küçük sunucusu (VPS) gibi bir yer, veya Postgres ile S3'e geçiş. Seçeneği sormadan önce kavramı kullanıcıya sade bir örnekle anlat.
+1. **Barındırma seçimi (karar verildi, 23.11.2026):** Tam site aynı Netlify projesinde çalışacak; veritabanı Netlify Database, dosyalar Netlify Blobs, formlar Netlify Forms. Kod hazır; ayrıntı `admin-panel` skill'i → "Yayına alırken (Netlify)". Proje Git'ten (GitHub, Base directory `site`) derlenince bu sayfanın elle yayını biter; "Yakında" görünümünü artık tam sitenin panelindeki **Site durumu** verir.
 2. **Hazırlık:** Yeni barındırmada site `*.up.railway.app` gibi geçici bir adreste test edilir.
 3. **Netlify'dan ayırma:** Netlify'da Domain management bölümünden `tahtirevan.com` ve `www` kaldırılır.
 4. **DNS değişikliği:** Squarespace'te yalnızca **A @** ve **CNAME www** kayıtları yeni barındırmanın verdiği değerlerle değiştirilir. Gmail kayıtlarına (MX ve TXT) yine dokunulmaz.

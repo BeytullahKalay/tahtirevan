@@ -6,7 +6,15 @@ import { useMemo, useRef, useState } from "react";
 import type { Catalog } from "@/lib/catalog";
 import { useCatalog } from "./CatalogProvider";
 import { href, type Lang } from "@/lib/i18n";
-import { parseConsultation, type FieldErrors } from "@/lib/forms";
+import {
+  CONSULTATION_FORM,
+  consultationFields,
+  looksLikeBot,
+  netlifyForms,
+  parseConsultation,
+  postNetlifyForm,
+  type FieldErrors,
+} from "@/lib/forms";
 import { track } from "./Consent";
 
 const COPY = {
@@ -142,9 +150,9 @@ export function ConsultationForm({ lang }: { lang: Lang }) {
       payload.note = `${c.selection}: ${pre.selection}\n\n${payload.note || ""}`.trim();
     }
 
-    const { errors: errs } = parseConsultation(payload);
+    const { data, errors: errs } = parseConsultation(payload);
     setErrors(errs);
-    if (Object.keys(errs).length) {
+    if (!data || Object.keys(errs).length) {
       const first = Object.keys(errs)[0];
       formRef.current?.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
       return;
@@ -152,13 +160,21 @@ export function ConsultationForm({ lang }: { lang: Lang }) {
 
     setState("sending");
     try {
-      const res = await fetch("/api/consultation", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      const json = await res.json().catch(() => ({}));
-      if (res.ok && json.ok) {
+      let ok: boolean;
+      let json: { ok?: boolean; errors?: FieldErrors } = {};
+      if (netlifyForms) {
+        // Botlara başarılı görünür ama hiçbir şey gönderilmez
+        ok = looksLikeBot(payload) || (await postNetlifyForm(CONSULTATION_FORM, consultationFields(data)));
+      } else {
+        const res = await fetch("/api/consultation", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        json = await res.json().catch(() => ({}));
+        ok = res.ok && !!json.ok;
+      }
+      if (ok) {
         setState("done");
         track("Consultation", { request: String(payload.request), type: String(payload.projectType) });
         window.scrollTo({ top: 0, behavior: "smooth" });

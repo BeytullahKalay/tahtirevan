@@ -130,11 +130,28 @@ Seed tekrar çalıştırılabilir: kayıtları `key` alanıyla bulur ve güncell
 - `PAYLOAD_SECRET` tanımlı değilse uygulama açılmaz (`site/.env`). Bu değeri hiçbir yere yazdırma, sohbete kopyalama.
 - Kumaş görselleri artık panelden yüklenince sürümleri kendiliğinden üretiliyor; CLAUDE.md'deki "sw/tile/tex sürümlerini yeniden üret" kuralı yalnızca `public/fabrics/` altındaki eski, panel dışı dosyalar için geçerli.
 
-## Yayına alırken
+## Yayına alırken (Netlify)
 
-- Veri sunucu diskinde bir dosyada (SQLite) ve yüklenen dosyalar `media/` klasöründe. Bu yüzden **kalıcı diski olan** bir sunucu gerekir (VPS veya kalıcı disk/volume veren bir hizmet). Vercel gibi her dağıtımda diski sıfırlayan yerlerde panel değişiklikleri kaybolur; oraya alınacaksa veritabanı ve dosya depolaması değiştirilmeli. Bunu kullanıcıyla konuşmadan seçme.
-- Canlıda `PAYLOAD_SECRET` için yeni, uzun, rastgele bir değer kullanılmalı (yereldekinin aynısı değil).
-- Yerel veritabanını ve `media/` klasörünü canlıya taşımak için önce `npm run backup`, sonra yedeği sunucuya kopyala.
+Kullanıcı kararı (23.11.2026): tam site, "Yakında" sayfasıyla aynı Netlify projesinde (**tahtirevan**, Site ID `03a2575d-9628-4b4a-9781-c6d021693799`) çalışır. Netlify'ın diski kalıcı değil, bu yüzden:
+
+| Ne | Yerelde | Netlify'da |
+| --- | --- | --- |
+| Veritabanı | SQLite (`data/tahtirevan.db`) | Netlify Database (Postgres), adres `NETLIFY_DB_URL` kendiliğinden gelir |
+| Yüklenen dosyalar | `media/<klasör>/` | Netlify Blobs, `media` deposu, anahtar `<klasör>/<dosya>` |
+| Formlar | `/api/consultation`, `/api/newsletter` (e-posta Resend ile, yoksa konsola) | Netlify Forms (`gorusme-talebi`, `atolyeden-mektuplar`), bildirim hi@tahtirevan.com |
+
+Kod (Claude için):
+- Veritabanı seçimi `payload.config.ts`: `NETLIFY_DB_URL` ya da `DATABASE_URI=postgres://…` varsa Postgres (`push: false`, şema yalnızca `migrations/` ile), yoksa SQLite.
+- **Koleksiyona alan ekleyince/değiştirince Postgres göçü üret:** `DATABASE_URI=postgres://… npx payload migrate:create <ad>`. Yerelde Postgres yoksa geçici bir PGlite sunucusu kullan (`npm i @electric-sql/pglite @electric-sql/pglite-socket` scratchpad'e, `npx pglite-server --db=./data --port=54329 --max-connections=20`), önce `payload migrate` ile mevcut göçleri uygula. Göç dosyası Git'e girer; Netlify derlemesi `npx payload migrate && npm run build` ile uygular. Uygulanmış bir göçü değiştirme.
+- PGlite aynı anda çok bağlantıda `ECONNRESET` verir (ör. `next build`); bu gerçek Postgres'te olmaz. Uzun süre açık kalan PGlite oturumu tuhaf hatalar verebiliyor; temiz bir klasörle yeniden başlat.
+- Dosyalar `payload/fileStore.ts` (yerel disk / Netlify Blobs) ve `payload/storageAdapter.ts` (Payload depolama bağlantısı, `@payloadcms/plugin-cloud-storage`) üzerinden. Adresler değişmedi: `/api/<koleksiyon>/file/<dosya>`; video için Range desteklenir. Diske doğrudan `fs` ile yazma; `fileStore`'u kullan.
+- Netlify'da panelden tek dosya en fazla ~4,5 MB yüklenebilir (fonksiyon sınırı).
+- Formlar: `lib/forms.ts` (`netlifyForms`, `NEXT_PUBLIC_FORMS` derlemede `next.config.ts` içinde belirlenir); form tanımları `public/__forms.html`. Alan adlarını iki yerde aynı tut.
+- Yerel veriyi aktarma: `npm run netlify:veri` (Postgres'e; adresi Netlify komut aracından kendisi alır, ekrana yazmaz; `--uzerine-yaz`), `npm run netlify:dosyalar` (Blobs'a). **İkisini de kullanıcı çalıştırır** (Netlify girişi onun). Önce `npm run backup`.
+- Canlıya geçtikten sonra içerik panelde canlıda düzenlenir; yereldeki veri eskir. Yerelden yeniden aktarmak canlıdaki değişikliklerin üzerine yazar: önce kullanıcıya sor.
+
+Genel:
+- Canlıda `PAYLOAD_SECRET` için yeni, uzun, rastgele bir değer kullanılmalı (yereldekinin aynısı değil). Kullanıcı Netlify'da kendisi tanımlar; değeri sohbete yazdırma.
 - Canlıda `/admin` adresi herkese açık bir giriş sayfasıdır; güçlü şifre kullanılmasını hatırlat.
 - DNS ayarlarında Google Workspace'in MX/TXT kayıtlarına dokunma (bkz. CLAUDE.md).
 

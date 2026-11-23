@@ -1,5 +1,48 @@
 /** Görüşme formu: istemci ve sunucu aynı kuralları kullanır. */
 
+/**
+ * Netlify'da formlar Netlify Forms'a gider: başvurular Netlify › Forms'ta listelenir, bildirim
+ * hi@tahtirevan.com'a gelir (ek hesap ya da anahtar gerekmez). Netlify derlemede NETLIFY=true verir;
+ * next.config.ts bunu NEXT_PUBLIC_FORMS olarak tarayıcıya taşır. Yerelde formlar /api/… yoluna gider.
+ * Form tanımları (Netlify'ın formu tanıması için): public/__forms.html — alan adları aşağıdakilerle aynı olmalı.
+ */
+export const netlifyForms = process.env.NEXT_PUBLIC_FORMS === "netlify";
+export const CONSULTATION_FORM = "gorusme-talebi";
+export const NEWSLETTER_FORM = "atolyeden-mektuplar";
+
+const LABELS = {
+  request: { gorusme: "Özel görüşme", katalog: "Katalog", basin: "Basın" },
+  projectType: { konut: "Konut", "ic-mimar": "İç mimar / stüdyo", otel: "Otel / kulüp / kurumsal" },
+  meeting: { ev: "Ev ziyareti", video: "Video görüşme", telefon: "Telefon" },
+} as const;
+
+/** Netlify Forms'a gönderilecek alanlar (bildirim e-postasında bu adlarla görünür). */
+export function consultationFields(d: ConsultationInput): Record<string, string> {
+  return {
+    talep: LABELS.request[d.request],
+    "ad-soyad": d.name,
+    "e-posta": d.email,
+    telefon: d.phone || "-",
+    "ulke-sehir": d.location,
+    ilgi: d.interest || "-",
+    "proje-turu": LABELS.projectType[d.projectType],
+    "gorusme-bicimi": LABELS.meeting[d.meeting],
+    dil: d.lang,
+    not: d.note || "-",
+    "kvkk-onayi": d.consent ? "Evet" : "Hayır",
+  };
+}
+
+/** Netlify Forms'a gönderir (yalnızca Netlify'da çalışır). */
+export async function postNetlifyForm(name: string, fields: Record<string, string>) {
+  const res = await fetch("/__forms.html", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ "form-name": name, ...fields }).toString(),
+  });
+  return res.ok;
+}
+
 export const PROJECT_TYPES = ["konut", "ic-mimar", "otel"] as const;
 export const MEETING_TYPES = ["ev", "video", "telefon"] as const;
 export const REQUEST_TYPES = ["gorusme", "katalog", "basin"] as const;

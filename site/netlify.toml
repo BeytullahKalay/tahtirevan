@@ -1,0 +1,12 @@
+# Tam sitenin Netlify ayarı. Netlify'da "Base directory" = site olmalı.
+# Veri: Netlify Database (Postgres, NETLIFY_DB_URL kendiliğinden gelir) · Dosyalar: Netlify Blobs ("media" deposu).
+# Netlify panelinde elle tanımlanacak ortam değişkeni: PAYLOAD_SECRET (uzun, rastgele; yereldekinin aynısı değil).
+# Ayrıntı: .claude/skills/admin-panel/SKILL.md → "Netlify'da yayın".
+
+[build]
+  # Önce veritabanı şemasını günceller (migrations/), sonra siteyi derler.
+  command = "npx payload migrate && npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"

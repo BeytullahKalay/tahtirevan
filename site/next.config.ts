@@ -6,6 +6,8 @@ import type { NextConfig } from "next";
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig: NextConfig = {
+  // Netlify'da formlar Netlify Forms'a gider (lib/forms.ts); Netlify derlemede NETLIFY=true verir
+  env: { NEXT_PUBLIC_FORMS: process.env.NETLIFY === "true" ? "netlify" : "api" },
   images: {
     // Yalnızca WebP: AVIF kodlaması çok yavaş; ilk istekte görsel kuyruğu birikip sayfa "yüklenmiyor" görünüyordu.
     formats: ["image/webp"],

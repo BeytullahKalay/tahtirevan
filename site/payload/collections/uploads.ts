@@ -2,9 +2,14 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { APIError, type CollectionConfig } from "payload";
 import { ModelError, hasNamedParts, prepareChairModel } from "../chairModel";
+import { deleteFile, readFile, writeFile } from "../fileStore";
 import { L, protectDelete, revalidateAfterChange } from "../shared";
+import { mediaKey } from "../storageAdapter";
 
-/** Yüklenen dosyalar `site/media/` altında durur (Git'e girmez; yedekleme betiği bunu da alır). */
+/**
+ * Yerelde yüklenen dosyalar `site/media/` altında durur (Git'e girmez; yedekleme betiği bunu da alır).
+ * Netlify'da Netlify Blobs'a yazılır; ikisini de `payload/storageAdapter.ts` yönetir (staticDir yalnızca yedek bilgi).
+ */
 const dir = (name: string) => path.resolve(process.cwd(), "media", name);
 
 const altField = {
@@ -121,7 +126,7 @@ export const Videos: CollectionConfig = {
 /* ---------- 3B modeller ---------- */
 
 /** Yüklenen ham modelin kopyası; ayarlar değişince model buradan yeniden hazırlanır. */
-const sourcePath = (filename: string) => path.join(dir("models"), "kaynak", path.basename(filename));
+const sourceKey = (filename: string) => `models/kaynak/${path.basename(filename)}`;
 
 const prepOptions = (data: { heightCm?: number | null; backStart?: number | null } | undefined) => ({
   height: (data?.heightCm || 81) / 100,
@@ -196,14 +201,10 @@ export const Models: CollectionConfig = {
         const before = prepOptions(originalDoc);
         const after = prepOptions({ heightCm: data.heightCm ?? originalDoc.heightCm, backStart: data.backStart ?? originalDoc.backStart });
         if (before.height === after.height && before.cut === after.cut) return data;
-        let src: Buffer;
-        try {
-          src = await fs.readFile(sourcePath(originalDoc.filename));
-        } catch {
-          throw new APIError("Modelin ilk hâli bulunamadı; ayarı değiştirmek için .glb dosyasını yeniden yükleyin.", 400, null, true);
-        }
+        const src = await readFile(sourceKey(originalDoc.filename));
+        if (!src) throw new APIError("Modelin ilk hâli bulunamadı; ayarı değiştirmek için .glb dosyasını yeniden yükleyin.", 400, null, true);
         const r = await prepare(src, { heightCm: after.height * 100, backStart: after.cut * 100 });
-        await fs.writeFile(path.join(dir("models"), path.basename(originalDoc.filename)), r.glb);
+        await writeFile(mediaKey("models", originalDoc.filename), r.glb, "model/gltf-binary");
         return { ...data, report: r.report, filesize: r.glb.length };
       },
     ],
@@ -211,9 +212,8 @@ export const Models: CollectionConfig = {
       async ({ doc, previousDoc, req }) => {
         const src = (req.context as ModelCtx).modelSource;
         if (!src || !doc.filename) return doc;
-        await fs.mkdir(path.dirname(sourcePath(doc.filename)), { recursive: true });
-        await fs.writeFile(sourcePath(doc.filename), src);
-        if (previousDoc?.filename && previousDoc.filename !== doc.filename) await fs.rm(sourcePath(previousDoc.filename), { force: true });
+        await writeFile(sourceKey(doc.filename), src, "model/gltf-binary");
+        if (previousDoc?.filename && previousDoc.filename !== doc.filename) await deleteFile(sourceKey(previousDoc.filename));
         return doc;
       },
       // Model ayarı değişince sitedeki önbellek yenilensin (adres ?v= ile değişir)
@@ -228,7 +228,7 @@ export const Models: CollectionConfig = {
     ],
     afterDelete: [
       async ({ doc }) => {
-        if (doc?.filename) await fs.rm(sourcePath(doc.filename), { force: true });
+        if (doc?.filename) await deleteFile(sourceKey(doc.filename));
       },
     ],
   },

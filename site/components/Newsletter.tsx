@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { NEWSLETTER_FORM, looksLikeBot, netlifyForms, postNetlifyForm } from "@/lib/forms";
 import { UI, type Lang } from "@/lib/i18n";
 
 export function Newsletter({ lang }: { lang: Lang }) {
@@ -13,6 +14,12 @@ export function Newsletter({ lang }: { lang: Lang }) {
     const fd = new FormData(e.currentTarget);
     setState("sending");
     try {
+      if (netlifyForms) {
+        const email = String(fd.get("email") || "").trim();
+        const bot = looksLikeBot({ website: fd.get("website"), elapsed: Date.now() - startedAt });
+        setState(bot || (await postNetlifyForm(NEWSLETTER_FORM, { "e-posta": email, dil: lang })) ? "done" : "error");
+        return;
+      }
       const res = await fetch("/api/newsletter", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
