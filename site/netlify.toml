@@ -10,6 +10,11 @@
   command = "npx payload migrate && node scripts/netlify-veri-yukle.mjs && npm run build"
   publish = ".next"
 
+# Next.js'i Netlify'da çalıştırır (sunucu sayfaları, /admin, /api, proxy.ts). Olmazsa Netlify .next klasörünü
+# düz dosya gibi yükler ve her adres 404 verir (proje ilk başta düz "Yakında" sayfası için açıldığından kendiliğinden eklenmedi).
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
 # Blobs erişimini derleme komutuna aktarır (veri-yukle betiği için)
 [[plugins]]
   package = "./netlify/plugins/veri-yukle"
