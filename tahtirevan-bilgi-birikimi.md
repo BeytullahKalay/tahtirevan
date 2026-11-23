@@ -84,6 +84,8 @@ Bu dosya, Tahtırevan için bugüne kadar yürütülen tasarım çalışmasını
 
 Not (23 Kasım 2026): Bilinen formlar yeniden yorumlanarak kullanılabilir. Bu liste, yine kaçındığımız klasik formları gösterir.
 
+**Minimalizm zorlanmasın (23 Kasım 2026, ChatGPT denemelerinden sonra):** Güncel heykelsi formlar iyi, okunaklı. Ama "düz tek renk gövde + tek motif" zorlanmış minimalizm gibi duruyor; Bohça, Sandık, Çatma ve Yaka bu yüzden tutmadı. Kırk Kat heykelsi ama minimalist değil; Bağ (kanallı gövde + saran kuşak) beğenildi. Gelişigüzel, her yere atılmış süs de itiyor. Aranan: okunaklı heykelsi form + bütün gövdeyi saran tek, düzenli bir süs sistemi + bu sistemin bir hikâyeye atıf yapması. "Tek kahraman" tek küçük motif değil, tek sistem ve tek hikâye demek. Gündelik bir eşyayı (sandık, kaftan, bohça) birebir konsept yapmak kostüme kayıyor.
+
 ---
 
 ## 3. Tasarım kuralları
@@ -344,6 +346,71 @@ Left: front three-quarter view, showing the red inside and the bound edges. Righ
 
 Width 92 cm, depth 90 cm, seat height 40 cm, height 78 cm. Warm grey studio backdrop, soft key light from the upper left, soft floor shadow, 50 mm lens, f/8. A real photograph of a real, buildable piece of contemporary collectible design. No text other than the edition number, no people in the scene.
 ```
+
+### M7 — Bohça (puf + bench) · denendi, beğenilmedi
+
+- **Fikir:** Kumaşçının bohçası. Düz lacivert kadife küpün üstüne çapraz serilmiş, ton sür ton nar desenli kırmızı kesme kadife "bez"; dört ucu yan yüzlere üçgen olarak iner, çevrede kırmızı-lacivert zikzak oluşur. Kırk Kat gibi süs yapının kendisi; kanal bile yok, en ucuz gövde.
+- **İmzalar:** Ön üçgende tek nar desen üstüne altın nakış; üçgenin ucunda bezi tutan ağırlık gibi pirinç başlık (damga); başlıktan sarkan püskül.
+- **Prompt'lar:** `yeni-parcalar-bohca-bag.md` (ChatGPT için).
+
+### M8 — Bağ (puf + berjer) · denendi, beğenildi
+
+- **Fikir:** Otağın duvarını saran Türkmen çadır kuşağı. Dikey kanallı çivit kadife gövdeyi nakışlı kırmızı kuşak gerçekten sıkar; kanallar kuşağın altında içe girer, üstünde ve altında kabarır.
+- **İmzalar:** Kuşağın kendisi nakış şeridi; iki ucu birleştiren pirinç toka (damga); tokadan sonra sarkan sivri uçta püskül.
+- **Risk:** M2'deki kuşak ve paftaya yakın; fark kuşağın sıkması ve serbest sarkan ucu. Berjer kanallı fıçı koltuğa kayarsa puf ve tabureyle devam edilir.
+- **Prompt'lar:** `yeni-parcalar-bohca-bag.md`.
+- **Berjer v2 (yeni kurala göre, henüz denenmedi):** Hikâye "tör", otağın başköşesi. Dış yüz otağın anatomisi: kuşağın altında ince altın kordon kafes (kerege), kol hizasında panellere bölünmüş sıkan kuşak (motifler kolların önünden sırtın ortasındaki tör paneline doğru zenginleşir), üstte sade kanallar (çatı direkleri) ve kırmızı kalın biye. İç yüz düz. Pirinç toka tör panelinin sağında, sarkan uçta püskül.
+
+### M9 — Sandık (sandıklı bench) · denendi, beğenilmedi
+
+- **Fikir:** Çeyiz sandığı; Bohça'nın eşi. Orman yeşili kadife, kapağın altında altın rumi-palmet frizi, açılınca kırmızı iç.
+- **İmzalar:** Friz nakışı; gerçek anahtar delikli pirinç kilit aynası (damga); anahtardan sarkan püskül.
+
+### M10 — Çatma (berjer) · denendi, beğenilmedi
+
+- **Fikir:** Bursa çatmasındaki boşaltılmış zemin. Yüksek yarım silindir sırtın dışında kırmızı kadifeden oyulmuş tek büyük nar palmeti, altından mat altın ipek görünür; kenarı altın saten dikiş.
+- **Not:** 60 cm motif büyük kasnak ister; en pahalısı. Kırmızı-altın saraya kayarsa yeşile geç.
+
+### M11 — Yaka (berjer) · denendi, beğenilmedi
+
+- **Fikir:** Kaftanın çapraz kavuşması. Zeytin yeşili küp klub koltuğun dış sırtında sol panel çapraz biner; kenarda 6 cm safran astar şeridi.
+- **İmzalar:** Şeritte altın hatayi nakışı; kavuşmanın alt ucunda pirinç çubuk toka (damga); tokanın kordon ilmeğinde püskül.
+- **Prompt'lar (M9–M11):** `yeni-parcalar-sandik-catma-yaka.md`.
+- **Ders (M7–M11):** Düz gövde + tek motif zorlanmış minimalizm gibi durdu; gündelik eşya konsepti (bohça, sandık, kaftan) kostüme kaydı. Bağ'ı kurtaran, süsün bütün gövdeyi saran bir sistem olmasıydı (bkz. 2. bölüm, "Minimalizm zorlanmasın").
+
+### M12 — Uğurlama (berjer) · öneri, henüz denenmedi
+
+- **Fikir:** "Su gibi git, su gibi gel." Kalın davul oturumun üstünde at nalı biçiminde çok kalın bir rulo. Rulonun bütün dış yüzünde, kilim motifleriyle yazılmış bir uğurlama cümlesi: koçboynuzu (yola çıkış) → kurt izi (koruma) → sırtta büyük yıldız → bereket (varış). Kırmızı üstüne ton sür ton kabartma; altta ve üstte altın su yolu bordürleri.
+- **İmzalar:** Friz nakışı; yıldızın altında pirinç levha; levhadan püskül.
+
+### M13 — Filiz (berjer) · öneri, henüz denenmedi
+
+- **Fikir:** Hayat ağacı. Kadeh biçimli, dikey kanallı yosun yeşili gövde. Kanal dikişlerindeki altın kordonlar tabandan yükselir, yarıda dallanır, üst 20 cm'de nar ve hatayi tacına döner.
+- **İmzalar:** Taç nakışı; tabanda altın çizgilerin çıktığı yerde pirinç disk (tohum); sırtın tepesinde en büyük narın altından püskül (meyve).
+- **Prompt'lar (M12–M13):** `yeni-parcalar-ugurlama-filiz.md`.
+
+### M14 — Tezgâh (berjer) · öneri, henüz denenmedi
+
+- **Fikir:** Tezgâhta yarım bırakılmış kilim. Dış yüz dikey kanallar (çözgü): altta kabartmalı kilim (kırmızı, çivit, kum), üstte kum rengi düz kadife ve her kanalda ince altın çözgü kordonu. Sınır basamaklı; her kanal iki kumaştan farklı yükseklikte eklenerek kurulur. Her parçada dokuma başka yükseklikte durur: edisyonun her numarası tek.
+- **İmzalar:** Dokunmuş kısım nakış; en yüksek basamakta dişleri dokumaya gömülü pirinç kirkit (damga sapında); sapından sarkan kırmızı yün püskül.
+- **Form:** Alçak derin oturum, anıtsal geniş ve hafif kavisli sırt, yuvarlak üstlü kalın kollar. Risk: yatar koltuk / ofis koltuğu.
+- **Prompt:** `yeni-parcalar-tezgah.md`.
+
+### M15–M18 — Aykırılar · denendi, beğenilmedi
+
+Her biri tek bir "ters" hamleye dayanır. Prompt'lar: `yeni-parcalar-aykiri.md`. Kullanıcı: "iyi olmadılar"; aykırılık aranmıyor, kesin Tahtırevan olan parça aranıyor.
+- **M15 Ters Yüz (kolsuz lounge):** Katlanmış tek kalın "halı" levhası. İçte Uşak halısının önü, dışta düğüm ızgaralı tersi; tüccarın halıyı çevirdiği an. Kalkmış köşede madalyon nakışı, köşedeki kordonda pirinç balya mührü + kırmızı yün püskül. Kırmızı, çivit, safran.
+- **M16 Çintemani (ikili kanepe):** Motifin kendisi kanepe: iki dalgalı kanallı silindir oturum (kırmızı, altın kordon), üç dik yuvarlak minder sırt (krem, lapis hilal aplike + altın nakış). Alt silindirin ucunda pirinç disk + lapis püskül. Risk: oyuncak gibi.
+- **M17 Taraklı (asimetrik üçlü kanepe):** Sırt solda yüksek, tek eğimle sağ kola akar. Bütün gövde taraklı ebru baskılı kadife, kanallar ebru çizgisini takip eder. Dış sırtta nakış ebru lalesi; püskül at kılı ebru fırçası, damga pirinç bileziği. Her parçanın deseni tek.
+- **M18 Başlık (lobi pufu):** Yere indirilmiş Selçuklu mukarnas sütun başlığı. Üç kademe yastıklı hücre (okra kenar, turkuaz iç, altın kordon), oturumun altında yıldız geçmesi nakış bandı, alt kademede tek pirinç sarkıt + turkuaz püskül. İç mimar/lobi parçası.
+
+### M19–M22 — İmza parçalar · öneri, henüz denenmedi
+
+Ev dili: hikâyeye göre tasarlanmış kumaş (sitedeki kumaşlara bağlı değil; kullanıcı 23 Kasım'da "bilinen kumaşları kullanmana gerek yok" dedi), altın kordonlu kanal, kabartmalı nakış, pirinç damga + püskül, gizli kaide. Form bir sanat alanından. Prompt'lar: `yeni-parcalar-imza.md`.
+- **M19 Kubbe (yuvarlak berjer):** Osmanlı kubbesi: dışı şişe yeşili kaburga kanallar + altın kordon, içi kırmızı zemin üstüne altın-yeşil rumi-palmet sarmalı (büyük palmetler nakışla), üst rulo kırmızı + altın bulut bandı nakışı. Damga dış sırtta rulonun altında.
+- **M20 Kuyruk (berjer):** Açılmış tavus kuyruğu: siyah dış sırtta tek noktadan ışınsal kanallar + altın kordon, üst kenarda kabartmalı göz sırası, içte siyah üstüne ışınsal tüy telleri baskısı. Damga ışınların toplandığı noktada.
+- **M21 Gonca (puf → berjer):** Kapalı gül goncası: beş yaprak, dipte koyu bordo uçta gül kurusu renk geçişi, kenarlarda altın kordon, her yaprakta nakış damarlar. Damga bir yaprağın kıvrık ucunda.
+- **M22 Kademe (klub):** Art Deco basamakları: U'nun üst kenarı üç basamaklı bordo rulo + altın kordon, dış yüz bordo üstüne pars beneği baskısı, dış sırtta Deco çizgili yürüyen pars nakışı. Damga sağ kolun ön yüzünde.
 
 ### Arşiv: denenenler ve dersleri
 
