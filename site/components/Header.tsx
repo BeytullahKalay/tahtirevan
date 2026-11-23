@@ -10,7 +10,7 @@ import { useCatalog } from "./CatalogProvider";
 export function Header({ lang }: { lang: Lang }) {
   const t = UI[lang];
   const pathname = usePathname() || "/";
-  const { slugs } = useCatalog();
+  const { slugs, pieces } = useCatalog();
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -18,12 +18,9 @@ export function Header({ lang }: { lang: Lang }) {
   const menuBtn = useRef<HTMLButtonElement>(null);
   const firstLink = useRef<HTMLAnchorElement>(null);
 
-  const links = [
-    { href: href(lang, "collections"), label: t.nav.collections },
-    { href: href(lang, "patterns"), label: t.nav.patterns },
-    { href: href(lang, "bespoke"), label: t.nav.bespoke },
-    { href: href(lang, "story"), label: t.nav.story },
-  ];
+  // Koleksiyonlar, yayında parça olana kadar menüde görünmez (boş sayfaya götürmesin); alt bilgide kalır.
+  const keys = (["studies", "patterns", "collections", "bespoke", "story"] as const).filter((k) => k !== "collections" || pieces.length > 0);
+  const links = keys.map((k) => ({ href: href(lang, k), label: t.nav[k], hint: t.navHint[k] }));
 
   // Aşağı kaydırınca gizlen, yukarı kaydırınca dön.
   useEffect(() => {
@@ -140,19 +137,22 @@ export function Header({ lang }: { lang: Lang }) {
         aria-hidden={!open}
         inert={!open}
       >
-        <nav aria-label={lang === "tr" ? "Mobil menü" : "Mobile menu"} className="flex flex-1 flex-col gap-5">
+        <nav aria-label={lang === "tr" ? "Mobil menü" : "Mobile menu"} className="flex flex-1 flex-col gap-[clamp(12px,2.2svh,22px)] overflow-y-auto overflow-x-hidden">
           {links.map((l, i) => (
             <Link
               key={l.href}
               ref={i === 0 ? firstLink : undefined}
               href={l.href}
-              className="font-serif text-[2.75rem] font-light leading-[1.05]"
+              className="group flex flex-col gap-1.5 border-b hairline pb-[clamp(10px,2svh,18px)]"
               aria-current={isActive(l.href) ? "page" : undefined}
             >
-              {l.label}
+              <span className={`font-serif text-[clamp(2rem,5.2svh,2.6rem)] font-light leading-[1.05] ${isActive(l.href) ? "text-altin" : ""}`}>
+                {l.label}
+              </span>
+              <span className="label !text-[10px]">{l.hint}</span>
             </Link>
           ))}
-          <Link href={href(lang, "consultation")} className="mt-6 font-serif text-[2.75rem] font-light italic leading-[1.05] text-altin">
+          <Link href={href(lang, "consultation")} className="btn mt-4 self-start">
             {t.consult}
           </Link>
         </nav>

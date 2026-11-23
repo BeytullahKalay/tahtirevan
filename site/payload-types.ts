@@ -1190,7 +1190,7 @@ export interface SiteStatus {
   createdAt?: string | null;
 }
 /**
- * The home page opening, the studio's 3D chair and craft numbers.
+ * The fabric circles on the home page opening and the craft numbers.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings".
@@ -1203,7 +1203,7 @@ export interface SiteSetting {
      */
     fabric: number | Fabric;
     /**
-     * Up to 4; order sets their positions.
+     * Up to 4 fabrics that upholster the inside of the gold emblem on the home page. They change every 6 seconds, in this order; the first shows on load.
      */
     orbs?: (number | Fabric)[] | null;
   };

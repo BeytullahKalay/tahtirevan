@@ -48,6 +48,10 @@ export const META = {
     tr: [null, "Siparişle, sahibine göre yapılan koltuk ve sedirler. Kumaştan doğan biçimler; nakış, püskül ve pirinç damga."],
     en: [null, "Armchairs and daybeds made to order, for one owner. Forms born of the fabric; embroidery, a tassel and a brass seal."],
   },
+  studies: {
+    tr: ["Etütler", "Kumaşlarımızla düşünülmüş, henüz üretilmemiş gövdeler. Her biri siparişle, sizin ölçünüzde yapılabilir."],
+    en: ["Studies", "Bodies imagined in our fabrics, not yet made. Each can be made to order, to your measurements."],
+  },
   collections: {
     tr: ["Koleksiyonlar", "Kuruluş serisi ve yolun durakları: siparişle yapılan, numaralı parçalar."],
     en: ["Collections", "The founding series and the stops on the road: numbered pieces, made to order."],

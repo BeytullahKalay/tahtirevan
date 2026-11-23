@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ROUTES, href, type Lang } from "@/lib/i18n";
-import { Media, type Shot } from "../Media";
 import { Reveal } from "../Reveal";
 
 const COPY = {
@@ -9,12 +8,12 @@ const COPY = {
     title: "Bir taht, tek bir kişi için.",
     line: "Her Tahtırevan bir görüşmeyle başlar ve sahibinin evinde, ömür boyu sürecek bir bakım sözüyle biter. Arada altı adım vardır.",
     steps: [
-      ["Özel görüşme", "Evinizde ya da video ile. Mekânı, ışığı ve parçanın nerede duracağını konuşuruz.", "space", "Görüşme · mekân ölçümü"],
-      ["Gövde tasarımı ve desen seçimi", "Gövdeyi birlikte çizer, desenin gövde üzerindeki yerini işaretleriz. Çizim sizin onayınızla kesinleşir.", "craft", "Kâğıt üzerinde gövde çizimi"],
-      ["Malzeme ve kumaş", "Seçtiğiniz kumaşlar; nakış, püskül ve pirinç örnekleriyle birlikte bir numune kutusu olarak kapınıza gelir.", "fabric", "Numune kutusu"],
-      ["Atölyede yapım", "Parça, birlikte çalıştığımız atölyede ustaların elinde kurulur. İki haftada bir size ilerleme fotoğrafı ve videosu göndeririz.", "macro", "Atölyede gövde yapımı"],
-      ["Teslimat ve kurulum", "Parça size getirilir, yerine konur ve kurulur.", "space", "Teslimat ve kurulum"],
-      ["Sertifika ve ömür boyu bakım", "Numaralı sertifikanız parçayla birlikte gelir. Bakım, onarım ve yeniden döşeme ömür boyu bizdedir.", "macro", "Numara ve pirinç damga"],
+      ["Özel görüşme", "Evinizde ya da video ile. Mekânı, ışığı ve parçanın nerede duracağını konuşuruz."],
+      ["Gövde tasarımı ve desen seçimi", "Gövdeyi birlikte çizer, desenin gövde üzerindeki yerini işaretleriz. Çizim sizin onayınızla kesinleşir."],
+      ["Malzeme ve kumaş", "Seçtiğiniz kumaşlar; nakış, püskül ve pirinç örnekleriyle birlikte bir numune kutusu olarak kapınıza gelir."],
+      ["Atölyede yapım", "Parça, birlikte çalıştığımız atölyede ustaların elinde kurulur. İki haftada bir size ilerleme fotoğrafı ve videosu göndeririz."],
+      ["Teslimat ve kurulum", "Parça size getirilir, yerine konur ve kurulur."],
+      ["Sertifika ve ömür boyu bakım", "Numaralı sertifikanız parçayla birlikte gelir. Bakım, onarım ve yeniden döşeme ömür boyu bizdedir."],
     ],
     projectsLabel: "Projeler",
     projectsTitle: "Projeler için Tahtırevan",
@@ -32,12 +31,12 @@ const COPY = {
     title: "A throne, for one person.",
     line: "Every Tahtırevan begins with a conversation and ends in its owner's home, with a promise of care for life. Between the two are six steps.",
     steps: [
-      ["A private consultation", "At your home, or by video. We talk about the room, the light and where the piece will stand.", "space", "Consultation · measuring the room"],
-      ["Frame design and pattern", "We draw the body together and mark where the pattern will fall on it. The drawing is final only once you approve it.", "craft", "Frame drawing on paper"],
-      ["Materials and fabric", "Your chosen fabrics arrive at your door in a sample box, with samples of the embroidery, the tassel and the brass.", "fabric", "The sample box"],
-      ["Made in the atelier", "The piece is built by master upholsterers in a workshop we work with. Every two weeks we send you photographs and a short film of its progress.", "macro", "The frame in the atelier"],
-      ["Delivery and installation", "The piece is brought to you, placed and set up.", "space", "Delivery and installation"],
-      ["Certificate and lifetime care", "Your numbered certificate arrives with the piece. Care, repair and reupholstery stay with us for life.", "macro", "The number and the brass seal"],
+      ["A private consultation", "At your home, or by video. We talk about the room, the light and where the piece will stand."],
+      ["Frame design and pattern", "We draw the body together and mark where the pattern will fall on it. The drawing is final only once you approve it."],
+      ["Materials and fabric", "Your chosen fabrics arrive at your door in a sample box, with samples of the embroidery, the tassel and the brass."],
+      ["Made in the atelier", "The piece is built by master upholsterers in a workshop we work with. Every two weeks we send you photographs and a short film of its progress."],
+      ["Delivery and installation", "The piece is brought to you, placed and set up."],
+      ["Certificate and lifetime care", "Your numbered certificate arrives with the piece. Care, repair and reupholstery stay with us for life."],
     ],
     projectsLabel: "Projects",
     projectsTitle: "Tahtırevan for projects",
@@ -64,28 +63,24 @@ export function BespokeView({ lang }: { lang: Lang }) {
         </Reveal>
       </section>
 
-      <ol className="px-[var(--gutter)]">
-        {c.steps.map(([title, body, shot, subject], i) => (
-          <li key={title} className="grid items-center gap-8 border-t hairline py-[10vh] md:grid-cols-12 md:gap-12">
-            <Reveal className={`md:col-span-5 ${i % 2 ? "md:order-2 md:col-start-8" : ""}`}>
-              <span className="font-serif text-[5rem] font-light leading-none text-altin md:text-[7rem]" aria-hidden="true">
+      {/* Altı adım: görselsiz, yazı ağırlıklı (koltuk fotoğrafı ve kırpımları kullanıcı isteğiyle kaldırıldı) */}
+      <ol className="grid border-t hairline px-[var(--gutter)] md:grid-cols-2 lg:grid-cols-3">
+        {c.steps.map(([title, body], i) => (
+          <li
+            key={title}
+            className={`border-b hairline py-[7vh] md:py-[9vh] md:pr-10 ${i % 2 === 1 ? "md:border-l md:pl-10" : ""} ${
+              i % 3 !== 0 ? "lg:border-l lg:pl-10" : "lg:border-l-0 lg:pl-0"
+            }`}
+          >
+            <Reveal delay={(i % 3) * 0.1}>
+              <span className="font-serif text-[4.5rem] font-light leading-none text-altin md:text-[5.5rem]" aria-hidden="true">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <h2 className="display-sm mt-4">
+              <h2 className="display-sm mt-6">
                 <span className="sr-only">{i + 1}. </span>
                 {title}
               </h2>
-              <p className="mt-4 max-w-[42ch] text-tas">{body}</p>
-            </Reveal>
-            <Reveal className={`md:col-span-6 ${i % 2 ? "md:order-1 md:col-start-1" : "md:col-start-7"}`} delay={0.12}>
-              <Media
-                lang={lang}
-                shot={shot as Shot}
-                subject={subject}
-                colors={shot === "fabric" ? ["#7a1e2c", "#1f5a44", "#c98a1e"] : ["#4a3424"]}
-                className="aspect-[4/3] w-full"
-                sizes="(min-width: 768px) 50vw, 100vw"
-              />
+              <p className="mt-4 max-w-[40ch] text-tas">{body}</p>
             </Reveal>
           </li>
         ))}

@@ -9,6 +9,8 @@ import { StudyFilm } from "../StudyFilm";
 const COPY = {
   tr: {
     back: "Tüm kumaşlar",
+    crumbs: "Konum",
+    patterns: "Desenler",
     code: "Desen kodu",
     colors: "Renk notları",
     scale: "Ölçek",
@@ -32,6 +34,8 @@ const COPY = {
   },
   en: {
     back: "All fabrics",
+    crumbs: "Breadcrumb",
+    patterns: "Patterns",
     code: "Pattern code",
     colors: "Colour notes",
     scale: "Scale",
@@ -90,6 +94,31 @@ export async function FabricView({ lang, fabric }: { lang: Lang; fabric: Fabric 
           style={{ background: "linear-gradient(to top, rgba(20,17,15,0.92) 0%, rgba(20,17,15,0.35) 42%, rgba(20,17,15,0) 66%)" }}
           aria-hidden="true"
         />
+        {/* Okuma kuşağı üstte de: yol çizgisi görselin üstünde okunabilsin */}
+        <div
+          className="pointer-events-none absolute inset-x-[-2px] top-[-2px] h-[240px]"
+          style={{ background: "linear-gradient(to bottom, rgba(20,17,15,0.9) 0%, rgba(20,17,15,0.75) 45%, rgba(20,17,15,0))" }}
+          aria-hidden="true"
+        />
+        <nav aria-label={c.crumbs} className="absolute inset-x-0 top-[92px] px-[var(--gutter)] lg:top-[108px]">
+          <ol className="label flex flex-wrap items-center gap-x-3 gap-y-1 !text-[10px] !text-fildisi/75">
+            <li>
+              <Link href={href(lang, "patterns")} className="link-gold tap">
+                {c.patterns}
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li>
+              <Link href={`${ROUTES.patterns[lang]}#${code.slug[lang]}`} className="link-gold tap">
+                {code.name[lang]}
+              </Link>
+            </li>
+            <li aria-hidden="true">/</li>
+            <li aria-current="page" className="!text-fildisi">
+              {fabric.name}
+            </li>
+          </ol>
+        </nav>
         <div className="absolute inset-x-0 bottom-0 px-[var(--gutter)] pb-[8svh]">
           <Link href={`${ROUTES.patterns[lang]}#${code.slug[lang]}`} className="link-gold is-static label tap !text-fildisi/80">
             {c.code} · {code.name[lang]}
@@ -128,7 +157,12 @@ export async function FabricView({ lang, fabric }: { lang: Lang; fabric: Fabric 
         const num = studyNumeral(allStudies.findIndex((x) => x.id === s.id) + 1);
         const flip = si % 2 === 1;
         return (
-          <section key={s.id} aria-labelledby={`study-${s.id}`} className="relative overflow-hidden py-[12vh] lg:py-[16vh]">
+          <section
+            key={s.id}
+            id={`etut-${s.id}`}
+            aria-labelledby={`study-${s.id}`}
+            className="relative scroll-mt-0 overflow-hidden py-[12vh] lg:py-[16vh]"
+          >
             <div
               className="pointer-events-none absolute inset-0"
               style={{

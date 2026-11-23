@@ -142,6 +142,7 @@ Seed tekrar çalıştırılabilir: kayıtları `key` alanıyla bulur ve güncell
 
 | Belirti | Bakılacak yer |
 | --- | --- |
+| "Koleksiyonlar" üst menüde yok | Bilerek: yayında en az bir parça olana kadar üst menüde gizli (boş sayfaya götürmesin). Alt bilgide her zaman var. Bir parça yayınlanınca kendiliğinden döner |
 | Panelde değiştirdim, sitede yok | Kayıt "Yayınla" ile yayınlandı mı? Bağlı kumaş/koleksiyon yayında mı? |
 | `/admin` açılmıyor, "PAYLOAD_SECRET tanımlı değil" | `site/.env` dosyası eksik ya da değer boş |
 | "Another next dev server is already running" | Sunucu zaten açık; mevcut olanı kullan (http://localhost:3100) |

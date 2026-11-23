@@ -27,8 +27,9 @@ export function Footer({ lang }: { lang: Lang }) {
         <nav aria-label={lang === "tr" ? "Alt bilgi" : "Footer"} className="grid grid-cols-2 gap-10 lg:col-span-6 lg:grid-cols-3">
           <div className="flex flex-col gap-3">
             <span className="label mb-2">Tahtırevan</span>
-            <Link className="link-gold self-start" href={href(lang, "collections")}>{t.nav.collections}</Link>
+            <Link className="link-gold self-start" href={href(lang, "studies")}>{t.nav.studies}</Link>
             <Link className="link-gold self-start" href={href(lang, "patterns")}>{t.nav.patterns}</Link>
+            <Link className="link-gold self-start" href={href(lang, "collections")}>{t.nav.collections}</Link>
             <Link className="link-gold self-start" href={href(lang, "bespoke")}>{t.nav.bespoke}</Link>
             <Link className="link-gold self-start" href={href(lang, "story")}>{t.nav.story}</Link>
             <Link className="link-gold self-start" href={href(lang, "consultation")}>{t.consult}</Link>

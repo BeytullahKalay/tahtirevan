@@ -7,7 +7,7 @@ export const SiteSettings: GlobalConfig = {
   label: L("Site ayarları", "Site settings"),
   admin: {
     group: L("Ayarlar", "Settings"),
-    description: L("Ana sayfanın açılışı, kumaş stüdyosundaki 3B koltuk ve zanaat sayıları.", "The home page opening, the studio's 3D chair and craft numbers."),
+    description: L("Ana sayfanın açılışındaki kumaş daireleri ve zanaat sayıları.", "The fabric circles on the home page opening and the craft numbers."),
   },
   access: { read: () => true },
   hooks: { afterChange: [revalidateGlobal] },
@@ -24,6 +24,8 @@ export const SiteSettings: GlobalConfig = {
           required: true,
           label: L("Yaklaşılan kumaş", "Zoom-in fabric"),
           admin: {
+            // Açılıştaki kumaş geçişi kaldırıldı (23 Kasım 2026); değer saklanır, panelde gösterilmez.
+            hidden: true,
             description: L(
               "Aşağı kaydırınca ekranı dolduran kumaş. Açılıştaki koltuk fotoğrafının sırtıyla aynı kumaş olması önerilir.",
               "The fabric that fills the screen on scroll.",
@@ -36,8 +38,8 @@ export const SiteSettings: GlobalConfig = {
           relationTo: "fabrics",
           hasMany: true,
           maxRows: 4,
-          label: L("Koltuğun çevresindeki kumaşlar", "Floating fabrics"),
-          admin: { description: L("En fazla 4 kumaş; sırası daire konumlarını belirler.", "Up to 4; order sets their positions.") },
+          label: L("Açılıştaki kumaşlar", "Opening fabrics"),
+          admin: { description: L("Ana sayfadaki altın amblemin (tahtırevanın) içini döşeyen en fazla 4 kumaş. Sırayla, 6 saniyede bir değişir; sayfa açılınca ilki görünür.", "Up to 4 fabrics that upholster the inside of the gold emblem on the home page. They change every 6 seconds, in this order; the first shows on load.") },
         },
       ],
     },
@@ -45,6 +47,8 @@ export const SiteSettings: GlobalConfig = {
       name: "studio",
       type: "group",
       label: L("Kumaş stüdyosu", "Fabric studio"),
+      // Ana sayfadaki 3B kumaş stüdyosu kaldırıldı (23 Kasım 2026); değer saklanır, panelde gösterilmez.
+      admin: { hidden: true },
       fields: [
         {
           name: "model",

@@ -1,7 +1,10 @@
 import Link from "next/link";
+import { getCatalog } from "@/lib/catalog.server";
 import { href, type Lang } from "@/lib/i18n";
+import { roadStops } from "@/lib/road";
 import { Media } from "../Media";
 import { Reveal } from "../Reveal";
+import { RoadStops } from "../RoadStops";
 
 const COPY = {
   tr: {
@@ -30,12 +33,25 @@ const COPY = {
         ],
       },
     ],
+    road: {
+      label: "Yol",
+      title: "Yol ve duraklar.",
+      p: [
+        "Anadolu bir kumaş kavşağıydı: İpek Yolu'ndan, limanlardan ve saraylardan gelen desenler burada buluştu. Tahtırevan da bir yolculuk aracıydı.",
+        "Koleksiyonlarımız bu yolun duraklarıdır. Her biri, Anadolu'ya kumaş ve ticaretle bağlanan bir kültürden doğar. Yol, kuruluş serisiyle başlıyor.",
+      ],
+      stop: "Durak",
+      start: "Başlangıç",
+      next: "Sıradaki durak",
+      nextLine: "Yolun devamı",
+      see: "Koleksiyonu gör",
+    },
     founderLabel: "Kurucunun notu",
     // TASLAK: kurucunun kendi sözleriyle değiştirilecek.
     founder:
       "Tahtırevan'ı tek bir soruyla kurduk: bir koltuk, sahibini bir ömür boyu taşıyabilir mi? Cevabı desende değil, gövdenin içinde aradık. Göz alan bir desen, onu taşıyacak kadar sağlam bir gövde ve ikisini bir araya getiren sabırlı bir el.",
-    founderName: "Kurucu adı",
-    founderRole: "Kurucu, Tahtırevan",
+    founderName: "Beytullah Kalay",
+    founderRole: "Kurucu · Tasarım Direktörü",
     cta: "Kumaşlarımızı görmek için görüşme talep edin",
   },
   en: {
@@ -64,23 +80,37 @@ const COPY = {
         ],
       },
     ],
+    road: {
+      label: "The road",
+      title: "The road and its stops.",
+      p: [
+        "Anatolia was a crossroads of cloth: patterns from the Silk Road, the ports and the palaces met here. The tahtırevan, too, was made for the journey.",
+        "Our collections are the stops along that road. Each is born of a culture tied to Anatolia by cloth and trade. The road begins with the founding series.",
+      ],
+      stop: "Stop",
+      start: "The beginning",
+      next: "The next stop",
+      nextLine: "The road goes on",
+      see: "See the collection",
+    },
     founderLabel: "A note from the founder",
     // DRAFT: to be replaced with the founder's own words.
     founder:
       "We started Tahtırevan with one question: can a chair carry its owner for a lifetime? We looked for the answer inside the frame, not on its surface. A pattern that holds the eye, a frame strong enough to carry it, and a patient hand to bring the two together.",
-    founderName: "Founder's name",
-    founderRole: "Founder, Tahtırevan",
+    founderName: "Beytullah Kalay",
+    founderRole: "Founder · Creative Director",
     cta: "Request a consultation to see our fabrics",
   },
 };
 
-export function StoryView({ lang }: { lang: Lang }) {
+export async function StoryView({ lang }: { lang: Lang }) {
   const c = COPY[lang];
-  const shots = [
-    { subject: lang === "tr" ? "Eski bir tahtırevan, müze ışığında" : "An old tahtırevan in museum light", shot: "space" as const },
-    { subject: lang === "tr" ? "Ölçü alan eller" : "Hands taking measurements", shot: "craft" as const },
-    { subject: lang === "tr" ? "Kumaş topları ve desen provası" : "Bolts of cloth and a pattern proof", shot: "craft" as const },
-  ];
+  // Duraklar panelden gelir: yayındaki her koleksiyon yolun bir durağıdır; ardından boş "sıradaki durak"lar.
+  const { collections, getFabric, site } = await getCatalog();
+  const upcoming = Math.max(1, 4 - collections.length);
+  // Bölüm görselleri kumaştan gelir (koltuk fotoğrafı ve ondan kırpımlar kullanıcı isteğiyle kaldırıldı).
+  // Kumaş yayından kalkarsa getFabric ilk kumaşa döner; sayfa boş kalmaz.
+  const shots = ["soraya", "ardente", "sapphire"].map((id) => getFabric(id));
   return (
     <>
       <section className="px-[var(--gutter)] pb-[10vh] pt-36 text-center lg:pt-48">
@@ -95,12 +125,15 @@ export function StoryView({ lang }: { lang: Lang }) {
           <Reveal className={`lg:col-span-6 ${i % 2 ? "lg:order-2 lg:col-start-7" : ""}`}>
             <Media
               lang={lang}
-              shot={shots[i].shot}
-              subject={shots[i].subject}
-              colors={["#5a3a24"]}
+              shot="fabric"
+              fabric={shots[i].id}
+              subject={`${shots[i].name} · ${shots[i].motif[lang]}`}
               className={i === 0 ? "aspect-[4/5] w-full" : "aspect-[4/3] w-full"}
               sizes="(min-width: 1024px) 50vw, 100vw"
             />
+            <p className="label mt-4 !text-[10px]">
+              {shots[i].name} · {shots[i].motif[lang]}
+            </p>
           </Reveal>
           <Reveal className={`lg:col-span-5 ${i % 2 ? "lg:order-1" : "lg:col-start-8"}`} delay={0.12}>
             <p className="label">{String(i + 1).padStart(2, "0")}</p>
@@ -113,6 +146,34 @@ export function StoryView({ lang }: { lang: Lang }) {
           </Reveal>
         </section>
       ))}
+
+      {/* Yol ve duraklar: markanın ana hikâyesi */}
+      <section aria-labelledby="road-title" className="border-t hairline px-[var(--gutter)] py-[16vh]">
+        <Reveal className="grid gap-10 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <p className="label">
+              {String(c.chapters.length + 1).padStart(2, "0")} · {c.road.label}
+            </p>
+            <h2 id="road-title" className="display-md mt-3">
+              {c.road.title}
+            </h2>
+          </div>
+          <div className="prose-quiet max-w-[50ch] text-fildisi/90 lg:col-span-6 lg:col-start-7">
+            {c.road.p.map((p) => (
+              <p key={p}>{p}</p>
+            ))}
+          </div>
+        </Reveal>
+
+        <RoadStops
+          stops={roadStops(lang, collections, getFabric, site.hero.orbs, c.road)}
+          upcoming={upcoming}
+          stopWord={c.road.stop}
+          next={c.road.next}
+          nextLine={c.road.nextLine}
+          see={c.road.see}
+        />
+      </section>
 
       <section className="bg-ceviz/40 px-[var(--gutter)] py-[18vh]">
         <Reveal className="mx-auto max-w-[900px] text-center">

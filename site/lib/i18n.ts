@@ -13,6 +13,7 @@ export const LANGS = Object.keys(LOCALES) as Lang[];
 
 export const ROUTES = {
   home: { tr: "/", en: "/en" },
+  studies: { tr: "/etutler", en: "/en/studies" },
   collections: { tr: "/koleksiyonlar", en: "/en/collections" },
   bespoke: { tr: "/size-ozel", en: "/en/bespoke" },
   patterns: { tr: "/desenler", en: "/en/patterns" },
@@ -75,10 +76,19 @@ export const UI = {
   tr: {
     skip: "İçeriğe geç",
     nav: {
+      studies: "Etütler",
       collections: "Koleksiyonlar",
       patterns: "Desenler",
       bespoke: "Size Özel",
       story: "Hikâye",
+    },
+    /** Mobil menüde her bağlantının altında, sayfanın ne olduğunu anlatan kısa satır. */
+    navHint: {
+      studies: "Kumaşla düşünülmüş gövdeler",
+      patterns: "Kumaş kütüphanesi",
+      collections: "Kuruluş serisi",
+      bespoke: "Bir parça nasıl yapılır",
+      story: "Yol ve duraklar",
     },
     consult: "Özel görüşme",
     menu: "Menü",
@@ -111,10 +121,18 @@ export const UI = {
   en: {
     skip: "Skip to content",
     nav: {
+      studies: "Studies",
       collections: "Collections",
       patterns: "Patterns",
       bespoke: "Bespoke",
       story: "Story",
+    },
+    navHint: {
+      studies: "Bodies imagined in our fabrics",
+      patterns: "The fabric library",
+      collections: "The founding series",
+      bespoke: "How a piece is made",
+      story: "The road and its stops",
     },
     consult: "Private consultation",
     menu: "Menu",

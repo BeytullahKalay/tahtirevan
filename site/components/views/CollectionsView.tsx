@@ -124,7 +124,7 @@ export function CollectionsView({ lang, only }: { lang: Lang; only?: string }) {
                       <Link href={href(lang, "consultation")} className="btn">
                         {c.soonCta}
                       </Link>
-                      <Link href={href(lang, "patterns")} className="link-gold is-static label tap !text-fildisi">
+                      <Link href={href(lang, "studies")} className="link-gold is-static label tap !text-fildisi">
                         {c.studies}
                       </Link>
                     </div>
