@@ -38,11 +38,13 @@ Oturum 7 gün açık kalır. 8 yanlış denemede hesap 15 dakika kilitlenir.
 | --- | --- | --- |
 | Katalog | Parçalar (`pieces`) | Koltuklar ve diğer ürünler, kişiselleştirme seçenekleri, isteğe bağlı 3B model |
 | Katalog | Kumaşlar (`fabrics`) | Kumaş adı, açıklama, renk notları, ölçek, kadife rengi, görsel |
-| Katalog | Koleksiyonlar (`piece-collections`) | Parçaların gruplandığı koleksiyonlar |
+| Katalog | Etütler (`studies`) | Kumaşla düşünülmüş, henüz üretilmemiş gövdeler (Reels koltukları). Kendi kumaşının sayfasında (`/desenler/<kumaş>`) görünür; "Ana sayfada göster" işaretliyse ana sayfadaki etüt şeridine girer (en fazla 3, şerit yalnızca yayında parça yokken görünür). Koleksiyona karışmaz |
+| Katalog | Koleksiyonlar (`piece-collections`) | Yol üstündeki duraklar; yalnızca gerçekten yapılan parçalar bağlanır. "Durak", "Giriş metni" alanları var; desen kodu artık isteğe bağlı (eski). 23.11.2026 itibarıyla yayında yalnızca "Kuruluş serisi" var; eski 4 koleksiyon ve 11 hayali parça taslakta |
 | Katalog | Desen kodları (`pattern-codes`) | Bahçe, Fauna, Süsleme, Rüya gibi desen aileleri |
 | Seçenekler | Parça türleri, Ahşaplar, Kaplamalar, Ölçüler | Kişiselleştirmede sunulan seçenek listeleri |
 | Medya | Kumaş görselleri (`fabric-images`) | Düz kumaş görseli; yükleyince 3B doku (1024), numune (256) ve şerit (440×575) WebP sürümleri **kendiliğinden** üretilir |
 | Medya | Fotoğraflar (`media`) | Ürün fotoğrafları; portre için şeffaf PNG en iyisi |
+| Medya | Videolar (`videos`) | Etütlerin kısa, sessiz, dikey MP4'leri (`media/videos`). ~4 MB altı önerilir: `ffmpeg -i in.mp4 -t <son kart öncesi> -an -vf scale=720:1280 -c:v libx264 -crf 27 -movflags +faststart out.mp4`. Sitede yalnızca ekrandayken oynar |
 | Medya | 3B modeller (`models`) | Yalnızca `.glb`. Fotoğraftan yapay zekâyla üretilmiş ham dosya olduğu gibi yüklenir; sırt kumaşı / oturak kadifesi / metal **kendiliğinden** ayrılır (bkz. "3B modeller") |
 | Ayarlar | Site durumu (global `site-status`) | Site açık / "Yakında" / "Bakımdayız"; iki sayfanın metinleri, açılış tarihi, tahmini dönüş, iletişim e-postası |
 | Ayarlar | Açılış listesi (`signups`) | "Yakında" sayfasındaki "Haber ver" formundan gelen e-postalar; CSV: `/api/signups/csv` |
@@ -147,3 +149,4 @@ Seed tekrar çalıştırılabilir: kayıtları `key` alanıyla bulur ve güncell
 | GLB yüklenmiyor / hata veriyor | Uzantı `.glb` mi? Dokusu dosyanın içinde mi? "Sırt kumaşı bulunamadı" ise "Sırtın başladığı yükseklik"i küçült |
 | 3B modeli yükledim, sitede yok | Model bir parçaya (Görsel ve 3B) ya da Site ayarları › Kumaş stüdyosu'na bağlandı mı? Parça yayında mı? |
 | Yüklenen görsel eski görünüyor | Yeni adla yükle ya da `site/.next/cache/images` klasörünü sil |
+| Koleksiyon ekledikten sonra panel/site "collection … can't be found" diyor | `payload.config.ts` değişti: sunucuyu yeniden başlat. İlk istekte bir kez `CREATE INDEX … already exists` hatası çıkabilir (şema eşitlenirken iki istek yarışıyor); sayfayı yenile, geçer |

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getCatalog } from "@/lib/catalog.server";
-import { pieceHref, type Lang } from "@/lib/i18n";
+import { fabricHref, pieceHref, type Lang } from "@/lib/i18n";
 import { countWord } from "@/lib/words";
 import { Media } from "../Media";
 import { Reveal } from "../Reveal";
@@ -10,36 +10,40 @@ const COPY = {
     label: "Desen kütüphanesi",
     title: "Cesur desen, sessiz zanaat.",
     line: (fabrics: number, codes: number) =>
-      `Tahtırevan'ın ${countWord(fabrics, "tr")} kumaşı ${countWord(codes, "tr")} desen kodunda toplanır. Desenlerin kökeni tek bir ülke değildir; buta, damask, botanik ve fauna dünyanın ortak desen geleneğinden gelir.`,
+      `Tahtırevan'ın ${countWord(fabrics, "tr")} kumaşı ${countWord(codes, "tr")} desen kodunda toplanır. Desenler, Anadolu'yu kumaş ve ticaret yollarıyla dünyaya bağlayan geleneklerden gelir: buta, damask, bahçe ve hayvan figürleri.`,
     honestTitle: "Kumaş nasıl yapılır",
     honest:
-      "Her desen yalnızca Tahtırevan için çizilir ve kumaşa yüksek çözünürlüklü baskıyla aktarılır. Elde yapılan kısım gövdedir: oyma, kakma, lake ve ahşap işçiliği. Döşemeyi de ustalarımız elle kurar.",
+      "Desen kumaşa yüksek çözünürlüklü baskıyla aktarılır. Elde yapılan kısım döşemedir: desenin gövdeye ortalanması, nakış ve son işçilik. Her parçada üç imza bulunur: nakış, püskül, pirinç damga.",
     code: "Desen kodu",
     fabrics: "Kumaşlar",
     colors: "Renk notları",
     scale: "Ölçek",
     suits: "Uygun gövdeler",
     pieces: "Bu kodla yapılan parçalar",
+    study: "Etüt",
+    open: "Kumaşı incele",
   },
   en: {
     label: "Pattern library",
     title: "Bold pattern, quiet craft.",
     line: (fabrics: number, codes: number) =>
-      `Tahtırevan's ${countWord(fabrics, "en")} fabrics gather into ${countWord(codes, "en")} pattern codes. They belong to no single country: paisley, damask, botanicals and fauna come from the world's shared tradition of pattern.`,
+      `Tahtırevan's ${countWord(fabrics, "en")} fabrics gather into ${countWord(codes, "en")} pattern codes. They come from the traditions that tied Anatolia to the world along the roads of cloth and trade: paisley, damask, gardens and animal figures.`,
     honestTitle: "How the fabric is made",
     honest:
-      "Every pattern is drawn for Tahtırevan alone and printed onto the cloth in high resolution. What is made by hand is the frame: the carving, the inlay, the lacquer and the joinery. The upholstery is built by hand as well.",
+      "The pattern is printed onto the cloth in high resolution. What is made by hand is the upholstery: centring the pattern on the body, the embroidery and the finishing. Every piece carries three marks: embroidery, a tassel and a brass seal.",
     code: "Pattern code",
     fabrics: "Fabrics",
     colors: "Colour notes",
     scale: "Scale",
     suits: "Suited to",
     pieces: "Pieces in this code",
+    study: "Study",
+    open: "View the fabric",
   },
 };
 
 export async function PatternsView({ lang }: { lang: Lang }) {
-  const { fabrics, fabricsByCode, codes: patternCodes, piecesByCode, typeLabel } = await getCatalog();
+  const { fabrics, fabricsByCode, codes: patternCodes, piecesByCode, studiesByFabric, typeLabel } = await getCatalog();
   const c = COPY[lang];
   return (
     <>
@@ -79,7 +83,9 @@ export async function PatternsView({ lang }: { lang: Lang }) {
               />
               <div
                 className="pointer-events-none absolute inset-0"
-                style={{ background: "linear-gradient(to top, rgba(20,17,15,0.9) 0%, rgba(20,17,15,0.3) 40%, rgba(20,17,15,0) 64%)" }}
+                style={{
+                  background: "linear-gradient(to top, rgba(20,17,15,0.9) 0%, rgba(20,17,15,0.3) 40%, rgba(20,17,15,0) 64%)",
+                }}
                 aria-hidden="true"
               />
               <div className="absolute inset-x-0 bottom-0 grid gap-6 px-[var(--gutter)] pb-[10svh] lg:grid-cols-12 lg:items-end">
@@ -87,7 +93,9 @@ export async function PatternsView({ lang }: { lang: Lang }) {
                   <p className="label !text-fildisi/80">
                     {c.code} {String(i + 1).padStart(2, "0")}
                   </p>
-                  <h2 id={`h-${code.id}`} className="display mt-3">{code.name[lang]}</h2>
+                  <h2 id={`h-${code.id}`} className="display mt-3">
+                    {code.name[lang]}
+                  </h2>
                 </div>
                 <p className="max-w-[46ch] text-lg text-fildisi/90 lg:col-span-5 lg:col-start-8">{code.description[lang]}</p>
               </div>
@@ -98,17 +106,22 @@ export async function PatternsView({ lang }: { lang: Lang }) {
               <ul className="mt-8 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
                 {list.map((f, j) => (
                   <Reveal as="li" key={f.id} delay={j * 0.1}>
-                    <Media
-                      lang={lang}
-                      shot="fabric"
-                      subject={`${f.name} · ${f.motif[lang]}`}
-                      colors={f.colors}
-                      fabric={f.id}
-                      className="aspect-square w-full"
-                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                    />
-                    <h3 className="mt-5 font-serif text-3xl font-light">{f.name}</h3>
-                    <p className="text-tas">{f.motif[lang]}</p>
+                    <Link href={fabricHref(lang, f.id)} className="group block" aria-label={`${f.name} · ${c.open}`}>
+                      <Media
+                        lang={lang}
+                        shot="fabric"
+                        subject={`${f.name} · ${f.motif[lang]}`}
+                        colors={f.colors}
+                        fabric={f.id}
+                        className="aspect-square w-full"
+                        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                      />
+                      <h3 className="mt-5 flex items-baseline justify-between gap-4 font-serif text-3xl font-light">
+                        <span className="link-gold">{f.name}</span>
+                        {studiesByFabric(f.id).length > 0 && <span className="label !text-[10px] !text-altin">{c.study}</span>}
+                      </h3>
+                      <p className="text-tas">{f.motif[lang]}</p>
+                    </Link>
                     <dl className="mt-4 flex flex-col gap-2 text-[15px]">
                       <div>
                         <dt className="label !text-[10px]">{c.colors}</dt>

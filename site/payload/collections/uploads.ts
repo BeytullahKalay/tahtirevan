@@ -92,6 +92,32 @@ export const Media: CollectionConfig = {
   ],
 };
 
+/* ---------- Videolar ---------- */
+
+/** Etütlerin kısa, sessiz döngü videoları (MP4). Sitede sesi kapalı oynar. */
+export const Videos: CollectionConfig = {
+  slug: "videos",
+  labels: { singular: L("Video", "Video"), plural: L("Videolar", "Videos") },
+  admin: {
+    group: L("Medya", "Media"),
+    description: L(
+      "Kısa, dikey MP4 video (en fazla ~4 MB önerilir: 720×1280, sessiz). Sitede sesi kapalı, döngü halinde oynar; ekranda değilken durur.",
+      "Short vertical MP4 (about 4 MB at most: 720×1280, muted). Plays muted and looped on the site.",
+    ),
+    useAsTitle: "filename",
+    defaultColumns: ["filename", "filesize", "updatedAt"],
+  },
+  access: { read: () => true },
+  upload: {
+    staticDir: dir("videos"),
+    mimeTypes: ["video/mp4", "video/webm"],
+  },
+  hooks: {
+    beforeDelete: [protectDelete("video", [{ collection: "studies", field: "video", label: "Etütler" }])],
+  },
+  fields: [altField],
+};
+
 /* ---------- 3B modeller ---------- */
 
 /** Yüklenen ham modelin kopyası; ayarlar değişince model buradan yeniden hazırlanır. */

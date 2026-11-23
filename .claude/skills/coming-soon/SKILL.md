@@ -14,7 +14,7 @@ Kullanıcı Türkçe yazıyor ve barındırma/DNS konularında yeni. Her adımı
 | Dosya | Ne işe yarar |
 | --- | --- |
 | `index.html` | Sayfanın tamamı: CSS, TR/EN metinler, form, JS hepsi içinde |
-| `assets/` | `chair.webp` (820 px), `chair-sm.webp` (520 px, telefon), `fabrics/*.webp` (11 kumaş, 360×360), `og.jpg` (paylaşım görseli 1200×630), `apple-touch-icon.png`, `monogram.svg` |
+| `assets/` | `fabrics/*.webp` (11 kumaş, 360×360), `og-2.jpg` (paylaşım görseli 1200×630), `apple-touch-icon.png`, `monogram.svg`. `chair*.webp` ve `og.jpg` eski, sayfada kullanılmıyor |
 | `netlify.toml` | Yayın ayarı: klasörün kendisi yayınlanır (`publish = "."`), yönlendirmeler, güvenlik başlıkları |
 | `dev-server.mjs` | Yalnızca yerel önizleme sunucusu. Canlıda `netlify.toml` onu ana sayfaya yönlendirir |
 | `robots.txt`, `package.json` | Küçük yardımcı dosyalar |
@@ -112,7 +112,7 @@ Sertifikayı Netlify kendisi kurar ve yeniler. DNS doğru adresi gösterdikten s
 
 ## Görselleri yeniden üretmek
 
-Kaynak dosyalar ana sitenin klasöründe: koltuk `site/public/chair/serir.png`, kumaşlar `site/public/fabrics/<ad>.jpg`, monogram `site/public/monogram.svg`. Görseller bu skill'in içindeki betikle üretilir; betik `site/node_modules/sharp` paketini kullanır, bu yüzden önce `site` klasöründe `npm install` yapılmış olmalı.
+Kaynak dosyalar ana sitenin klasöründe: kumaşlar `site/public/fabrics/<ad>.jpg`. **Sayfada ve paylaşım görselinde koltuk yok** (23 Kasım 2026, kullanıcı istedi; koltuğu geri ekleme). Görseller bu skill'in içindeki betikle üretilir; betik `site/node_modules/sharp` paketini kullanır, bu yüzden önce `site` klasöründe `npm install` yapılmış olmalı.
 
 ```bash
 node ".claude/skills/coming-soon/scripts/make-assets.cjs" "C:\Users\Beytullah KALAY\OneDrive\Desktop\tahtirevan"
@@ -121,7 +121,7 @@ node ".claude/skills/coming-soon/scripts/make-assets.cjs" "C:\Users\Beytullah KA
 - Betik `coming-soon/assets/` içindeki dosyaları **aynı adlarla** yeniden yazar.
 - Netlify `/assets/*` dosyalarını 7 gün önbellekte tutar (`Cache-Control max-age=604800`). Görsel değişirse ya dosyaya yeni bir ad ver ve `index.html` içindeki yolu güncelle, ya da adresin sonuna `?v=2` gibi bir ek koy.
 - Kumaş listesi betikteki `ids` dizisinde. Sitede olmayan 7 katalog kumaşı (Serengeti, Savana, Zebrano, Montana, Rodeo, Celeste, Floresta) brief gereği burada da yok.
-- `og.jpg` görselinin üzerindeki yazı İngilizce ("A throne, made for one. · YAKINDA · COMING SOON"); yazıyı değiştirmek için betikteki SVG düzenlenir.
+- Paylaşım görseli `og-2.jpg`: ortada "Bir taht, tek bir kişi için." / "A throne, made for one.", altında 7 kumaş dairesi. Değişirse betikteki `OG_NAME`i artır ve `index.html`deki `og:image` yolunu güncelle.
 
 ## Bilinen küçük konular
 

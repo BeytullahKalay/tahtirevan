@@ -14,7 +14,11 @@ export function pageMeta(
 ): Metadata {
   const tr = lang === "tr" ? path : translatePath(path, "tr", slugs);
   const en = lang === "en" ? path : translatePath(path, "en", slugs);
-  const ogTitle = title ? `${title} · Tahtırevan` : "Tahtırevan · A throne, made for one";
+  const ogTitle = title
+    ? `${title} · Tahtırevan`
+    : lang === "tr"
+      ? "Tahtırevan · Bir taht, tek bir kişi için"
+      : "Tahtırevan · A throne, made for one";
   return {
     ...(title ? { title } : {}),
     description,
@@ -41,20 +45,20 @@ export const routeMeta = (lang: Lang, key: RouteKey, title: string | null, descr
 /** Sayfa başlıkları ve açıklamaları: iki dil ayrı yazılır. */
 export const META = {
   home: {
-    tr: [null, "Gövdesi elde yapılan, siparişe ve sahibine göre üretilen koltuk, kanepe ve sedirler. Her parça numaralı ve imzalıdır."],
-    en: [null, "Armchairs, sofas and daybeds with hand-built frames, each made to order for one owner. Every piece is numbered and signed."],
+    tr: [null, "Siparişle, sahibine göre yapılan koltuk ve sedirler. Kumaştan doğan biçimler; nakış, püskül ve pirinç damga."],
+    en: [null, "Armchairs and daybeds made to order, for one owner. Forms born of the fabric; embroidery, a tassel and a brass seal."],
   },
   collections: {
-    tr: ["Koleksiyonlar", "Bahçe, Fauna, Süsleme ve Rüya: dört desen kodu etrafında kurulan koltuk, kanepe ve sedirler."],
-    en: ["Collections", "Garden, Fauna, Ornament and Dream: armchairs, sofas and daybeds built around four pattern codes."],
+    tr: ["Koleksiyonlar", "Kuruluş serisi ve yolun durakları: siparişle yapılan, numaralı parçalar."],
+    en: ["Collections", "The founding series and the stops on the road: numbered pieces, made to order."],
   },
   bespoke: {
     tr: ["Size Özel", "Özel görüşmeden ömür boyu bakıma kadar, bir Tahtırevan'ın altı adımda yapılışı."],
     en: ["Bespoke", "From a private consultation to lifetime care: how a Tahtırevan is made, in six steps."],
   },
   patterns: {
-    tr: ["Desenler", "Tahtırevan desen kütüphanesi: dört desen kodu, on bir kumaş, renk notları, ölçekler ve uygun gövdeler."],
-    en: ["Patterns", "The Tahtırevan pattern library: four pattern codes, eleven fabrics, colour notes, scales and suitable frames."],
+    tr: ["Desenler", "Tahtırevan desen kütüphanesi: dört desen kodu, on bir kumaş, renk notları, ölçekler ve bu kumaşlarla düşünülmüş etütler."],
+    en: ["Patterns", "The Tahtırevan pattern library: four pattern codes, eleven fabrics, colour notes, scales and the studies imagined in them."],
   },
   story: {
     tr: ["Hikâye", "Yürüyen taht: tahtırevanın tarihteki yeri ve bugün Tahtırevan için ne anlama geldiği."],
@@ -75,9 +79,9 @@ export const organizationLd = (lang: Lang) => ({
   name: "Tahtırevan",
   url: SITE_URL,
   logo: `${SITE_URL}/brand/logo-512.png`,
-  slogan: "A throne, made for one.",
+  slogan: lang === "tr" ? "Bir taht, tek bir kişi için." : "A throne, made for one.",
   description:
     lang === "tr"
-      ? "Gövdesi elde yapılan, siparişe ve sahibine göre üretilen koltuk, kanepe ve sedirler."
-      : "Armchairs, sofas and daybeds with hand-built frames, each made to order for one owner.",
+      ? "Siparişle, sahibine göre yapılan koltuk ve sedirler."
+      : "Armchairs and daybeds made to order, for one owner.",
 });

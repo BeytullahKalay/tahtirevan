@@ -156,6 +156,19 @@ export const Fabrics: CollectionConfig = {
       ],
       admin: { position: "sidebar" },
     },
+    {
+      name: "studies",
+      type: "join",
+      collection: "studies",
+      on: "fabric",
+      label: L("Bu kumaşın etütleri", "Studies in this fabric"),
+      admin: {
+        description: L(
+          "Kumaş sayfasında görünen etütler. Yeni etüt eklemek için Katalog › Etütler'e gidin.",
+          "Studies shown on this fabric's page. Add new ones under Catalogue › Studies.",
+        ),
+      },
+    },
     keyField("rossaria"),
   ],
   hooks: {
@@ -164,6 +177,7 @@ export const Fabrics: CollectionConfig = {
     beforeDelete: [
       protectDelete("kumaş", [
         { collection: "pieces", field: "fabric", label: "Parçalar" },
+        { collection: "studies", field: "fabric", label: "Etütler" },
         { collection: "pattern-codes", field: "leadFabric", label: "Desen kodları" },
       ]),
       async ({ req, id }) => blockIfOnHome(req, id),
@@ -178,11 +192,61 @@ export const PieceCollections: CollectionConfig = {
   slug: "piece-collections",
   labels: { singular: L("Koleksiyon", "Collection"), plural: L("Koleksiyonlar", "Collections") },
   defaultSort: "_order",
-  admin: { group: CATALOG, useAsTitle: "name", defaultColumns: ["name", "code", "featured", "_status"] },
+  admin: {
+    group: CATALOG,
+    useAsTitle: "name",
+    defaultColumns: ["name", "stop", "featured", "_status"],
+    description: L(
+      "Her koleksiyon yol üstündeki bir duraktır (ör. Semerkant). Gerçekten yapılan parçalar buraya bağlanır. Şimdilik yayındaki tek koleksiyon \"Kuruluş serisi\".",
+      "Each collection is a stop on the road (e.g. Samarkand). Only pieces that are really made belong here.",
+    ),
+  },
   fields: [
-    nameField("Bahçe"),
-    { name: "code", type: "relationship", relationTo: "pattern-codes", required: true, label: L("Desen kodu", "Pattern code") },
+    nameField("Kuruluş serisi"),
+    {
+      name: "stop",
+      type: "text",
+      localized: true,
+      label: L("Durak", "Stop"),
+      admin: {
+        placeholder: "Semerkant",
+        description: L(
+          "Bu koleksiyonun yol üstündeki durağı. Sitede koleksiyon adının üstünde küçük harflerle görünür. Boş bırakılabilir.",
+          "The stop on the road this collection belongs to. Shown above the name. Optional.",
+        ),
+      },
+    },
     { name: "line", type: "textarea", localized: true, required: true, label: L("Tek cümle", "One line") },
+    {
+      name: "intro",
+      type: "textarea",
+      localized: true,
+      label: L("Giriş metni", "Introduction"),
+      admin: {
+        rows: 4,
+        description: L(
+          "Koleksiyon sayfasında, henüz parça yokken de görünen kısa metin.",
+          "Short text on the collection page, shown even before any piece is published.",
+        ),
+      },
+    },
+    {
+      name: "code",
+      type: "relationship",
+      relationTo: "pattern-codes",
+      label: L("Desen kodu (eski)", "Pattern code (legacy)"),
+      admin: {
+        position: "sidebar",
+        description: L("Eski düzenden kalan alan; yeni koleksiyonlarda boş bırakın.", "Left from the old structure; leave empty."),
+      },
+    },
+    {
+      name: "pieces",
+      type: "join",
+      collection: "pieces",
+      on: "collection",
+      label: L("Bu koleksiyonun parçaları", "Pieces in this collection"),
+    },
     {
       name: "featured",
       type: "checkbox",
@@ -195,6 +259,93 @@ export const PieceCollections: CollectionConfig = {
   hooks: {
     ...contentDefaults.hooks,
     beforeDelete: [protectDelete("koleksiyon", [{ collection: "pieces", field: "collection", label: "Parçalar" }])],
+  },
+};
+
+/* ---------- Etütler ---------- */
+
+/**
+ * Etüt: bir kumaşla düşünülmüş, henüz üretilmemiş gövde (ör. Reels'teki koltuklar).
+ * Kumaşın sayfasında görünür; koleksiyona ve satıştaki parçalara karışmaz.
+ */
+export const Studies: CollectionConfig = {
+  ...contentDefaults,
+  slug: "studies",
+  labels: { singular: L("Etüt", "Study"), plural: L("Etütler", "Studies") },
+  defaultSort: "_order",
+  admin: {
+    group: CATALOG,
+    useAsTitle: "name",
+    defaultColumns: ["name", "fabric", "image", "featured", "_status"],
+    description: L(
+      "Kumaşlarımızla düşünülmüş, henüz üretilmemiş gövdeler. Her etüt kendi kumaşının sayfasında görünür (Desenler › kumaş). Koleksiyona girmez; gerçekten yapılan parçalar Parçalar bölümüne eklenir.",
+      "Bodies imagined in our fabrics, not yet made. Each study appears on its fabric's page. Real, made pieces go under Pieces.",
+    ),
+  },
+  fields: [
+    nameField("Yele"),
+    {
+      type: "row",
+      fields: [
+        {
+          name: "fabric",
+          type: "relationship",
+          relationTo: "fabrics",
+          required: true,
+          label: L("Kumaş", "Fabric"),
+          admin: { width: "50%", description: L("Etüt bu kumaşın sayfasında görünür.", "Shown on this fabric's page.") },
+        },
+        {
+          name: "featured",
+          type: "checkbox",
+          label: L("Ana sayfada göster", "Show on the home page"),
+          admin: { width: "50%", description: L(
+              "İşaretliyse ana sayfadaki etüt şeridinde görünür. En fazla 3 tane, listedeki sırayla (sürükleyerek değiştirilir). Hiçbiri işaretli değilse ilk üçü görünür.",
+              "If ticked, appears in the home page strip. Up to 3, in list order (drag to reorder). If none is ticked, the first three appear.",
+            ),
+          },
+        },
+      ],
+    },
+    {
+      name: "line",
+      type: "textarea",
+      localized: true,
+      required: true,
+      label: L("Neden bu kumaş", "Why this fabric"),
+      admin: {
+        rows: 3,
+        placeholder: "Atların akışı sırttan sağ kola tek bir çizgide iner.",
+        description: L(
+          "Bir iki cümle: gövde kumaştan ne aldı? Ürün iddiası yazmayın (ör. \"el oyması\"); etüt henüz yapılmadı.",
+          "One or two sentences: what did the form take from the fabric? No product claims; a study is not made yet.",
+        ),
+      },
+    },
+    {
+      type: "row",
+      fields: [
+        {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
+          required: true,
+          label: L("Etüt görseli", "Study image"),
+          admin: { width: "50%", description: L("Dikey (9:16 ya da 4:5) tek kare.", "A single vertical frame (9:16 or 4:5).") },
+        },
+        {
+          name: "video",
+          type: "upload",
+          relationTo: "videos",
+          label: L("Video (isteğe bağlı)", "Video (optional)"),
+          admin: { width: "50%", description: L("Kısa, sessiz, dikey MP4. Görsel videonun kapağı olur.", "Short muted vertical MP4. The image is its poster.") },
+        },
+      ],
+    },
+    keyField("yele"),
+  ],
+  hooks: {
+    ...contentDefaults.hooks,
   },
 };
 

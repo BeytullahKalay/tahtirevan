@@ -8,7 +8,7 @@ Bu dosya, Tahtırevan için bugüne kadar yürütülen tasarım çalışmasını
 
 ## 1. Marka
 
-- **Tahtırevan (tahtirevan.com):** Ailenin kumaş ticaretinden gelen pahalı kumaşlarla üretilen üst segment mobilya. Aile işletmesinin mevcut bir satış kanalı ve sosyal medya sorumlusu var.
+- **Tahtırevan (tahtirevan.com):** Ailenin kumaş ticaretinden (Mane Tex) gelen pahalı kumaşlarla üretilen üst segment mobilya; Mane Tex'ten ayrı, kendi başına bir marka (bkz. "Konumlanma ve 12 aylık hedef"). Aile işletmesinin mevcut bir satış kanalı ve sosyal medya sorumlusu var.
 - **Anlamı:** "Tahtırevan marka ve üretilen her şeyin bir taht kadar ince elenip sık dokunduğunu göstermek için var… yaptığımız tek şey taht değil."
 - **Strateji:**
   - Başlangıçta, masrafı düşük ve denenebilir olsun diye tek kişilik oturaklar.
@@ -33,6 +33,31 @@ Bu dosya, Tahtırevan için bugüne kadar yürütülen tasarım çalışmasını
 - **İki hat:**
   - **Giriş:** Makine nakışı, tek dikiş imzası, genele hitap eden motif.
   - **Koleksiyon:** El işi (örneğin dival/Maraş işi) ve cesur hikâyeler (savaş, kan gibi temalar dahil).
+
+### Konumlanma ve 12 aylık hedef (23 Kasım 2026, kullanıcının kararı)
+
+- **Mane Tex ile ilişki:** Mane Tex ailenin kumaş işi. Tahtırevan onun vitrini değil, kendi başına bir marka. Kumaş çoğunlukla Mane Tex'ten gelir, gerektiğinde başka yerden de alınır. Ürünleri ortak döşemeciler yapar. Mane Tex, Tahtırevan parçalarını "içinde bizim kumaşımız var" diyerek kendi pazarlamasında kullanabilir.
+- **Ana hikâye:** Yol ve duraklar. Brief'teki dört desen kodu (Bahçe, Fauna, Süsleme, Rüya) artık ana hikâye değil; site hâlâ bu kodlara göre kurulu, yeniden düzenlenecek.
+- **Tercih:** Hiç satmayan, kendine "ultra lüks" diyen bir marka yerine satış yapan lüks (ya da lüksün biraz altı) bir marka. Ultra lüks uzun vadeli hedef olarak kalıyor.
+- **12 ayın başarı ölçütü (Kasım 2027'ye kadar):** Düzenli çalışılan 3 iç mimar ya da satılmış 6+ parça. Öncelik sayısal veride; Instagram'ın düzeni sonra gelir.
+
+**Ultra lükse giden üç basamak.** Ultra lüks bir etiket değil, birikmiş kanıttır: satılmış parçalar, bekleme süresi, kimin aldığı, basın, ikinci el değeri.
+
+1. **Kuruluş serisi (0–12 ay):** İlk 10 parça 01–10 numaralı. Kuruluş fiyatı açıkça söylenir ve birkaç parçada bir artar; böylece ucuzlamadan satılır. Ürünler Giriş hattından gelir (hazır iskelet, makine nakışı, üç imza). İlk ürün adayı Kırk Kat pufu.
+2. **Edisyon (12–24 ay):** Satılan parçalar kanıt olur. Sınırlı seriler (07/25 gibi), her yeni durak bir öncekinden pahalı. Fuar ve iç mimarlık yayınları.
+3. **Ultra lüks (24 ay ve sonrası):** Koleksiyon hattı (el işi dival/Maraş işi, tek parçalar, cesur hikâyeler). Fiyat görüşmede konuşulur. Arkada en az 20–30 satılmış parça olmadan inandırıcı değildir.
+
+**Fiyat kuralları.**
+- İndirim yok. Lüks fiyat yalnızca yukarı gider. Daha ucuz bir şey gerekirse daha küçük bir ürün yapılır (puf, tabure, yastık); büyük parçanın fiyatı kırılmaz.
+- Maliyet, kumaşın aile fiyatıyla değil piyasa fiyatıyla hesaplanır. Yoksa kâr payı sahte olur ve kumaş başka yerden alındığında zarar çıkar.
+- Fiyat maliyetten kurulur: kumaş + iskelet + döşeme işçiliği + nakış + pirinç + püskül + nakliye. Kaba kural: satış fiyatı bu toplamın 2,5–3 katı. İç mimara bu fiyattan indirim verilir (sektörde genelde %15–30). Bunlar yerleşik alışkanlık, kesin ölçüt değil; kuruluş fiyatı iç mimar görüşmeleriyle doğrulanır.
+- Bugün doğru olmayan söz yazılmaz ("el oyması ceviz", "420 saat, tek usta" gibi). Doğru olduğunda eklenir.
+
+**İlk 90 gün.**
+1. Kırk Kat pufunu ya da Etüt No. 0'ı gerçekten yaptır: elle tutulur ilk kanıt.
+2. Numune kutusu: kumaş parçaları, nakış örneği, pirinç damga, püskül.
+3. İlk parçanın gerçek maliyetini çıkar, kuruluş fiyatını belirle.
+4. 20 iç mimarla yüz yüze görüş; dört soruyu sor (bkz. 8. bölüm, Pazar testi) ve cevapları sayı olarak kaydet. 6 parça yılda iki ayda bir satış demek; bunun için kabaca 30–40 iç mimarla görüşmek gerekir.
 
 ---
 

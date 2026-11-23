@@ -14,7 +14,7 @@ const COPY = {
     done: "Mühürlendi",
     lines: [
       ["Numara", "N° 001"],
-      ["Usta imzası", "Gövdenin altında, ahşabın üzerinde"],
+      ["Pirinç damga", "Her parçada, yeri parçaya göre seçilir"],
       ["Sertifika", "Parçayla birlikte teslim edilir"],
     ],
   },
@@ -24,7 +24,7 @@ const COPY = {
     done: "Sealed",
     lines: [
       ["Number", "N° 001"],
-      ["Master's signature", "Beneath the frame, in the wood itself"],
+      ["Brass seal", "On every piece, placed to suit the piece"],
       ["Certificate", "Delivered with the piece"],
     ],
   },

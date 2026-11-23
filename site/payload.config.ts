@@ -10,9 +10,9 @@ import { en } from "@payloadcms/translations/languages/en";
 import { tr } from "@payloadcms/translations/languages/tr";
 import { buildConfig } from "payload";
 import sharp from "sharp";
-import { Fabrics, PatternCodes, PieceCollections, Pieces } from "./payload/collections/catalog";
+import { Fabrics, PatternCodes, PieceCollections, Pieces, Studies } from "./payload/collections/catalog";
 import { Finishes, PieceTypes, Sizes, Woods } from "./payload/collections/options";
-import { FabricImages, Media, Models } from "./payload/collections/uploads";
+import { FabricImages, Media, Models, Videos } from "./payload/collections/uploads";
 import { Signups } from "./payload/collections/signups";
 import { Users } from "./payload/collections/users";
 import { SiteSettings } from "./payload/globals/siteSettings";
@@ -30,7 +30,23 @@ export default buildConfig({
     meta: { titleSuffix: " · Tahtırevan Panel" },
     dateFormat: "d MMMM yyyy HH:mm",
   },
-  collections: [Pieces, Fabrics, PieceCollections, PatternCodes, PieceTypes, Woods, Finishes, Sizes, FabricImages, Media, Models, Signups, Users],
+  collections: [
+    Pieces,
+    Studies,
+    Fabrics,
+    PieceCollections,
+    PatternCodes,
+    PieceTypes,
+    Woods,
+    Finishes,
+    Sizes,
+    FabricImages,
+    Media,
+    Videos,
+    Models,
+    Signups,
+    Users,
+  ],
   globals: [SiteStatus, SiteSettings],
   localization: {
     locales: [

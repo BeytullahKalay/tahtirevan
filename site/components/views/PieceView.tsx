@@ -17,7 +17,7 @@ const COPY = {
     fabric: "Kumaş ve desen",
     code: "Desen kodu",
     seeCode: "Bu desen kodunu inceleyin",
-    fabricHonest: "Desen yalnızca Tahtırevan için çizilir ve kumaşa baskıyla aktarılır. El işçiliği gövdede ve döşemededir.",
+    fabricHonest: "Desen kumaşa baskıyla aktarılır. El işçiliği döşemede, nakışta ve son işçiliktedir.",
     materials: "Malzeme ve ölçüler",
     wood: "Gövde",
     finish: "Kaplama",
@@ -45,7 +45,7 @@ const COPY = {
     fabric: "Fabric and pattern",
     code: "Pattern code",
     seeCode: "Explore this pattern code",
-    fabricHonest: "The pattern is drawn for Tahtırevan alone and printed onto the cloth. The handwork lives in the frame and the upholstery.",
+    fabricHonest: "The pattern is printed onto the cloth. The handwork lives in the upholstery, the embroidery and the finishing.",
     materials: "Materials and dimensions",
     wood: "Frame",
     finish: "Finish",
@@ -74,8 +74,8 @@ export async function PieceView({ lang, piece }: { lang: Lang; piece: Piece }) {
   const { getCode, getCollection, getFabric, getFinish, getWood, piecesByCollection, typeLabel } = await getCatalog();
   const c = COPY[lang];
   const col = getCollection(piece.collection);
-  const code = getCode(col.code);
   const fabric = getFabric(piece.fabric);
+  const code = getCode(fabric.code);
   const related = piecesByCollection(col.id).filter((p) => p.id !== piece.id).slice(0, 3);
   const type = typeLabel(piece.type, lang);
   const lower = type.toLocaleLowerCase(lang);

@@ -25,8 +25,8 @@ const COPY = {
       {
         h: "Bugün",
         p: [
-          "Gövde atölyemizde elde oyulur, çatılır ve kaplanır. Döşemeyi ustalarımız katman katman elle kurar. Desenler yalnızca bizim için çizilir.",
-          "Bir Tahtırevan, nesilden nesile geçmek için yapılır. Numarası ve ustasının imzası, gövdenin altında onunla birlikte yolculuk eder.",
+          "Bugün her parça, birlikte çalıştığımız döşeme atölyelerinde ustaların elinde kurulur. Kumaşlarımız ailemizin kumaş geleneğinden gelir.",
+          "Bir Tahtırevan, nesilden nesile geçmek için yapılır. Numarası ve pirinç damgası onunla birlikte yolculuk eder.",
         ],
       },
     ],
@@ -36,7 +36,7 @@ const COPY = {
       "Tahtırevan'ı tek bir soruyla kurduk: bir koltuk, sahibini bir ömür boyu taşıyabilir mi? Cevabı desende değil, gövdenin içinde aradık. Göz alan bir desen, onu taşıyacak kadar sağlam bir gövde ve ikisini bir araya getiren sabırlı bir el.",
     founderName: "Kurucu adı",
     founderRole: "Kurucu, Tahtırevan",
-    cta: "Atölyeyi ziyaret etmek için görüşme talep edin",
+    cta: "Kumaşlarımızı görmek için görüşme talep edin",
   },
   en: {
     label: "Story",
@@ -59,8 +59,8 @@ const COPY = {
       {
         h: "Today",
         p: [
-          "In our atelier the frame is carved, joined and finished by hand. Our masters build the upholstery by hand, layer by layer. The patterns are drawn for us alone.",
-          "A Tahtırevan is made to pass from one generation to the next. Its number and its maker's signature travel with it, beneath the frame.",
+          "Today every piece is built by master upholsterers in the workshops we work with. Our fabrics come from our family's long trade in cloth.",
+          "A Tahtırevan is made to pass from one generation to the next. Its number and its brass seal travel with it.",
         ],
       },
     ],
@@ -70,7 +70,7 @@ const COPY = {
       "We started Tahtırevan with one question: can a chair carry its owner for a lifetime? We looked for the answer inside the frame, not on its surface. A pattern that holds the eye, a frame strong enough to carry it, and a patient hand to bring the two together.",
     founderName: "Founder's name",
     founderRole: "Founder, Tahtırevan",
-    cta: "Request a consultation to visit the atelier",
+    cta: "Request a consultation to see our fabrics",
   },
 };
 
@@ -79,7 +79,7 @@ export function StoryView({ lang }: { lang: Lang }) {
   const shots = [
     { subject: lang === "tr" ? "Eski bir tahtırevan, müze ışığında" : "An old tahtırevan in museum light", shot: "space" as const },
     { subject: lang === "tr" ? "Ölçü alan eller" : "Hands taking measurements", shot: "craft" as const },
-    { subject: lang === "tr" ? "Oyma kalemleri ve ceviz talaşı" : "Carving chisels and walnut shavings", shot: "craft" as const },
+    { subject: lang === "tr" ? "Kumaş topları ve desen provası" : "Bolts of cloth and a pattern proof", shot: "craft" as const },
   ];
   return (
     <>

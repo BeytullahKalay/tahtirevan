@@ -68,6 +68,7 @@ export interface Config {
   blocks: {};
   collections: {
     pieces: Piece;
+    studies: Study;
     fabrics: Fabric;
     'piece-collections': PieceCollection;
     'pattern-codes': PatternCode;
@@ -77,6 +78,7 @@ export interface Config {
     sizes: Size;
     'fabric-images': FabricImage;
     media: Media;
+    videos: Video;
     models: Model;
     signups: Signup;
     users: User;
@@ -85,9 +87,17 @@ export interface Config {
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    fabrics: {
+      studies: 'studies';
+    };
+    'piece-collections': {
+      pieces: 'pieces';
+    };
+  };
   collectionsSelect: {
     pieces: PiecesSelect<false> | PiecesSelect<true>;
+    studies: StudiesSelect<false> | StudiesSelect<true>;
     fabrics: FabricsSelect<false> | FabricsSelect<true>;
     'piece-collections': PieceCollectionsSelect<false> | PieceCollectionsSelect<true>;
     'pattern-codes': PatternCodesSelect<false> | PatternCodesSelect<true>;
@@ -97,6 +107,7 @@ export interface Config {
     sizes: SizesSelect<false> | SizesSelect<true>;
     'fabric-images': FabricImagesSelect<false> | FabricImagesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    videos: VideosSelect<false> | VideosSelect<true>;
     models: ModelsSelect<false> | ModelsSelect<true>;
     signups: SignupsSelect<false> | SignupsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -205,6 +216,8 @@ export interface Piece {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Each collection is a stop on the road (e.g. Samarkand). Only pieces that are really made belong here.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "piece-collections".
  */
@@ -212,8 +225,24 @@ export interface PieceCollection {
   id: number;
   _order?: string | null;
   name: string;
-  code: number | PatternCode;
+  /**
+   * The stop on the road this collection belongs to. Shown above the name. Optional.
+   */
+  stop?: string | null;
   line: string;
+  /**
+   * Short text on the collection page, shown even before any piece is published.
+   */
+  intro?: string | null;
+  /**
+   * Left from the old structure; leave empty.
+   */
+  code?: (number | null) | PatternCode;
+  pieces?: {
+    docs?: (number | Piece)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
   /**
    * If several are ticked, the first in the list is used.
    */
@@ -304,6 +333,14 @@ export interface Fabric {
   velvet?: string | null;
   nameStatus?: ('final' | 'provisional') | null;
   /**
+   * Studies shown on this fabric's page. Add new ones under Catalogue › Studies.
+   */
+  studies?: {
+    docs?: (number | Study)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  /**
    * Permanent ASCII name (e.g. rossaria). Generated from the name if left empty. Do not change once published.
    */
   key: string;
@@ -380,6 +417,44 @@ export interface FabricImage {
   };
 }
 /**
+ * Bodies imagined in our fabrics, not yet made. Each study appears on its fabric's page. Real, made pieces go under Pieces.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "studies".
+ */
+export interface Study {
+  id: number;
+  _order?: string | null;
+  name: string;
+  /**
+   * Shown on this fabric's page.
+   */
+  fabric: number | Fabric;
+  /**
+   * If ticked, appears in the home page strip. Up to 3, in list order (drag to reorder). If none is ticked, the first three appear.
+   */
+  featured?: boolean | null;
+  /**
+   * One or two sentences: what did the form take from the fabric? No product claims; a study is not made yet.
+   */
+  line: string;
+  /**
+   * A single vertical frame (9:16 or 4:5).
+   */
+  image: number | Media;
+  /**
+   * Short muted vertical MP4. The image is its poster.
+   */
+  video?: (number | null) | Video;
+  /**
+   * Permanent ASCII name (e.g. yele). Generated from the name if left empty. Do not change once published.
+   */
+  key: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * Product photos. A transparent PNG works best for product portraits.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -416,6 +491,30 @@ export interface Media {
       filename?: string | null;
     };
   };
+}
+/**
+ * Short vertical MP4 (about 4 MB at most: 720×1280, muted). Plays muted and looped on the site.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "videos".
+ */
+export interface Video {
+  id: number;
+  /**
+   * Short description for people who cannot see the image.
+   */
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
 }
 /**
  * Upload the AI-generated .glb as is: the back fabric, seat velvet and metal frame are separated automatically. Then link it to a piece.
@@ -574,6 +673,10 @@ export interface PayloadLockedDocument {
         value: number | Piece;
       } | null)
     | ({
+        relationTo: 'studies';
+        value: number | Study;
+      } | null)
+    | ({
         relationTo: 'fabrics';
         value: number | Fabric;
       } | null)
@@ -608,6 +711,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'videos';
+        value: number | Video;
       } | null)
     | ({
         relationTo: 'models';
@@ -710,6 +817,23 @@ export interface PiecesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "studies_select".
+ */
+export interface StudiesSelect<T extends boolean = true> {
+  _order?: T;
+  name?: T;
+  fabric?: T;
+  featured?: T;
+  line?: T;
+  image?: T;
+  video?: T;
+  key?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "fabrics_select".
  */
 export interface FabricsSelect<T extends boolean = true> {
@@ -729,6 +853,7 @@ export interface FabricsSelect<T extends boolean = true> {
       };
   velvet?: T;
   nameStatus?: T;
+  studies?: T;
   key?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -741,8 +866,11 @@ export interface FabricsSelect<T extends boolean = true> {
 export interface PieceCollectionsSelect<T extends boolean = true> {
   _order?: T;
   name?: T;
-  code?: T;
+  stop?: T;
   line?: T;
+  intro?: T;
+  code?: T;
+  pieces?: T;
   featured?: T;
   key?: T;
   slug?: T;
@@ -901,6 +1029,24 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "videos_select".
+ */
+export interface VideosSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

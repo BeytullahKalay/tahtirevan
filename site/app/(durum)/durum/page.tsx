@@ -1,11 +1,9 @@
 import config from "@payload-config";
 import type { Metadata } from "next";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { getPayload } from "payload";
 import { Emblem, Mark } from "@/components/Brand";
 import { getCatalogData } from "@/lib/catalog.server";
-import { CHAIR } from "@/lib/media";
 import { LangSwitch, NotifyForm } from "./GateClient";
 
 /**
@@ -31,8 +29,8 @@ const DEFAULTS = {
     label: { tr: "Yakında", en: "Coming soon" },
     title: { tr: "Bir taht, tek bir kişi için.", en: "A throne, made for one." },
     message: {
-      tr: "Her parça sahibi için, tek bir ustanın elinde yapılır. Atölyenin kapılarını çok yakında açıyoruz.",
-      en: "Every piece is made for its owner, by a single master. The atelier opens its doors soon.",
+      tr: "Her parça sahibi için, siparişle yapılır. Kapılarımızı çok yakında açıyoruz.",
+      en: "Every piece is made to order, for its owner. Our doors open soon.",
     },
   },
   maintenance: {
@@ -116,16 +114,6 @@ export default async function DurumPage({ searchParams }: { searchParams: SP }) 
       <main className={`g-main${mode === "maintenance" ? " g-maint" : ""}`}>
         <div className="g-stage" aria-hidden="true">
           <div className="g-glow" />
-          <Image
-            className="g-chair"
-            src={CHAIR.src}
-            width={CHAIR.width}
-            height={CHAIR.height}
-            alt=""
-            priority
-            sizes="(min-width: 900px) 470px, 320px"
-          />
-          <div className="g-floor" />
         </div>
 
         <div className="g-copy">
@@ -193,8 +181,8 @@ export default async function DurumPage({ searchParams }: { searchParams: SP }) 
           <span className="g-label">© {new Date().getFullYear()} Tahtırevan</span>
         </span>
         <span className="g-label">
-          <span data-l="tr">Her parça numaralı ve imzalıdır.</span>
-          <span data-l="en">Every piece is numbered and signed.</span>
+          <span data-l="tr">Her parça siparişle yapılır ve numaralıdır.</span>
+          <span data-l="en">Every piece is made to order and numbered.</span>
         </span>
       </footer>
     </>

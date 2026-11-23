@@ -6,7 +6,7 @@ import { SITE_URL } from "@/lib/seo";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: "Tahtırevan · Her taht, sahibini bekler", template: "%s · Tahtırevan" },
-  description: "Gövdesi elde yapılan, siparişe ve sahibine göre üretilen koltuk, kanepe ve sedirler.",
+  description: "Siparişle, sahibine göre yapılan koltuk ve sedirler.",
   icons: { icon: "/brand/icon.svg", apple: "/brand/apple-touch-icon.png" },
 };
 

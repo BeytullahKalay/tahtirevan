@@ -1,4 +1,5 @@
-// Coming-soon görsellerini üretir: koltuk webp, kumaş numuneleri, OG görseli, favicon PNG.
+// Coming-soon görsellerini üretir: kumaş numuneleri, OG (paylaşım) görseli, favicon PNG.
+// Koltuk görseli 23 Kasım 2026'da kullanıcı isteğiyle sayfadan ve paylaşım görselinden kaldırıldı.
 const path = require("path");
 const fs = require("fs");
 const root = process.argv[2]; // proje kökü
@@ -7,14 +8,11 @@ const pub = path.join(root, "site/public");
 const out = path.join(root, "coming-soon/assets");
 fs.mkdirSync(path.join(out, "fabrics"), { recursive: true });
 
+// Netlify /assets/* dosyalarını 7 gün önbellekte tutar: paylaşım görseli değişince adı da değişir
+// (index.html'deki og:image yolu da güncellenir).
+const OG_NAME = "og-2.jpg";
+
 (async () => {
-  const chairSrc = path.join(pub, "chair/serir.png");
-  const meta = await sharp(chairSrc).metadata();
-  console.log("chair", meta.width, meta.height, "alpha:", meta.hasAlpha);
-
-  await sharp(chairSrc).resize({ width: 820 }).webp({ quality: 82, alphaQuality: 90 }).toFile(path.join(out, "chair.webp"));
-  await sharp(chairSrc).resize({ width: 520 }).webp({ quality: 80, alphaQuality: 90 }).toFile(path.join(out, "chair-sm.webp"));
-
   const ids = ["rossaria", "colibri", "sahara", "ardente", "panthera", "mayura", "soraya", "mirza", "zafran", "sapphire", "simur"];
   for (const id of ids) {
     await sharp(path.join(pub, "fabrics", id + ".jpg"))
@@ -23,28 +21,43 @@ fs.mkdirSync(path.join(out, "fabrics"), { recursive: true });
       .toFile(path.join(out, "fabrics", id + ".webp"));
   }
 
-  // OG 1200x630: koyu zemin, solda koltuk, sağda yazı
-  const chairOg = await sharp(chairSrc).resize({ height: 540 }).png().toBuffer();
-  const cm = await sharp(chairOg).metadata();
-  const text = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
-    <defs><radialGradient id="g" cx="0.3" cy="0.45" r="0.6"><stop offset="0" stop-color="#3a1a1c" stop-opacity="0.9"/><stop offset="1" stop-color="#14110F" stop-opacity="0"/></radialGradient></defs>
-    <rect width="1200" height="630" fill="#14110F"/><rect width="1200" height="630" fill="url(#g)"/>
-    <ellipse cx="${60 + cm.width / 2}" cy="562" rx="${cm.width * 0.4}" ry="12" fill="#000" opacity="0.55"/>
-    <text x="640" y="250" fill="#E9E1D3" font-family="Helvetica, Arial, sans-serif" font-size="22" letter-spacing="11">TAHTIREVAN</text>
-    <text x="640" y="330" fill="#E9E1D3" font-family="Georgia, 'Times New Roman', serif" font-size="54">A throne,</text>
-    <text x="640" y="395" fill="#E9E1D3" font-family="Georgia, 'Times New Roman', serif" font-size="54">made for one.</text>
-    <line x1="640" y1="440" x2="700" y2="440" stroke="#B08D57" stroke-width="1.5"/>
-    <text x="640" y="480" fill="#9A8F80" font-family="Helvetica, Arial, sans-serif" font-size="18" letter-spacing="6">YAKINDA · COMING SOON</text>
+  // OG 1200x630: koyu zemin, ortada iki dilli başlık, altında bir sıra kumaş dairesi (renk yalnızca kumaştan)
+  const W = 1200, H = 630, D = 84, GAP = 22;
+  const row = ["mayura", "soraya", "ardente", "rossaria", "panthera", "sapphire", "colibri"];
+  const rowW = row.length * D + (row.length - 1) * GAP;
+  const x0 = Math.round((W - rowW) / 2), y0 = 412;
+  const mask = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${D}" height="${D}"><circle cx="${D / 2}" cy="${D / 2}" r="${D / 2}" fill="#fff"/></svg>`);
+  const circles = [];
+  for (const [i, id] of row.entries()) {
+    const img = await sharp(path.join(pub, "fabrics", id + ".jpg"))
+      .resize({ width: D, height: D, fit: "cover" })
+      .composite([{ input: mask, blend: "dest-in" }])
+      .png()
+      .toBuffer();
+    circles.push({ input: img, left: x0 + i * (D + GAP), top: y0 });
+  }
+  const rings = row
+    .map((_, i) => `<circle cx="${x0 + i * (D + GAP) + D / 2}" cy="${y0 + D / 2}" r="${D / 2 + 5}" fill="none" stroke="#B08D57" stroke-opacity="0.35" stroke-width="1"/>`)
+    .join("");
+  const bg = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
+    <defs><radialGradient id="g" cx="0.5" cy="0.42" r="0.55"><stop offset="0" stop-color="#3a1a1c" stop-opacity="0.95"/><stop offset="1" stop-color="#14110F" stop-opacity="0"/></radialGradient></defs>
+    <rect width="${W}" height="${H}" fill="#14110F"/><rect width="${W}" height="${H}" fill="url(#g)"/>
+    <text x="600" y="118" text-anchor="middle" fill="#E9E1D3" font-family="Helvetica, Arial, sans-serif" font-size="20" letter-spacing="10">TAHTIREVAN</text>
+    <text x="600" y="228" text-anchor="middle" fill="#E9E1D3" font-family="Georgia, 'Times New Roman', serif" font-size="64">Bir taht, tek bir kişi için.</text>
+    <text x="600" y="290" text-anchor="middle" fill="#9A8F80" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="32">A throne, made for one.</text>
+    <line x1="570" y1="342" x2="630" y2="342" stroke="#B08D57" stroke-width="1.5"/>
+    ${rings}
+    <text x="600" y="576" text-anchor="middle" fill="#9A8F80" font-family="Helvetica, Arial, sans-serif" font-size="17" letter-spacing="6">YAKINDA · COMING SOON</text>
   </svg>`);
-  await sharp(text)
-    .composite([{ input: chairOg, left: 60, top: 40 }])
-    .jpeg({ quality: 84 })
-    .toFile(path.join(out, "og.jpg"));
+  await sharp(bg).composite(circles).jpeg({ quality: 86 }).toFile(path.join(out, OG_NAME));
 
-  // Favicon / Apple ikon
-  const icon = Buffer.from(fs.readFileSync(path.join(pub, "monogram.svg"), "utf8"));
-  await sharp(icon, { density: 400 }).resize(180, 180).png().toFile(path.join(out, "apple-touch-icon.png"));
-  fs.copyFileSync(path.join(pub, "monogram.svg"), path.join(out, "monogram.svg"));
+  // Favicon / Apple ikon (eski monogram; site/public'ten kaldırıldıysa assets'teki mevcut dosyalar kalır)
+  const mono = path.join(pub, "monogram.svg");
+  if (fs.existsSync(mono)) {
+    const icon = Buffer.from(fs.readFileSync(mono, "utf8"));
+    await sharp(icon, { density: 400 }).resize(180, 180).png().toFile(path.join(out, "apple-touch-icon.png"));
+    fs.copyFileSync(mono, path.join(out, "monogram.svg"));
+  }
 
   for (const f of fs.readdirSync(out)) {
     const p = path.join(out, f);

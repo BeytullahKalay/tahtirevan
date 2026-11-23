@@ -21,6 +21,7 @@ import {
   type PatternCode,
   type Piece,
   type SiteSettings,
+  type Study,
 } from "./catalog";
 
 type Doc = Record<string, unknown> & { id: number };
@@ -55,17 +56,19 @@ async function load(): Promise<CatalogData> {
       })
     ).docs as unknown as Doc[];
 
-  const [codesD, fabricsD, colsD, piecesD, typesD, woodsD, finishesD, sizesD, fimgD, mediaD, modelsD, siteD, statusD] = await Promise.all([
+  const [codesD, fabricsD, colsD, piecesD, studiesD, typesD, woodsD, finishesD, sizesD, fimgD, mediaD, videosD, modelsD, siteD, statusD] = await Promise.all([
     all("pattern-codes", { published: true, sort: "_order" }),
     all("fabrics", { published: true, sort: "_order" }),
     all("piece-collections", { published: true, sort: "_order" }),
     all("pieces", { published: true, sort: "_order" }),
+    all("studies", { published: true, sort: "_order" }),
     all("piece-types", { sort: "_order" }),
     all("woods", { sort: "_order" }),
     all("finishes", { sort: "_order" }),
     all("sizes", { sort: "_order" }),
     all("fabric-images"),
     all("media"),
+    all("videos"),
     all("models"),
     payload.findGlobal({ slug: "site-settings", locale: "all", depth: 0 }) as unknown as Promise<Doc>,
     payload.findGlobal({ slug: "site-status", depth: 0 }) as unknown as Promise<Doc>,
@@ -78,6 +81,7 @@ async function load(): Promise<CatalogData> {
   const finishKey = keyOf(finishesD);
   const fimg = byId(fimgD);
   const media = byId(mediaD);
+  const videos = byId(videosD);
   const models = byId(modelsD);
   /** 3B modelin adresi; `?v=` model her yeniden hazırlandığında değişir, tarayıcı eskisini göstermez. */
   const modelUrl = (v: unknown) => {
@@ -150,11 +154,16 @@ async function load(): Promise<CatalogData> {
     };
   });
 
-  const collections: Collection[] = colsD.flatMap((c) => {
-    const code = codeKeyAll.get(id(c.code) as number);
-    if (!code) return [];
-    return [{ id: c.key as string, code, featured: Boolean(c.featured), slug: loc(c.slug), name: loc(c.name), line: loc(c.line) }];
-  });
+  const collections: Collection[] = colsD.map((c) => ({
+    id: c.key as string,
+    code: codeKeyAll.get(id(c.code) as number),
+    featured: Boolean(c.featured),
+    slug: loc(c.slug),
+    name: loc(c.name),
+    stop: loc(c.stop),
+    line: loc(c.line),
+    intro: loc(c.intro),
+  }));
   const colByDbId = new Map(colsD.map((c) => [c.id, collections.find((x) => x.id === c.key)]));
 
   const imgOf = (doc: Doc | undefined): Img | undefined =>
@@ -200,6 +209,25 @@ async function load(): Promise<CatalogData> {
     ];
   });
 
+  // Etütler: görseli ve kumaşı yayında olanlar
+  const studies: Study[] = studiesD.flatMap((s) => {
+    const fabric = fabricKey.get(id(s.fabric) as number);
+    const image = imgOf(media.get(id(s.image) as number));
+    if (!fabric || !liveFabric.has(fabric) || !image) return [];
+    const v = videos.get(id(s.video) as number);
+    return [
+      {
+        id: s.key as string,
+        name: loc(s.name),
+        fabric,
+        featured: Boolean(s.featured),
+        line: loc(s.line),
+        image,
+        video: (v?.url as string | undefined) || undefined,
+      },
+    ];
+  });
+
   const hero = (siteD.hero ?? {}) as { fabric?: unknown; orbs?: unknown[] };
   const live = (v: unknown) => {
     const k = fabricKey.get(id(v) as number);
@@ -219,7 +247,7 @@ async function load(): Promise<CatalogData> {
     }),
   };
 
-  return { codes, fabrics, collections, pieces, options, site };
+  return { codes, fabrics, collections, pieces, studies, options, site };
 }
 
 /** İstek başına bir kez yüklenir. */

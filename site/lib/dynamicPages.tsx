@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CollectionsView } from "@/components/views/CollectionsView";
+import { FabricView } from "@/components/views/FabricView";
 import { PieceView } from "@/components/views/PieceView";
 import { LEGAL_META, LegalView, type LegalKey } from "@/components/views/LegalView";
 import { getCatalog } from "./catalog.server";
-import { collectionHref, pieceHref, ROUTES, type Lang } from "./i18n";
+import { collectionHref, fabricHref, pieceHref, ROUTES, type Lang } from "./i18n";
 import { pageMeta, routeMeta } from "./seo";
 
 type PieceParams = { col: string; piece: string };
@@ -60,6 +61,36 @@ export function collectionPage(lang: Lang, colKey: string) {
       const col = findCollectionBySlug(lang, (await params)[colKey]);
       if (!col) notFound();
       return <CollectionsView lang={lang} only={col.id} />;
+    },
+  };
+}
+
+/** Kumaş sayfası (/desenler/[kumas] · /en/patterns/[fabric]): kumaşın künyesi ve etütleri. */
+export function fabricPage(lang: Lang, key: string) {
+  const find = async (params: Promise<Record<string, string>>) => {
+    const { findFabric } = await getCatalog();
+    return findFabric((await params)[key]);
+  };
+  return {
+    generateStaticParams: async () => (await getCatalog()).fabrics.map((f) => ({ [key]: f.id })),
+    generateMetadata: async ({ params }: { params: Promise<Record<string, string>> }): Promise<Metadata> => {
+      const f = await find(params);
+      if (!f) return {};
+      const { studiesByFabric } = await getCatalog();
+      const n = studiesByFabric(f.id).length;
+      return pageMeta(
+        lang,
+        fabricHref(lang, f.id),
+        `${f.name} · ${lang === "tr" ? "Kumaş" : "Fabric"}`,
+        lang === "tr"
+          ? `${f.name}: ${f.motif.tr}. ${f.colorNotes.tr}.${n ? " Bu kumaşla düşünülmüş etütler." : ""}`
+          : `${f.name}: ${f.motif.en}. ${f.colorNotes.en}.${n ? " Studies imagined in this fabric." : ""}`,
+      );
+    },
+    Page: async ({ params }: { params: Promise<Record<string, string>> }) => {
+      const f = await find(params);
+      if (!f) notFound();
+      return <FabricView lang={lang} fabric={f} />;
     },
   };
 }

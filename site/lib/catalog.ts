@@ -47,11 +47,26 @@ export type Fabric = {
 
 export type Collection = {
   id: string;
-  code: string;
+  /** Eski düzenden kalan desen kodu; yeni koleksiyonlarda (duraklar) yok. */
+  code?: string;
   featured?: boolean;
   slug: Localized;
   name: Localized;
+  /** Yol üstündeki durak (ör. Semerkant). */
+  stop: Localized;
   line: Localized;
+  intro: Localized;
+};
+
+/** Etüt: bir kumaşla düşünülmüş, henüz üretilmemiş gövde. Kumaş sayfasında görünür. */
+export type Study = {
+  id: string;
+  name: Localized;
+  fabric: string;
+  featured: boolean;
+  line: Localized;
+  image: Img;
+  video?: string;
 };
 
 export type Piece = {
@@ -110,16 +125,17 @@ export type CatalogData = {
   fabrics: Fabric[];
   collections: Collection[];
   pieces: Piece[];
+  studies: Study[];
   options: Options;
   site: SiteSettings;
 };
 
 /** Veriye bağlı yardımcılar. Sunucuda `await getCatalog()`, tarayıcıda `useCatalog()` bunları döndürür. */
 export function withHelpers(data: CatalogData) {
-  const { codes, fabrics, collections, pieces, options } = data;
+  const { codes, fabrics, collections, pieces, studies, options } = data;
   const getCode = (id: string) => codes.find((c) => c.id === id) ?? codes[0];
   const getFabric = (id: string) => fabrics.find((f) => f.id === id) ?? fabrics[0];
-  const getCollection = (id: string) => collections.find((c) => c.id === id) ?? collections[0];
+  const getCollection = (id: string) => (collections.find((c) => c.id === id) ?? collections[0]) as Collection;
   const getPiece = (id: string) => pieces.find((p) => p.id === id);
   const findCollectionBySlug = (lang: Lang, slug: string) => collections.find((c) => c.slug[lang] === slug);
 
@@ -133,7 +149,10 @@ export function withHelpers(data: CatalogData) {
     getFinish: (id: string) => options.finishes.find((f) => f.id === id) ?? options.finishes[0],
     fabricsByCode: (code: string) => fabrics.filter((f) => f.code === code),
     piecesByCollection: (id: string) => pieces.filter((p) => p.collection === id),
-    piecesByCode: (code: string) => pieces.filter((p) => getCollection(p.collection).code === code),
+    piecesByCode: (code: string) => pieces.filter((p) => getCollection(p.collection)?.code === code),
+    piecesByFabric: (fabric: string) => pieces.filter((p) => p.fabric === fabric),
+    studiesByFabric: (fabric: string) => studies.filter((s) => s.fabric === fabric),
+    findFabric: (id: string) => fabrics.find((f) => f.id === id),
     findCollectionBySlug,
     findPieceBySlug: (lang: Lang, collectionSlug: string, pieceSlug: string) => {
       const col = findCollectionBySlug(lang, collectionSlug);
@@ -156,3 +175,18 @@ export type Catalog = ReturnType<typeof withHelpers>;
 
 export const cmToIn = (cm: number) => Math.round((cm / 2.54) * 10) / 10;
 export const kgToLb = (kg: number) => Math.round(kg * 2.20462);
+
+/** Etüt numarası: parçaların Nº 01–10 numarasıyla karışmasın diye Roma rakamı. */
+export function studyNumeral(n: number) {
+  const map: [number, string][] = [
+    [10, "X"],
+    [9, "IX"],
+    [5, "V"],
+    [4, "IV"],
+    [1, "I"],
+  ];
+  let out = "";
+  let v = n;
+  for (const [k, s] of map) while (v >= k) ((out += s), (v -= k));
+  return out;
+}

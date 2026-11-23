@@ -17,6 +17,7 @@ const COPY = {
     optional: "isteğe bağlı",
     location: "Ülke / şehir",
     interest: "İlgilendiğiniz parça ya da koleksiyon",
+    studies: "Etütler (kumaşla düşünülmüş gövdeler)",
     undecided: "Henüz karar vermedim",
     collection: "koleksiyonun tamamı",
     project: "Proje türü",
@@ -55,6 +56,7 @@ const COPY = {
     optional: "optional",
     location: "Country / city",
     interest: "The piece or collection you are interested in",
+    studies: "Studies (bodies imagined in our fabrics)",
     undecided: "I have not decided yet",
     collection: "the whole collection",
     project: "Project type",
@@ -94,7 +96,7 @@ const field =
 export function ConsultationForm({ lang }: { lang: Lang }) {
   const c = COPY[lang];
   const cat = useCatalog();
-  const { collections, fabrics, getPiece, options, piecesByCollection, typeLabel } = cat;
+  const { collections, fabrics, getFabric, getPiece, options, piecesByCollection, studies, typeLabel } = cat;
   const params = useSearchParams();
   const [startedAt] = useState(() => Date.now());
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -105,6 +107,7 @@ export function ConsultationForm({ lang }: { lang: Lang }) {
   const pre = useMemo(() => {
     const pieceId = params.get("parca") || "";
     const piece = pieceId ? getPiece(pieceId) : undefined;
+    const study = studies.find((s) => s.id === params.get("etut"));
     const fabric = fabrics.find((f) => f.id === params.get("kumas"));
     const wood = options.woods.find((w) => w.id === params.get("ahsap"));
     const finish = options.finishes.find((f) => f.id === params.get("kaplama"));
@@ -113,13 +116,17 @@ export function ConsultationForm({ lang }: { lang: Lang }) {
     const proje = params.get("proje");
     const parts = [fabric?.name, wood?.[lang], finish?.[lang], size?.[lang]].filter(Boolean);
     return {
-      interest: piece ? `piece:${piece.id}` : "",
-      pieceName: piece ? `${piece.name} ${typeLabel(piece.type, lang).toLocaleLowerCase(lang)}` : "",
+      interest: piece ? `piece:${piece.id}` : study ? `study:${study.id}` : "",
+      pieceName: piece
+        ? `${piece.name} ${typeLabel(piece.type, lang).toLocaleLowerCase(lang)}`
+        : study
+          ? `${study.name[lang]} ${lang === "tr" ? "etüdü" : "study"}`
+          : "",
       selection: parts.join(" · "),
       request: talep === "katalog" ? "katalog" : talep === "basin" ? "basin" : "gorusme",
       projectType: proje === "ic-mimar" || proje === "otel" ? proje : "konut",
     };
-  }, [params, lang, getPiece, fabrics, options, typeLabel]);
+  }, [params, lang, getPiece, studies, fabrics, options, typeLabel]);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -237,6 +244,15 @@ export function ConsultationForm({ lang }: { lang: Lang }) {
               ))}
             </optgroup>
           ))}
+          {studies.length > 0 && (
+            <optgroup label={c.studies} className="bg-gece">
+              {studies.map((s) => (
+                <option key={s.id} value={`study:${s.id}`} className="bg-gece">
+                  {s.name[lang]} · {getFabric(s.fabric).name}
+                </option>
+              ))}
+            </optgroup>
+          )}
         </select>
         {pre.selection && (
           <p className="mt-3 text-sm text-tas">
@@ -312,9 +328,13 @@ export function ConsultationForm({ lang }: { lang: Lang }) {
 }
 
 function interestLabel(cat: Catalog, v: string, lang: Lang, undecided: string, whole: string) {
-  const { getPiece, typeLabel, collections } = cat;
+  const { getPiece, getFabric, typeLabel, collections, studies } = cat;
   if (!v) return undecided;
   const [kind, id] = v.split(":");
+  if (kind === "study") {
+    const s = studies.find((x) => x.id === id);
+    return s ? `${lang === "tr" ? "Etüt" : "Study"}: ${s.name[lang]} · ${getFabric(s.fabric).name}` : undecided;
+  }
   if (kind === "piece") {
     const p = getPiece(id);
     return p ? `${p.name} ${typeLabel(p.type, lang)}` : undecided;

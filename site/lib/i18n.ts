@@ -37,6 +37,9 @@ export const collectionHref = (lang: Lang, col: Slugged) =>
 export const pieceHref = (lang: Lang, piece: Slugged & { colSlug: { tr: string; en: string } }) =>
   `${ROUTES.collections[lang]}/${piece.colSlug[lang]}/${piece.slug[lang]}`;
 
+/** Kumaş sayfası: adres kumaşın kalıcı kod adıyla kurulur, iki dilde aynıdır (/desenler/mayura · /en/patterns/mayura). */
+export const fabricHref = (lang: Lang, fabricId: string) => `${ROUTES.patterns[lang]}/${fabricId}`;
+
 /** Koleksiyon ve parça bağlantı parçaları (katalogdan gelir: `catalog.slugs`). */
 export type SlugMap = {
   collections: { id: string; slug: { tr: string; en: string } }[];
@@ -51,6 +54,9 @@ export function translatePath(pathname: string, to: Lang, slugs?: SlugMap): stri
   for (const key of Object.keys(ROUTES) as RouteKey[]) {
     if (ROUTES[key][from] === clean) return ROUTES[key][to];
   }
+
+  const patterns = ROUTES.patterns[from];
+  if (clean.startsWith(patterns + "/")) return fabricHref(to, clean.slice(patterns.length + 1).split("/")[0]);
 
   const base = ROUTES.collections[from];
   if (clean.startsWith(base + "/")) {
@@ -93,7 +99,7 @@ export const UI = {
       press: "Basın",
       language: "Dil",
       follow: "Takip edin",
-      rights: "Her parça numaralı ve imzalıdır.",
+      rights: "Her parça siparişle yapılır ve numaralıdır.",
     },
     consent: {
       text: "Ziyaretleri anlamak için çerez kullanmayan, gizlilik dostu bir ölçüm aracı kullanmak istiyoruz.",
@@ -129,7 +135,7 @@ export const UI = {
       press: "Press",
       language: "Language",
       follow: "Follow",
-      rights: "Every piece is numbered and signed.",
+      rights: "Every piece is made to order and numbered.",
     },
     consent: {
       text: "We would like to use a privacy-friendly, cookie-free tool to understand how the site is visited.",
