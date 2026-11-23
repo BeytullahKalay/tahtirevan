@@ -375,7 +375,7 @@ Width 92 cm, depth 90 cm, seat height 40 cm, height 78 cm. Warm grey studio back
 
 - **Fikir:** Kaftanın çapraz kavuşması. Zeytin yeşili küp klub koltuğun dış sırtında sol panel çapraz biner; kenarda 6 cm safran astar şeridi.
 - **İmzalar:** Şeritte altın hatayi nakışı; kavuşmanın alt ucunda pirinç çubuk toka (damga); tokanın kordon ilmeğinde püskül.
-- **Prompt'lar (M9–M11):** `yeni-parcalar-sandik-catma-yaka.md`.
+- **Prompt'lar (M9–M11):** silindi (beğenilmedi; git geçmişinde `yeni-parcalar-sandik-catma-yaka.md`).
 - **Ders (M7–M11):** Düz gövde + tek motif zorlanmış minimalizm gibi durdu; gündelik eşya konsepti (bohça, sandık, kaftan) kostüme kaydı. Bağ'ı kurtaran, süsün bütün gövdeyi saran bir sistem olmasıydı (bkz. 2. bölüm, "Minimalizm zorlanmasın").
 
 ### M12 — Uğurlama (berjer) · öneri, henüz denenmedi
@@ -398,7 +398,7 @@ Width 92 cm, depth 90 cm, seat height 40 cm, height 78 cm. Warm grey studio back
 
 ### M15–M18 — Aykırılar · denendi, beğenilmedi
 
-Her biri tek bir "ters" hamleye dayanır. Prompt'lar: `yeni-parcalar-aykiri.md`. Kullanıcı: "iyi olmadılar"; aykırılık aranmıyor, kesin Tahtırevan olan parça aranıyor.
+Her biri tek bir "ters" hamleye dayanır. Prompt'lar silindi (beğenilmedi; git geçmişinde `yeni-parcalar-aykiri.md`). Kullanıcı: "iyi olmadılar"; aykırılık aranmıyor, kesin Tahtırevan olan parça aranıyor.
 - **M15 Ters Yüz (kolsuz lounge):** Katlanmış tek kalın "halı" levhası. İçte Uşak halısının önü, dışta düğüm ızgaralı tersi; tüccarın halıyı çevirdiği an. Kalkmış köşede madalyon nakışı, köşedeki kordonda pirinç balya mührü + kırmızı yün püskül. Kırmızı, çivit, safran.
 - **M16 Çintemani (ikili kanepe):** Motifin kendisi kanepe: iki dalgalı kanallı silindir oturum (kırmızı, altın kordon), üç dik yuvarlak minder sırt (krem, lapis hilal aplike + altın nakış). Alt silindirin ucunda pirinç disk + lapis püskül. Risk: oyuncak gibi.
 - **M17 Taraklı (asimetrik üçlü kanepe):** Sırt solda yüksek, tek eğimle sağ kola akar. Bütün gövde taraklı ebru baskılı kadife, kanallar ebru çizgisini takip eder. Dış sırtta nakış ebru lalesi; püskül at kılı ebru fırçası, damga pirinç bileziği. Her parçanın deseni tek.
