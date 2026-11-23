@@ -1,0 +1,154 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  .tp-wrap { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin-top: 18px; }
+  @media (max-width: 1100px) { .tp-wrap { grid-template-columns: 1fr; } }
+  .tp-card { border: 1px solid rgba(176,141,87,.35); border-radius: 10px; overflow: hidden; cursor: pointer; background: #14110f; transition: box-shadow .2s, border-color .2s; }
+  .tp-card.selected { border-color: #b08d57; box-shadow: 0 0 0 2px #b08d57; }
+  .tp-head { padding: 14px 16px; background: #1b1714; color: #e9e1d3; font-family: Manrope, sans-serif; border-bottom: 1px solid rgba(176,141,87,.25); }
+  .tp-head b { color: #b08d57; font-size: 12px; letter-spacing: .2em; }
+  .tp-head h3 { margin: 4px 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 24px; color: #e9e1d3; }
+  .tp-head p { margin: 0; font-size: 12.5px; line-height: 1.5; color: #aca290; }
+  .tp-page { height: 620px; overflow-y: auto; background: #14110f; color: #e9e1d3; font-family: Manrope, sans-serif; }
+  .tp-page::-webkit-scrollbar { width: 6px; } .tp-page::-webkit-scrollbar-thumb { background: rgba(176,141,87,.4); border-radius: 3px; }
+  .tp-s { padding: 34px 22px; }
+  .tp-label { font-size: 9px; letter-spacing: .32em; text-transform: uppercase; color: #aca290; }
+  .tp-d { font-family: 'Cormorant Garamond', serif; font-weight: 300; line-height: 1; }
+  .tp-i { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; }
+  .tp-p { font-size: 11.5px; line-height: 1.7; color: rgba(233,225,211,.82); }
+  .tp-hr { height: 1px; background: rgba(176,141,87,.35); border: 0; margin: 0; }
+  .tp-img { background-size: cover; background-position: center; position: relative; }
+  .tp-img::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,17,15,.15), rgba(20,17,15,.55)); }
+  .tp-btn { display: inline-block; border: 1px solid #b08d57; color: #e9e1d3; font-size: 9px; letter-spacing: .26em; text-transform: uppercase; padding: 10px 14px; }
+  .tp-btn.fill { background: #b08d57; color: #14110f; }
+  .tp-note { font-size: 9.5px; color: #b08d57; letter-spacing: .08em; padding: 6px 22px; background: rgba(176,141,87,.08); border-top: 1px dashed rgba(176,141,87,.3); border-bottom: 1px dashed rgba(176,141,87,.3); }
+  .tp-step { display: grid; grid-template-columns: 30px 1fr auto; gap: 8px; padding: 12px 0; border-top: 1px solid rgba(176,141,87,.2); align-items: baseline; }
+  .tp-step span:first-child { color: #b08d57; font-family: 'Cormorant Garamond', serif; font-size: 18px; }
+  .tp-step em { font-style: normal; font-size: 9px; letter-spacing: .15em; color: #aca290; text-transform: uppercase; }
+  .tp-arch { width: 64px; height: 84px; border: 1.4px solid #b08d57; border-radius: 32px 32px 0 0; background-size: cover; background-position: center; }
+</style>
+
+<h2>Hikâye sayfası için üç yön</h2>
+<p class="subtitle">Amaç: sayfayı okuyan iç mimar görüşme talep etmek istesin. Her kartın içi kaydırılabilir; sayfanın yukarıdan aşağı akışını gösteriyor. Görseller sitedeki gerçek kumaşlar, metinler örnek. Beğendiğine tıkla; parça parça da beğenebilirsin, terminalde söylemen yeterli.</p>
+
+<div class="tp-wrap">
+
+  <!-- A -->
+  <div class="tp-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="tp-head"><b>A</b><h3>Mektup</h3><p>Sakin, yazı ağırlıklı, bir dergi sayfası gibi. Hikâye kısa ilkelerle anlatılır, sonunda kurucunun notu ve görüşme daveti gelir. Zarif ama görüşme düğmesi en sonda.</p></div>
+    <div class="tp-page">
+      <div class="tp-s" style="padding-top:70px;padding-bottom:60px;text-align:center">
+        <div class="tp-label">Hikâye</div>
+        <div class="tp-d" style="font-size:46px;margin-top:14px">Yürüyen taht.</div>
+        <p class="tp-p" style="max-width:30ch;margin:18px auto 0">Tahtırevan, sahibiyle birlikte yola çıkan bir tahttı. Biz de her parçayı tek bir kişi için yapıyoruz.</p>
+      </div>
+      <div class="tp-img" style="height:260px;background-image:url(http://localhost:3100/fabrics/tile/soraya.webp)"></div>
+      <div class="tp-s" style="padding-bottom:10px"><div class="tp-label" style="font-size:8px">Soraya · Kumaş detayı</div></div>
+      <div class="tp-s">
+        <div class="tp-label">Üç ilke</div>
+        <div style="margin-top:18px;display:grid;gap:26px">
+          <div><div class="tp-i" style="font-size:13px;color:#b08d57">01</div><div class="tp-d" style="font-size:24px;margin:4px 0 8px">Sahibi için yapılır</div><p class="tp-p" style="margin:0">Ölçü, kumaş ve süsleme bir başkasına göre değil, yalnızca onu kullanacak kişiye göre.</p></div>
+          <div><div class="tp-i" style="font-size:13px;color:#b08d57">02</div><div class="tp-d" style="font-size:24px;margin:4px 0 8px">Kumaş aileden gelir</div><p class="tp-p" style="margin:0">Kumaşlarımız ailemizin uzun kumaş geleneğinden gelir.</p></div>
+          <div><div class="tp-i" style="font-size:13px;color:#b08d57">03</div><div class="tp-d" style="font-size:24px;margin:4px 0 8px">Üç imza taşır</div><p class="tp-p" style="margin:0">Nakış, püskül ve pirinç damga. Her parçanın numarası damgasında yazar.</p></div>
+        </div>
+      </div>
+      <hr class="tp-hr">
+      <div class="tp-s" style="text-align:center;padding:50px 26px">
+        <div class="tp-label">Kurucunun notu</div>
+        <p class="tp-i" style="font-size:20px;line-height:1.35;margin:16px 0">“Bir koltuk, sahibini bir ömür boyu taşıyabilir mi?”</p>
+        <div class="tp-i" style="font-size:22px;color:#b08d57">Beytullah Kalay</div>
+      </div>
+      <div class="tp-s" style="text-align:center;background:#1b1714;padding:46px 22px">
+        <div class="tp-d" style="font-size:26px">Bir proje için mi bakıyorsunuz?</div>
+        <p class="tp-p">Kumaşları birlikte inceleyelim.</p>
+        <span class="tp-btn">Görüşme talep edin</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- B -->
+  <div class="tp-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="tp-head"><b>B · ÖNERİM</b><h3>Mimarla çalışma</h3><p>Görüşme düğmesi en başta. Hikâye tek paragrafa iner; ağırlık "birlikte nasıl çalışırız" adımlarında ve sürede. Bir mimarın görüşmeden önce sorduğu sorulara cevap verir.</p></div>
+    <div class="tp-page">
+      <div class="tp-s" style="padding-top:60px">
+        <div class="tp-label">Hikâye · Mimarlar için</div>
+        <div class="tp-d" style="font-size:40px;margin-top:14px">Projenize özel,<br>tek bir parça.</div>
+        <p class="tp-p" style="max-width:32ch;margin:16px 0 22px">Her Tahtırevan, bir kişi ve bir mekân için başlar. Ölçü, form, kumaş ve süslemeyi sizinle birlikte belirleriz.</p>
+        <span class="tp-btn fill">Görüşme talep edin</span>
+      </div>
+      <div class="tp-img" style="height:170px;background-image:url(http://localhost:3100/fabrics/tile/mirza.webp)"></div>
+      <div class="tp-s" style="display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:center">
+        <div class="tp-arch" style="background-image:url(http://localhost:3100/fabrics/tile/soraya.webp)"></div>
+        <p class="tp-p" style="margin:0"><span class="tp-i" style="font-size:15px;color:#e9e1d3">Taht ve revan: yürüyen taht.</span><br>Tahtırevan, sahibi için yapılıp onunla yola çıkan bir oturaktı. Adımızı ve yöntemimizi buradan alıyoruz.</p>
+      </div>
+      <div class="tp-s">
+        <div class="tp-label">Birlikte nasıl çalışırız</div>
+        <div style="margin-top:12px">
+          <div class="tp-step"><span>01</span><div><div class="tp-d" style="font-size:18px">Görüşme</div><p class="tp-p" style="margin:2px 0 0">Kumaşları elinizle görürsünüz.</p></div><em>1 saat</em></div>
+          <div class="tp-step"><span>02</span><div><div class="tp-d" style="font-size:18px">Tasarım</div><p class="tp-p" style="margin:2px 0 0">Ölçü, form, kumaş, süsleme.</p></div><em>1–2 hafta</em></div>
+          <div class="tp-step"><span>03</span><div><div class="tp-d" style="font-size:18px">Onay</div><p class="tp-p" style="margin:2px 0 0">Çizim ve fiyat.</p></div><em></em></div>
+          <div class="tp-step"><span>04</span><div><div class="tp-d" style="font-size:18px">Atölye</div><p class="tp-p" style="margin:2px 0 0">Ustaların elinde kurulur.</p></div><em>~3 ay</em></div>
+          <div class="tp-step"><span>05</span><div><div class="tp-d" style="font-size:18px">Teslim</div><p class="tp-p" style="margin:2px 0 0">Numarası ve pirinç damgasıyla.</p></div><em></em></div>
+        </div>
+      </div>
+      <div class="tp-note">Süreler örnek; doğrusunu sen söyleyeceksin.</div>
+      <div class="tp-s" style="background:#1b1714">
+        <div class="tp-label">Kumaşlar</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px">
+          <div class="tp-img" style="aspect-ratio:1;background-image:url(http://localhost:3100/fabrics/tile/ardente.webp)"></div>
+          <div class="tp-img" style="aspect-ratio:1;background-image:url(http://localhost:3100/fabrics/tile/sapphire.webp)"></div>
+          <div class="tp-img" style="aspect-ratio:1;background-image:url(http://localhost:3100/fabrics/tile/zafran.webp)"></div>
+          <div class="tp-img" style="aspect-ratio:1;background-image:url(http://localhost:3100/fabrics/tile/simur.webp)"></div>
+        </div>
+        <p class="tp-p" style="margin-top:10px">Ailemizin kumaş geleneğinden. Görüşmede hepsi masada.</p>
+      </div>
+      <div class="tp-s" style="text-align:center;padding:46px 22px">
+        <div class="tp-d" style="font-size:26px">Projenizi konuşalım.</div>
+        <p class="tp-p">Ad, ofis, proje. Bir iş günü içinde dönüş.</p>
+        <span class="tp-btn fill">Görüşme talep edin</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- C -->
+  <div class="tp-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="tp-head"><b>C</b><h3>Kumaştan açılış</h3><p>Duygusal ama çizim yok, yalnızca gerçek malzeme. Ekranı kaplayan bir kumaşla açılır; kaydırdıkça üç kısa bölüm ve yanında değişen büyük kumaş detayları gelir. Görüşme daveti bordo bir bantta.</p></div>
+    <div class="tp-page">
+      <div class="tp-img" style="height:420px;background-image:url(http://localhost:3100/fabrics/tile/mayura.webp)">
+        <div style="position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;justify-content:flex-end;padding:28px 22px;background:linear-gradient(180deg,transparent 30%,rgba(20,17,15,.92))">
+          <div class="tp-label">Hikâye</div>
+          <div class="tp-d" style="font-size:46px;margin-top:10px">Yürüyen taht.</div>
+        </div>
+      </div>
+      <div class="tp-s" style="display:grid;gap:34px">
+        <div style="display:grid;grid-template-columns:1fr 110px;gap:14px;align-items:center">
+          <div><div class="tp-label">Taht</div><p class="tp-i" style="font-size:18px;line-height:1.3;margin:8px 0 0">Saray yerinde durur.</p></div>
+          <div class="tp-img" style="height:140px;background-image:url(http://localhost:3100/fabrics/tile/rossaria.webp)"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 110px;gap:14px;align-items:center">
+          <div><div class="tp-label">Revan</div><p class="tp-i" style="font-size:18px;line-height:1.3;margin:8px 0 0">Tahtırevan sahibiyle yola çıkar.</p></div>
+          <div class="tp-img" style="height:140px;background-image:url(http://localhost:3100/fabrics/tile/panthera.webp)"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 110px;gap:14px;align-items:center">
+          <div><div class="tp-label">Bugün</div><p class="tp-i" style="font-size:18px;line-height:1.3;margin:8px 0 0">Her parça bir kişi için başlar.</p></div>
+          <div class="tp-img" style="height:140px;background-image:url(http://localhost:3100/fabrics/tile/colibri.webp)"></div>
+        </div>
+      </div>
+      <hr class="tp-hr">
+      <div class="tp-s">
+        <div class="tp-label">Yol ve duraklar</div>
+        <div style="display:flex;gap:10px;margin-top:14px">
+          <div class="tp-arch" style="background-image:url(http://localhost:3100/fabrics/tile/soraya.webp)"></div>
+          <div class="tp-arch" style="background-image:url(http://localhost:3100/fabrics/tile/ardente.webp)"></div>
+          <div class="tp-arch" style="border-style:dashed"></div>
+        </div>
+      </div>
+      <div class="tp-s" style="background:#6e1f24;text-align:center;padding:46px 22px">
+        <div class="tp-d" style="font-size:26px">Kumaşlarımızı elinizle görün.</div>
+        <p class="tp-p" style="color:rgba(233,225,211,.85)">Projeniz için bir görüşme ayarlayalım.</p>
+        <span class="tp-btn">Görüşme talep edin</span>
+      </div>
+    </div>
+  </div>
+
+</div>

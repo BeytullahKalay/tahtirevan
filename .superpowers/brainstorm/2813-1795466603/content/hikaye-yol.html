@@ -1,0 +1,165 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  .tp-wrap { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; margin-top: 18px; }
+  @media (max-width: 1100px) { .tp-wrap { grid-template-columns: 1fr; } }
+  .tp-card { border: 1px solid rgba(176,141,87,.35); border-radius: 10px; overflow: hidden; cursor: pointer; background: #14110f; transition: box-shadow .2s, border-color .2s; }
+  .tp-card.selected { border-color: #b08d57; box-shadow: 0 0 0 2px #b08d57; }
+  .tp-head { padding: 14px 16px; background: #1b1714; color: #e9e1d3; font-family: Manrope, sans-serif; border-bottom: 1px solid rgba(176,141,87,.25); }
+  .tp-head b { color: #b08d57; font-size: 12px; letter-spacing: .2em; }
+  .tp-head h3 { margin: 4px 0 4px; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 24px; color: #e9e1d3; }
+  .tp-head p { margin: 0; font-size: 12.5px; line-height: 1.5; color: #aca290; }
+  .tp-page { height: 640px; overflow-y: auto; background: #14110f; color: #e9e1d3; font-family: Manrope, sans-serif; }
+  .tp-page::-webkit-scrollbar { width: 6px; } .tp-page::-webkit-scrollbar-thumb { background: rgba(176,141,87,.4); border-radius: 3px; }
+  .tp-s { padding: 34px 22px; }
+  .tp-label { font-size: 9px; letter-spacing: .32em; text-transform: uppercase; color: #aca290; }
+  .tp-gold { color: #b08d57; }
+  .tp-d { font-family: 'Cormorant Garamond', serif; font-weight: 300; line-height: 1.02; }
+  .tp-i { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; }
+  .tp-p { font-size: 11.5px; line-height: 1.7; color: rgba(233,225,211,.82); }
+  .tp-img { background-size: cover; background-position: center; position: relative; }
+  .tp-img.shade::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,17,15,.1), rgba(20,17,15,.5)); }
+  .tp-btn { display: inline-block; border: 1px solid #b08d57; color: #e9e1d3; font-size: 9px; letter-spacing: .26em; text-transform: uppercase; padding: 10px 14px; }
+  .tp-cap { font-size: 8px; letter-spacing: .22em; text-transform: uppercase; color: #aca290; margin-top: 8px; }
+  .tp-noimg { border: 1px dashed rgba(176,141,87,.45); display: flex; align-items: center; justify-content: center; text-align: center; font-size: 9px; color: #aca290; letter-spacing: .1em; padding: 10px; }
+  /* B: yol çizgisi */
+  .tp-road { position: relative; padding: 10px 22px 10px 46px; }
+  .tp-road::before { content: ""; position: absolute; left: 26px; top: 0; bottom: 0; width: 1px; background: linear-gradient(180deg, #b08d57 0%, #b08d57 62%, rgba(176,141,87,.25) 62%); }
+  .tp-stop { position: relative; padding: 22px 0; }
+  .tp-stop::before { content: ""; position: absolute; left: -24px; top: 30px; width: 7px; height: 7px; border: 1px solid #b08d57; background: #14110f; transform: rotate(45deg); }
+  .tp-stop.on::before { background: #b08d57; }
+  /* C: sabit ekran kareleri */
+  .tp-frame { height: 380px; position: relative; border-bottom: 1px solid rgba(176,141,87,.25); }
+  .tp-frame .tp-img { position: absolute; inset: 0 0 38% 0; }
+  .tp-frame .tx { position: absolute; left: 0; right: 0; bottom: 0; height: 38%; padding: 16px 22px; }
+  .tp-dots { position: absolute; right: 14px; top: 14px; z-index: 2; display: flex; flex-direction: column; gap: 6px; }
+  .tp-dots i { width: 5px; height: 5px; border: 1px solid #b08d57; transform: rotate(45deg); display: block; }
+  .tp-dots i.on { background: #b08d57; }
+  .tp-sticky-note { font-size: 9.5px; color: #b08d57; padding: 8px 22px; background: rgba(176,141,87,.08); border-bottom: 1px dashed rgba(176,141,87,.3); }
+</style>
+
+<h2>Hikâye: desenlerin yolu</h2>
+<p class="subtitle">Üçünde de hikâye aynı, yalnızca sunuluşu farklı. Açılış bir desenle başlıyor; damask Şam'dan, buta İran'dan, at bozkırdan, nar Venedik ile Bursa arasından geliyor. Yollar Anadolu'da buluşuyor. Sonra o yollarda yürüyen tahta, adın anlamına ve bugüne geçiyoruz: her parça tek bir kişi için yapılıyor ve hikâyesini nakış, püskül ve pirinç damgada taşıyor. Sayfa "Yolun bir sonraki durağı, sizin projeniz" davetiyle bitiyor. Kumaşlar sitedeki gerçek kumaşlar; nar desenli bir kumaşımız olmadığı için o durakta görsel yok.</p>
+
+<div class="tp-wrap">
+
+  <!-- A: Editoryal -->
+  <div class="tp-card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="tp-head"><b>A</b><h3>Uzun okuma</h3><p>Tek sütun, büyük yazı, her durakta tam genişlikte bir kumaş. Bir dergideki uzun yazı gibi sakin akar; yazılar kaydırdıkça yavaşça belirir. En sade ve en hızlı kurulan yön; hareket az.</p></div>
+    <div class="tp-page">
+      <div class="tp-s" style="padding:64px 24px 40px;text-align:center">
+        <div class="tp-label">Hikâye</div>
+        <div class="tp-d" style="font-size:36px;margin-top:14px">Her desen<br>bir yoldan geldi.</div>
+        <p class="tp-p" style="max-width:30ch;margin:16px auto 0">Damask adını Şam'dan aldı. Buta İran'dan yola çıktı. Hepsi bir gün Anadolu'da buluştu.</p>
+      </div>
+      <div class="tp-img shade" style="height:220px;background-image:url(http://localhost:3100/fabrics/tile/sapphire.webp)"></div>
+      <div class="tp-s"><div class="tp-label tp-gold">Şam · Damask</div><p class="tp-i" style="font-size:19px;line-height:1.35;margin:10px 0 0">Kumaşa dokunan desene bugün hâlâ şehrin adıyla, damask diyoruz.</p><div class="tp-cap">Sapphire · Madalyonlu damask</div></div>
+      <div class="tp-img shade" style="height:220px;background-image:url(http://localhost:3100/fabrics/tile/soraya.webp)"></div>
+      <div class="tp-s"><div class="tp-label tp-gold">İran · Buta</div><p class="tp-i" style="font-size:19px;line-height:1.35;margin:10px 0 0">Bir damla, bir alev, bir tohum. Buta İran'dan çıktı, şallarda dünyayı dolaştı.</p><div class="tp-cap">Soraya · Siyah zeminde iri buta</div></div>
+      <div class="tp-img shade" style="height:220px;background-image:url(http://localhost:3100/fabrics/tile/ardente.webp)"></div>
+      <div class="tp-s"><div class="tp-label tp-gold">Bozkır · At</div><p class="tp-i" style="font-size:19px;line-height:1.35;margin:10px 0 0">Bozkırın sanatında hayvan bir süs değildi; koşan, bakan bir figürdü.</p><div class="tp-cap">Ardente · Dörtnala koşan at sürüsü</div></div>
+      <div class="tp-s"><div class="tp-label tp-gold">Venedik ve Bursa · Nar</div><p class="tp-i" style="font-size:19px;line-height:1.35;margin:10px 0 0">Nar ve enginar, iki şehrin kadifeleri arasında yüzyıllarca gidip geldi.</p></div>
+      <div class="tp-s" style="text-align:center;background:#1b1714;padding:48px 24px">
+        <div class="tp-label">Kavşak</div>
+        <div class="tp-d" style="font-size:30px;margin-top:12px">Bütün yollar<br>Anadolu'da buluştu.</div>
+        <p class="tp-p" style="max-width:32ch;margin:14px auto 0">O yollarda desenleri kervanlar taşıdı. Hükümdarları ise tahtırevan: taht ve revan, yürüyen taht.</p>
+      </div>
+      <div class="tp-img shade" style="height:240px;background-image:url(http://localhost:3100/fabrics/tile/zafran.webp)"></div>
+      <div class="tp-s"><div class="tp-label">Bugün</div><div class="tp-d" style="font-size:24px;margin:10px 0">Her parça tek bir kişi için.</div><p class="tp-p">Desen yolculuğunu bir koltukta tamamlar. Hikâyesini üç imzada taşır: nakış, püskül ve pirinç damga.</p></div>
+      <div class="tp-s" style="text-align:center;padding:40px 26px"><p class="tp-i" style="font-size:18px;line-height:1.35">“Bir koltuk, sahibini bir ömür boyu taşıyabilir mi?”</p><div class="tp-i tp-gold" style="font-size:20px">Beytullah Kalay</div></div>
+      <div class="tp-s" style="text-align:center;background:#1b1714;padding:46px 22px"><div class="tp-d" style="font-size:24px">Yolun bir sonraki durağı,<br>sizin projeniz.</div><p class="tp-p">Kumaşları birlikte inceleyelim.</p><span class="tp-btn">Görüşme talep edin</span></div>
+    </div>
+  </div>
+
+  <!-- B: Yol çizgisi -->
+  <div class="tp-card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="tp-head"><b>B · ÖNERİM</b><h3>Yol çizgisi</h3><p>Sayfa boyunca ince bir altın çizgi iner: yolun kendisi. Kaydırdıkça çizgi uzar, her durakta bir baklava işareti yanar ve şehrin adı, desen, kumaş ve kısa bir cümle belirir. Tek "çizim" bu çizgi; gerisi kumaş ve yazı. Göz gezdiren bir mimar bile şehirleri görür.</p></div>
+    <div class="tp-page">
+      <div class="tp-s" style="padding:60px 24px 26px">
+        <div class="tp-label">Hikâye</div>
+        <div class="tp-d" style="font-size:36px;margin-top:14px">Her desen<br>bir yoldan geldi.</div>
+        <p class="tp-p" style="max-width:30ch;margin:14px 0 0">Ve bütün yollar Anadolu'dan geçti.</p>
+      </div>
+      <div class="tp-road">
+        <div class="tp-stop on">
+          <div class="tp-label tp-gold">Şam</div>
+          <div class="tp-d" style="font-size:22px;margin:6px 0 10px">Damask</div>
+          <div style="display:grid;grid-template-columns:1fr 96px;gap:12px;align-items:start">
+            <p class="tp-p" style="margin:0">Kumaşa dokunan desene bugün hâlâ şehrin adıyla, damask diyoruz.</p>
+            <div><div class="tp-img" style="height:110px;background-image:url(http://localhost:3100/fabrics/tile/sapphire.webp)"></div><div class="tp-cap">Sapphire</div></div>
+          </div>
+        </div>
+        <div class="tp-stop on">
+          <div class="tp-label tp-gold">İran</div>
+          <div class="tp-d" style="font-size:22px;margin:6px 0 10px">Buta</div>
+          <div style="display:grid;grid-template-columns:1fr 96px;gap:12px;align-items:start">
+            <p class="tp-p" style="margin:0">Bir damla, bir alev, bir tohum. Şallarda dünyayı dolaştı.</p>
+            <div><div class="tp-img" style="height:110px;background-image:url(http://localhost:3100/fabrics/tile/soraya.webp)"></div><div class="tp-cap">Soraya</div></div>
+          </div>
+        </div>
+        <div class="tp-stop on">
+          <div class="tp-label tp-gold">Bozkır</div>
+          <div class="tp-d" style="font-size:22px;margin:6px 0 10px">At</div>
+          <div style="display:grid;grid-template-columns:1fr 96px;gap:12px;align-items:start">
+            <p class="tp-p" style="margin:0">Hayvan bir süs değildi; koşan, bakan bir figürdü.</p>
+            <div><div class="tp-img" style="height:110px;background-image:url(http://localhost:3100/fabrics/tile/ardente.webp)"></div><div class="tp-cap">Ardente</div></div>
+          </div>
+        </div>
+        <div class="tp-stop">
+          <div class="tp-label tp-gold">Venedik ve Bursa</div>
+          <div class="tp-d" style="font-size:22px;margin:6px 0 10px">Nar</div>
+          <p class="tp-p" style="margin:0">Nar ve enginar, iki şehrin kadifeleri arasında yüzyıllarca gidip geldi.</p>
+        </div>
+        <div class="tp-stop">
+          <div class="tp-label tp-gold">Anadolu</div>
+          <div class="tp-d" style="font-size:26px;margin:6px 0 10px">Kavşak</div>
+          <p class="tp-p" style="margin:0">Desenleri kervanlar taşıdı. Hükümdarları ise tahtırevan: taht ve revan, <span class="tp-i" style="font-size:14px">yürüyen taht</span>.</p>
+        </div>
+      </div>
+      <div class="tp-img shade" style="height:200px;background-image:url(http://localhost:3100/fabrics/tile/zafran.webp)"></div>
+      <div class="tp-s"><div class="tp-label">Bugün</div><div class="tp-d" style="font-size:24px;margin:10px 0">Yol bir koltukta durur.</div><p class="tp-p">Her parça tek bir kişi için yapılır ve hikâyesini üç imzada taşır: nakış, püskül, pirinç damga.</p></div>
+      <div class="tp-s" style="text-align:center;padding:36px 26px"><p class="tp-i" style="font-size:18px;line-height:1.35">“Bir koltuk, sahibini bir ömür boyu taşıyabilir mi?”</p><div class="tp-i tp-gold" style="font-size:20px">Beytullah Kalay</div></div>
+      <div class="tp-s" style="text-align:center;background:#1b1714;padding:46px 22px"><div class="tp-d" style="font-size:24px">Yolun bir sonraki durağı,<br>sizin projeniz.</div><p class="tp-p">Kumaşları birlikte inceleyelim.</p><span class="tp-btn">Görüşme talep edin</span></div>
+    </div>
+  </div>
+
+  <!-- C: Sabit ekran -->
+  <div class="tp-card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="tp-head"><b>C</b><h3>Sabit sahne</h3><p>Ekran bir süre sabit kalır; kaydırdıkça büyük kumaş ve altındaki yazı durak durak değişir, kenarda ilerleme işaretleri yanar. Bir müze salonunda dolaşır gibi, en sinematik yön. Kurulması en zor olanı; telefonda dikkat ister. Aşağıdaki kareler aynı ekranın sırayla aldığı hâller.</p></div>
+    <div class="tp-page">
+      <div class="tp-s" style="padding:60px 24px 30px;text-align:center">
+        <div class="tp-label">Hikâye</div>
+        <div class="tp-d" style="font-size:36px;margin-top:14px">Her desen<br>bir yoldan geldi.</div>
+      </div>
+      <div class="tp-sticky-note">↓ Bu ekran sabit; kaydırdıkça yalnızca kumaş ve yazı değişir.</div>
+      <div class="tp-frame">
+        <div class="tp-dots"><i class="on"></i><i></i><i></i><i></i><i></i></div>
+        <div class="tp-img shade" style="background-image:url(http://localhost:3100/fabrics/tile/sapphire.webp)"></div>
+        <div class="tx"><div class="tp-label tp-gold">Şam · Damask</div><p class="tp-i" style="font-size:17px;line-height:1.3;margin:8px 0 0">Kumaşa dokunan desene bugün hâlâ şehrin adıyla, damask diyoruz.</p></div>
+      </div>
+      <div class="tp-frame">
+        <div class="tp-dots"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="tp-img shade" style="background-image:url(http://localhost:3100/fabrics/tile/soraya.webp)"></div>
+        <div class="tx"><div class="tp-label tp-gold">İran · Buta</div><p class="tp-i" style="font-size:17px;line-height:1.3;margin:8px 0 0">Bir damla, bir alev, bir tohum. Şallarda dünyayı dolaştı.</p></div>
+      </div>
+      <div class="tp-frame">
+        <div class="tp-dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+        <div class="tp-img shade" style="background-image:url(http://localhost:3100/fabrics/tile/ardente.webp)"></div>
+        <div class="tx"><div class="tp-label tp-gold">Bozkır · At</div><p class="tp-i" style="font-size:17px;line-height:1.3;margin:8px 0 0">Hayvan bir süs değildi; koşan, bakan bir figürdü.</p></div>
+      </div>
+      <div class="tp-frame">
+        <div class="tp-dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+        <div class="tp-img tp-noimg" style="position:absolute;inset:0 0 38% 0">Nar desenli kumaşımız yok: burada büyük yazı ya da nakış detayı olabilir</div>
+        <div class="tx"><div class="tp-label tp-gold">Venedik ve Bursa · Nar</div><p class="tp-i" style="font-size:17px;line-height:1.3;margin:8px 0 0">İki şehrin kadifeleri arasında yüzyıllarca gidip geldi.</p></div>
+      </div>
+      <div class="tp-frame">
+        <div class="tp-dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div>
+        <div class="tp-img shade" style="background-image:url(http://localhost:3100/fabrics/tile/zafran.webp)"></div>
+        <div class="tx"><div class="tp-label tp-gold">Anadolu · Kavşak</div><p class="tp-i" style="font-size:17px;line-height:1.3;margin:8px 0 0">Bütün yollar burada buluştu. Hükümdarları tahtırevan taşıdı: yürüyen taht.</p></div>
+      </div>
+      <div class="tp-s"><div class="tp-label">Bugün</div><div class="tp-d" style="font-size:24px;margin:10px 0">Yol bir koltukta durur.</div><p class="tp-p">Her parça tek bir kişi için; nakış, püskül, pirinç damga.</p></div>
+      <div class="tp-s" style="text-align:center;background:#1b1714;padding:46px 22px"><div class="tp-d" style="font-size:24px">Yolun bir sonraki durağı,<br>sizin projeniz.</div><span class="tp-btn">Görüşme talep edin</span></div>
+    </div>
+  </div>
+
+</div>
