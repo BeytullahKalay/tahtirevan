@@ -8,7 +8,9 @@
 // Neden doğrudan yazmıyor: Netlify canlı veritabanına bilgisayardan yalnızca OKUMA izni veriyor.
 // Yazma izni yalnızca Netlify'ın kendi derlemesinde var. Bu yüzden:
 //  1. Bu betik yerel veriyi tek bir JSON dosyasına döker ve Netlify Blobs'taki gizli "aktarim" deposuna yükler.
-//  2. Bir sonraki Netlify derlemesinde scripts/netlify-veri-yukle.mjs onu veritabanına yazar ve depodan siler.
+//  2. Bir sonraki Netlify derlemesinde scripts/netlify-veri-yukle.mjs onu veritabanına yazar (aynı dosyayı bir kez).
+//     Derleme dosyayı silemez (Netlify derlemelere yalnızca okuma izni veriyor); derleme bitince silmek için:
+//     npx netlify-cli blobs:delete aktarim veri.json
 // Dosyada kullanıcı hesapları (şifre özetleriyle) ve açılış listesi de var; depo herkese açık değildir.
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
@@ -77,3 +79,4 @@ console.log(
     : "Tamam. Bir sonraki Netlify derlemesinde, canlı veritabanı boşsa bu veri yazılacak.",
 );
 console.log("Şimdi Netlify'da yeni bir derleme başlatın (Deploys → Trigger deploy → Deploy project).");
+console.log("Derlemede veri yazılınca dosyayı silin: npx netlify-cli blobs:delete aktarim veri.json");

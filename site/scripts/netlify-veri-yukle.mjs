@@ -5,7 +5,9 @@
 //  - Bekleyen veri yoksa hiçbir şey yapmaz.
 //  - Veritabanında zaten veri varsa (ve dosya --uzerine-yaz ile hazırlanmadıysa) dokunmaz.
 //  - Kopyalama tek bir işlemdir (transaction): hata olursa veritabanında hiçbir şey değişmez, derleme durur.
-//  - Başarılı olunca dosyayı depodan siler (bir sonraki derleme yeniden yazmasın).
+//  - Yazılan dosyanın tarihini "_veri_aktarim" tablosuna not eder; aynı dosya ikinci kez yazılmaz.
+//    (Derleme Blobs'taki dosyayı silemiyor: Netlify derlemelere yalnızca okuma izni veriyor.
+//    Dosyayı silmek için yerelde: npx netlify-cli blobs:delete aktarim veri.json)
 //
 // Yerelde denemek için: VERI_DOSYASI=backups/netlify-aktarim.json DATABASE_URI=postgres://… node scripts/netlify-veri-yukle.mjs
 import fs from "node:fs";
@@ -19,7 +21,6 @@ if (!target) {
   process.exit(0);
 }
 
-let store;
 let dump;
 if (localFile) {
   dump = JSON.parse(fs.readFileSync(localFile, "utf8"));
@@ -32,7 +33,7 @@ if (localFile) {
     process.exit(0);
   }
   const { getStore } = await import("@netlify/blobs");
-  store = context
+  const store = context
     ? getStore({ name: "aktarim", consistency: "strong" })
     : getStore({ name: "aktarim", consistency: "strong", siteID, token });
   dump = await store.get("veri.json", { type: "json" });
@@ -46,7 +47,15 @@ const q = (name) => `"${name.replace(/"/g, '""')}"`;
 const pgc = new pg.Client({ connectionString: target });
 await pgc.connect();
 
-const SKIP = new Set(["payload_migrations"]);
+const MARK = "_veri_aktarim";
+const SKIP = new Set(["payload_migrations", MARK]);
+
+await pgc.query(`create table if not exists ${q(MARK)} (created_at text primary key, applied_at timestamptz not null default now())`);
+if ((await pgc.query(`select 1 from ${q(MARK)} where created_at = $1`, [dump.createdAt])).rows.length) {
+  console.log(`[veri-yukle] ${dump.createdAt} tarihli veri daha önce yazılmış, atlandı.`);
+  await pgc.end();
+  process.exit(0);
+}
 const tables = (
   await pgc.query(`select table_name from information_schema.tables where table_schema = 'public' and table_type = 'BASE TABLE' order by table_name`)
 ).rows
@@ -139,6 +148,7 @@ try {
     await pgc.query(`select setval($1, coalesce((select max(${q(s.column_name)}) from ${q(s.table_name)}), 0) + 1, false)`, [s.seq]);
   }
 
+  await pgc.query(`insert into ${q(MARK)} (created_at) values ($1)`, [dump.createdAt]);
   await pgc.query("commit");
   console.log(`[veri-yukle] Tamam: ${total} satır yazıldı.`);
 } catch (e) {
@@ -148,8 +158,3 @@ try {
   process.exit(1);
 }
 await pgc.end();
-
-if (store) {
-  await store.delete("veri.json");
-  console.log("[veri-yukle] Bekleyen veri depodan silindi.");
-}
