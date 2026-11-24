@@ -381,29 +381,53 @@ function BrassSeal() {
   );
 }
 
-/** Bordo ipek püskül: kaydırma işaretinin ucunda hafifçe sallanır. */
+/**
+ * İpek saçak: altın bir telin ucunda, altın sargıdan dökülen bordo ve lal iplikler; hafifçe sallanır.
+ * Zanaat kartlarındaki püskülle aynı dil (nesnenin resmi değil, malzemenin kendisi).
+ * Sabit tohumla üretilir: sunucu ve tarayıcı aynı çizgileri çizsin.
+ */
+const FRINGE = (() => {
+  let s = 23;
+  const r = () => {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+  const f = (n: number) => Math.round(n * 100) / 100;
+  const n = 18;
+  return Array.from({ length: n }, (_, i) => {
+    const t = i / (n - 1) - 0.5;
+    const x = 11 + t * 6 + (r() - 0.5) * 0.5; // sargıda toplu
+    const ex = 11 + t * 13 + (r() - 0.5) * 1.2; // uçta hafifçe açılır
+    const y = 76 - r() * 12 - Math.abs(t) * 8;
+    const gold = r() < 0.1;
+    return {
+      d: `M${f(x)} 30Q${f((x + ex) / 2 + (r() - 0.5) * 1.5)} ${f((30 + y) / 2)} ${f(ex)} ${f(y)}`,
+      c: gold ? "#b08d57" : r() < 0.5 ? "#8f2e35" : "#6e1f24",
+      w: f(gold ? 0.35 : 0.4 + r() * 0.35),
+      o: f(gold ? 0.6 : 0.45 + r() * 0.45),
+    };
+  });
+})();
+
 function Tassel() {
   return (
-    <svg width="22" height="78" viewBox="0 0 22 78" className="tassel-sway" fill="none">
+    <svg width="22" height="78" viewBox="0 0 22 78" className="tassel-sway" fill="none" strokeLinecap="round">
       <defs>
-        <linearGradient id="hc-silk" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#4a1418" />
-          <stop offset="0.35" stopColor="#8f2e35" />
-          <stop offset="0.6" stopColor="#6e1f24" />
-          <stop offset="1" stopColor="#3d1013" />
+        <linearGradient id="hc-fringe-fade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0.5" stopColor="#fff" />
+          <stop offset="1" stopColor="#fff" stopOpacity="0" />
         </linearGradient>
-        <radialGradient id="hc-knot" cx="0.35" cy="0.35" r="0.7">
-          <stop offset="0" stopColor="#ecd3a0" />
-          <stop offset="1" stopColor="#8a6a3c" />
-        </radialGradient>
+        <mask id="hc-fringe-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="22" height="78">
+          <rect width="22" height="78" fill="url(#hc-fringe-fade)" />
+        </mask>
       </defs>
-      <path d="M11 0V27" stroke="#b08d57" strokeOpacity="0.75" strokeWidth="1" />
-      <circle cx="11" cy="30.5" r="3.6" fill="url(#hc-knot)" />
-      <path d="M8.2 34h5.6l0.9 5.2H7.3z" fill="url(#hc-silk)" />
-      <rect x="7" y="39" width="8" height="1.8" rx="0.4" fill="#b08d57" />
-      <path d="M7.2 40.8C5.6 52 4.6 63 3.6 76.5h14.8C17.4 63 16.4 52 14.8 40.8z" fill="url(#hc-silk)" />
-      <path d="M8.4 43V75.5M10 43V76M11.6 43V76M13.2 43V75.5M6.8 50V75M15.2 50V75" stroke="#2c0b0e" strokeOpacity="0.55" strokeWidth="0.45" />
-      <path d="M9.2 43V74M12.4 43V74" stroke="#b3474f" strokeOpacity="0.35" strokeWidth="0.4" />
+      <path d="M11 0V27" stroke="#b08d57" strokeOpacity="0.7" strokeWidth="0.7" />
+      <g mask="url(#hc-fringe-mask)">
+        {FRINGE.map((t, i) => (
+          <path key={i} d={t.d} stroke={t.c} strokeWidth={t.w} opacity={t.o} />
+        ))}
+      </g>
+      <path d="M7.5 28H14.5M7.5 29.3H14.5" stroke="#b08d57" strokeWidth="0.5" />
     </svg>
   );
 }

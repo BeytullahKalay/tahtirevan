@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Lang } from "@/lib/i18n";
 import { Reveal } from "./Reveal";
 
@@ -14,13 +15,10 @@ const COPY = {
   ],
 };
 
-const BUTA =
-  "M-1.5 4C-4.5 4 -5.2 1 -4.6 -1C-4 -3 -1.8 -4.2 0.8 -3.6C2.8 -3.2 4 -2.4 5.6 -3.6C5.2 -1.2 3.6 0.2 2 1.6C1 2.8 0 4 -1.5 4Z";
-const BUTA_EYE = "M-1.6 2.2C-3 2.2 -3.2 0.8 -2.8 -0.2C-2.3 -1.4 -0.9 -1.8 0.4 -1.4";
-
 /**
- * Üç imza, kartvizitteki gibi küçük kartlar üzerinde altın çizimlerle.
- * Gerçek nakış/püskül/damga fotoğrafları gelince çizimlerin yerine konabilir.
+ * Üç imza, kartvizitteki gibi küçük kartlar üzerinde. Nesnenin resmi değil, malzemenin yakın çekimi:
+ * saten dikiş bandı, ipek saçak, tornada işlenmiş pirinç. (Birebir çizimler çizgi film gibi duruyordu.)
+ * Fotoğraf istenmiyor; değiştirilecekse yine soyut kalsın.
  */
 export function CraftMarks({ lang }: { lang: Lang }) {
   const items = COPY[lang];
@@ -36,7 +34,7 @@ export function CraftMarks({ lang }: { lang: Lang }) {
               className="absolute inset-0"
               style={{ background: "radial-gradient(80% 90% at 18% 0%, rgba(240,220,185,0.08), transparent 60%), radial-gradient(60% 60% at 50% 60%, rgba(110,31,36,0.18), transparent 70%)" }}
             />
-            <div className="absolute inset-0 flex items-center justify-center">{art[i]}</div>
+            <div className="absolute inset-0">{art[i]}</div>
             {/* Kartın boyalı kenarı */}
             <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[3px] bg-lal" />
           </div>
@@ -51,93 +49,134 @@ export function CraftMarks({ lang }: { lang: Lang }) {
 }
 
 const GOLD = "#b08d57";
+const LAL = "#6e1f24";
+const BORDO = "#8f2e35";
 
-function Defs({ id }: { id: string }) {
+/** Sabit tohumlu rastgele sayı: sunucu ve tarayıcı aynı çizgileri üretsin (hydration uyuşmazlığı olmasın). */
+function rng(seed: number) {
+  let s = seed;
+  return () => {
+    s = (s * 9301 + 49297) % 233280;
+    return s / 233280;
+  };
+}
+const f = (n: number) => Math.round(n * 100) / 100;
+
+/** Kart kutusu 170×110 (kartın 85/55 oranı); svg kartı tam kaplar. */
+function Card({ id, children }: { id: string; children: ReactNode }) {
   return (
-    <defs>
-      {/* userSpaceOnUse: kutu esaslı geçiş tam yatay/dikey çizgilerde hiç çizilmiyor */}
-      <linearGradient id={`${id}-g`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="100" y2="100">
-        <stop offset="0" stopColor="#dcc08a" />
-        <stop offset="0.5" stopColor={GOLD} />
-        <stop offset="1" stopColor="#86693e" />
-      </linearGradient>
-    </defs>
+    <svg viewBox="0 0 170 110" className="block h-full w-full" fill="none" strokeLinecap="round" aria-hidden="true">
+      <defs>
+        {/* userSpaceOnUse: kutu esaslı geçiş tam yatay/dikey çizgilerde hiç çizilmiyor */}
+        <linearGradient id={`${id}-g`} gradientUnits="userSpaceOnUse" x1="20" y1="0" x2="150" y2="110">
+          <stop offset="0" stopColor="#dcc08a" />
+          <stop offset="0.5" stopColor={GOLD} />
+          <stop offset="1" stopColor="#86693e" />
+        </linearGradient>
+      </defs>
+      {children}
+    </svg>
   );
 }
 
-/** Nakış: buta bandı, dikiş izi gibi kesik çizgiyle; sağda iğne ve ipliği. */
+/**
+ * Nakış: saten dikiş. Kısa eğik ipler yan yana, hafif kıvrılan bir yaprak gibi uçlara doğru incelir.
+ * Üstte ve altta kumaşın dokusu gibi ince, kesik kordon.
+ */
+const SATIN = (() => {
+  const r = rng(23);
+  const out: { d: string; o: number }[] = [];
+  const x0 = 26, x1 = 144;
+  for (let x = x0; x <= x1; x += 1.3) {
+    const u = (x - x0) / (x1 - x0);
+    const h = 0.8 + 13 * Math.pow(Math.sin(Math.PI * u), 0.75);
+    const cy = 55 + 4 * Math.sin(2 * Math.PI * u);
+    const lean = 2.2 + 1.2 * Math.sin(Math.PI * u);
+    out.push({ d: `M${f(x - lean)} ${f(cy - h)}L${f(x + lean)} ${f(cy + h)}`, o: f(0.45 + r() * 0.5) });
+  }
+  return out;
+})();
+
 function Embroidery() {
   const g = "url(#cm-n-g)";
   return (
-    <svg viewBox="0 0 160 100" className="h-[62%] w-auto" fill="none" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <Defs id="cm-n" />
-      <path d="M10 34H128M10 66H128" stroke={g} strokeWidth="1.4" />
-      <path d="M10 38H128M10 62H128" stroke={g} strokeWidth="0.6" strokeDasharray="1.6 1.6" />
-      <g stroke={g} strokeWidth="0.55" strokeDasharray="1.1 0.8">
-        {[22, 42, 62].map((x) => (
-          <g key={x} transform={`translate(${x} 50.5) scale(2.1)`}>
-            <path d={BUTA} />
-            <path d={BUTA_EYE} />
-          </g>
+    <Card id="cm-n">
+      <path d="M18 33H152M18 77H152" stroke={g} strokeWidth="0.45" strokeDasharray="1.4 1.8" opacity="0.4" />
+      <g stroke={g} strokeWidth="0.5">
+        {SATIN.map((s, i) => (
+          <path key={i} d={s.d} opacity={s.o} />
         ))}
-        {[96, 116].map((x) => (
-          <g key={x} transform={`translate(${x} 50.5) scale(-2.1 2.1)`}>
-            <path d={BUTA} />
-            <path d={BUTA_EYE} />
-          </g>
-        ))}
-        <path d="M79 42L87.5 50.5L79 59L70.5 50.5Z" />
       </g>
-      <circle cx="79" cy="50.5" r="1.3" fill={g} />
-      {/* iplik ve iğne */}
-      <path d="M118 50C126 40 136 44 138 54C140 64 148 66 152 58" stroke="#8f2e35" strokeWidth="1" />
-      <path d="M131 26L152 58" stroke={g} strokeWidth="1.3" />
-      <ellipse cx="133.2" cy="29.4" rx="0.9" ry="2.4" transform="rotate(-33 133.2 29.4)" stroke={g} strokeWidth="0.6" />
-    </svg>
+    </Card>
   );
 }
 
-/** Püskül: altın düğüm, bordo ipek, altın bilezik. */
+/** Püskül: kartın üstünden dökülen ipek saçak, bordo ve lal; arada birkaç altın tel, üstte altın sargı. */
+const THREADS = (() => {
+  const r = rng(41);
+  const out: { d: string; c: string; w: number; o: number }[] = [];
+  const n = 120;
+  for (let i = 0; i < n; i++) {
+    // Ortada sık, kenarlara doğru seyrek: saçak kendi ağırlığıyla toplanmış gibi
+    const t = i / (n - 1) - 0.5;
+    const x = 85 + Math.sign(t) * Math.pow(Math.abs(t) * 2, 1.25) * 58 + (r() - 0.5) * 0.9;
+    const y = 104 - r() * 22 - Math.abs(t) * 18;
+    const gold = r() < 0.07;
+    out.push({
+      d: `M${f(x)} 0Q${f(x + (r() - 0.5) * 3)} ${f(y / 2)} ${f(x + (r() - 0.5) * 3)} ${f(y)}`,
+      c: gold ? GOLD : r() < 0.45 ? BORDO : LAL,
+      w: f(gold ? 0.3 : 0.35 + r() * 0.45),
+      o: f(gold ? 0.45 + r() * 0.25 : 0.3 + r() * 0.5),
+    });
+  }
+  return out;
+})();
+
 function Tassel() {
   return (
-    <svg viewBox="0 0 60 100" className="h-[72%] w-auto" fill="none" strokeLinecap="round" aria-hidden="true">
-      <Defs id="cm-p" />
+    <Card id="cm-p">
       <defs>
-        <linearGradient id="cm-silk" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0" stopColor="#4a1418" />
-          <stop offset="0.35" stopColor="#8f2e35" />
-          <stop offset="0.6" stopColor="#6e1f24" />
-          <stop offset="1" stopColor="#3d1013" />
+        {/* İplik uçları kesik değil, yumuşakça kaybolsun */}
+        <linearGradient id="cm-p-fade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0.55" stopColor="#fff" />
+          <stop offset="1" stopColor="#fff" stopOpacity="0" />
         </linearGradient>
+        <mask id="cm-p-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="170" height="110">
+          <rect width="170" height="110" fill="url(#cm-p-fade)" />
+        </mask>
       </defs>
-      <path d="M30 2V20" stroke="url(#cm-p-g)" strokeWidth="1.2" />
-      <path d="M30 20C25 20 23.5 25 26 28C27 29.2 28.4 30 30 30C31.6 30 33 29.2 34 28C36.5 25 35 20 30 20Z" stroke="url(#cm-p-g)" strokeWidth="1.1" fill="#14110f" />
-      <path d="M26.5 31H33.5L35 37H25Z" fill="url(#cm-silk)" />
-      <rect x="23.5" y="37" width="13" height="3.4" rx="0.8" fill="url(#cm-p-g)" />
-      <path d="M24 40.4C21 56 19.6 74 18.6 96H41.4C40.4 74 39 56 36 40.4Z" fill="url(#cm-silk)" />
-      <path d="M25.6 44V95M28.2 44V96M30 44V96M31.8 44V96M34.4 44V95M22.6 56V95M37.4 56V95" stroke="#2c0b0e" strokeOpacity="0.6" strokeWidth="0.5" />
-      <path d="M27 44V93M33 44V93" stroke="#c05a62" strokeOpacity="0.35" strokeWidth="0.5" />
-    </svg>
+      <g mask="url(#cm-p-mask)">
+        {THREADS.map((t, i) => (
+          <path key={i} d={t.d} stroke={t.c} strokeWidth={t.w} opacity={t.o} />
+        ))}
+      </g>
+      <path d="M24 12H146M24 13.4H146M24 14.8H146" stroke="url(#cm-p-g)" strokeWidth="0.45" opacity="0.85" />
+    </Card>
   );
 }
 
-/** Pirinç damga: çift çerçeveli kare mühür, içinde küçük amblem ve numara. */
+/** Pirinç damga: tornada işlenmiş pirinç gibi ince eş merkezli halkalar, ortada numara. */
+const RINGS = (() => {
+  const r = rng(11);
+  const out: { r: number; o: number }[] = [];
+  for (let k = 5; k <= 31; k += 1.15) out.push({ r: f(k), o: f(0.25 + r() * 0.35) });
+  return out;
+})();
+
 function Seal() {
   const g = "url(#cm-d-g)";
   return (
-    <svg viewBox="0 0 100 100" className="h-[66%] w-auto" fill="none" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <Defs id="cm-d" />
-      <rect x="8" y="8" width="84" height="84" stroke={g} strokeWidth="2" />
-      <rect x="15" y="15" width="70" height="70" stroke={g} strokeWidth="0.8" />
-      <g transform="translate(31 18) scale(0.6)" stroke={g}>
-        <path d="M32 3.5C34.2 6 34.4 8.2 32 10.6C29.6 8.2 29.8 6 32 3.5Z" fill={g} stroke="none" />
-        <path d="M19.5 57V31C19.5 24.6 23.4 21.6 27.6 18.8C30 17.2 31.4 15.4 32 12.8C32.6 15.4 34 17.2 36.4 18.8C40.6 21.6 44.5 24.6 44.5 31V57" strokeWidth="2.4" />
-        <path d="M19.5 44H44.5" strokeWidth="1.8" />
-        <path d="M10 50.5H54" strokeWidth="2.6" />
+    <Card id="cm-d">
+      <g stroke={g} strokeWidth="0.3">
+        {RINGS.map((c) => (
+          <circle key={c.r} cx="85" cy="55" r={c.r} opacity={c.o} />
+        ))}
       </g>
-      <text x="50" y="76" textAnchor="middle" fill={g} style={{ font: "500 8px var(--font-serif)", letterSpacing: "0.18em" }}>
-        N° 001
+      <circle cx="85" cy="55" r="33" stroke={g} strokeWidth="1.1" />
+      <circle cx="85" cy="55" r="11" fill="#14110f" stroke={g} strokeWidth="0.5" />
+      <text x="85" y="58" textAnchor="middle" fill={g} style={{ font: "400 8.5px var(--font-serif)", letterSpacing: "0.08em" }}>
+        001
       </text>
-    </svg>
+    </Card>
   );
 }

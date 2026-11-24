@@ -412,6 +412,10 @@ Ev dili: hikâyeye göre tasarlanmış kumaş (sitedeki kumaşlara bağlı deği
 - **M21 Gonca (puf → berjer):** Kapalı gül goncası: beş yaprak, dipte koyu bordo uçta gül kurusu renk geçişi, kenarlarda altın kordon, her yaprakta nakış damarlar. Damga bir yaprağın kıvrık ucunda.
 - **M22 Kademe (klub):** Art Deco basamakları: U'nun üst kenarı üç basamaklı bordo rulo + altın kordon, dış yüz bordo üstüne pars beneği baskısı, dış sırtta Deco çizgili yürüyen pars nakışı. Damga sağ kolun ön yüzünde.
 
+### M23 — Hezarbaf (berjer) · öneri, henüz denenmedi (24 Kasım 2026)
+
+Katalogdaki gerçek Mane Tex kumaşlarıyla tasarlanan ilk parça: AKİDE 18 (tuğla örgüsü desenli kehribar kadife), LOKİ 18 (iç ve oturum), LOKİ 12 (firuze). Selçuklu hezarbaf tuğla örgüsü ve firuze çini kuşağı (Yivli Minare) kumaşa geri dönüyor. Gövde köşeleri yuvarlatılmış kare planlı, tek yükseklikte, kalın bir duvar. Dış yüzde yiv gibi kanallar ve altın kordon var. Üst yüzde firuze kuşak ve kabartmalı altın Selçuklu yıldız geçmesi nakışı. Damga (01/10) ve firuze püskül sağ kolun ön yüzünde. Prompt'lar: `yeni-parcalar-hezarbaf.md`, kumaş görselleri `kumas-referans/hezarbaf/`.
+
 ### Arşiv: denenenler ve dersleri
 
 - **Kuşak koltuk (ceviz halka):** Entegrasyonu en iyi çözen tasarımdı ama kavisli ceviz pahalı ve zor. Koleksiyon hattı için.
