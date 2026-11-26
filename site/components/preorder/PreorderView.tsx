@@ -190,8 +190,8 @@ export function PreorderView({ product, open, price, priceNote, leadTime }: Prop
                 <dd className="mt-1 text-fildisi">{leadTime}</dd>
               </div>
               <div>
-                <dt className="label">Ödeme</dt>
-                <dd className="mt-1 text-fildisi">Şimdi alınmaz</dd>
+                <dt className="label">Rezervasyon</dt>
+                <dd className="mt-1 text-fildisi">Ücretsiz</dd>
               </div>
               <div className="col-span-2">
                 <dt className="label">Kumaş</dt>
@@ -201,11 +201,10 @@ export function PreorderView({ product, open, price, priceNote, leadTime }: Prop
 
             <div className="mt-10" ref={heroCta}>
               {price ? (
-                <p className="font-serif text-4xl font-light text-fildisi lg:text-5xl">{price}</p>
+                <PriceTag price={price} note={priceNote} />
               ) : (
                 <p className="text-fildisi/85">Fiyat, görüşmede seçtiğiniz ölçüye göre paylaşılır.</p>
               )}
-              {priceNote && <p className="mt-2 text-sm text-tas">{priceNote}</p>}
               {open ? (
                 <>
                   <button type="button" onClick={openForm} className="btn mt-8 w-full sm:w-auto">
@@ -368,12 +367,36 @@ export function PreorderView({ product, open, price, priceNote, leadTime }: Prop
         style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
         aria-hidden={!showSticky}
       >
-        <span className="font-serif text-xl text-fildisi">{price || name}</span>
+        <span className="font-serif text-xl text-fildisi">{name}</span>
         <button type="button" onClick={openForm} className="btn !min-h-[44px] !py-3" tabIndex={showSticky ? 0 : -1}>
           Sipariş ver
         </button>
       </div>
     </>
+  );
+}
+
+/**
+ * Fiyat: lüks markalardaki gibi sakin. Büyük, kalın bir rakam yerine ince serif, para birimi küçük ve
+ * aralıklı, üstünde "Fiyat" etiketi, altında neyin dahil olduğu. "147.500 TL", "147500₺" gibi yazımları toparlar.
+ */
+function PriceTag({ price, note }: { price: string; note: string }) {
+  const m = price.replace(/\s+/g, " ").match(/^(?:₺\s?)?([\d.,\s]+?)\s*(?:TL|₺|tl)?$/);
+  const digits = m ? m[1].replace(/[.\s]/g, "") : "";
+  const amount = /^\d+$/.test(digits) ? Number(digits).toLocaleString("tr-TR") : null;
+  return (
+    <div>
+      <p className="label">Fiyat</p>
+      {amount ? (
+        <p className="mt-3 flex items-baseline gap-3 text-fildisi">
+          <span className="font-serif text-[2.1rem] font-light leading-none tracking-[0.04em] lg:text-[2.5rem]">{amount}</span>
+          <span className="label !text-fildisi/70">TL</span>
+        </p>
+      ) : (
+        <p className="mt-3 font-serif text-[2.1rem] font-light leading-none text-fildisi lg:text-[2.5rem]">{price}</p>
+      )}
+      {note && <p className="mt-3 max-w-[46ch] text-sm text-tas">{note}</p>}
+    </div>
   );
 }
 
