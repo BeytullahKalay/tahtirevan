@@ -10,6 +10,7 @@ import config from "@payload-config";
 import { getPayload, type CollectionSlug } from "payload";
 import { cache } from "react";
 import { STUDY_GALLERY } from "./studyGallery";
+import { PRODUCTS, type Offer, type ProductKey } from "./preorder";
 import {
   withHelpers,
   type CatalogData,
@@ -74,6 +75,8 @@ async function load(): Promise<CatalogData> {
     payload.findGlobal({ slug: "site-settings", locale: "all", depth: 0 }) as unknown as Promise<Doc>,
     payload.findGlobal({ slug: "site-status", depth: 0 }) as unknown as Promise<Doc>,
   ]);
+  // Siparişe açık parçaların fiyatı (Reklam testi › Sipariş sayfası). Okunamazsa site yine açılır.
+  const preorderD = (await payload.findGlobal({ slug: "on-siparis-sayfasi", depth: 0 }).catch(() => ({}))) as Doc;
 
   const keyOf = (docs: Doc[]) => new Map(docs.map((d) => [d.id, d.key as string]));
   const byId = <T extends Doc>(docs: T[]) => new Map(docs.map((d) => [d.id, d]));
@@ -249,7 +252,16 @@ async function load(): Promise<CatalogData> {
     }),
   };
 
-  return { codes, fabrics, collections, pieces, studies, options, site };
+  const offers: Offer[] = (Object.keys(PRODUCTS) as ProductKey[]).map((key) => ({
+    ...PRODUCTS[key],
+    key,
+    price: String(preorderD.price ?? "").trim(),
+    priceNote: String(preorderD.priceNote ?? "").trim(),
+    leadTime: String(preorderD.leadTime ?? "").trim() || "Yaklaşık 3 ay",
+    open: preorderD.open !== false,
+  }));
+
+  return { codes, fabrics, collections, pieces, studies, options, site, offers };
 }
 
 /** İstek başına bir kez yüklenir. */

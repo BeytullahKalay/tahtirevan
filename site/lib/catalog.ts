@@ -4,6 +4,7 @@
  * Hem sunucu hem tarayıcı bileşenleri bu dosyayı kullanabilir.
  */
 import type { Lang, SlugMap } from "./i18n";
+import type { Offer } from "./preorder";
 
 export type Localized = { tr: string; en: string };
 /** Parça türü anahtarı (panelde "Parça türleri": koltuk, kanepe, sedir…). */
@@ -130,6 +131,8 @@ export type CatalogData = {
   studies: Study[];
   options: Options;
   site: SiteSettings;
+  /** Siparişe açık parçalar (lib/preorder.ts + panel fiyatı). */
+  offers: Offer[];
 };
 
 /** Veriye bağlı yardımcılar. Sunucuda `await getCatalog()`, tarayıcıda `useCatalog()` bunları döndürür. */

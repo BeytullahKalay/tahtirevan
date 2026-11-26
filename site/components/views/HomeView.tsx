@@ -6,6 +6,7 @@ import { CraftMarks } from "../CraftMarks";
 import { FabricMarquee } from "../FabricMarquee";
 import { HeroCard } from "../HeroCard";
 import { Media } from "../Media";
+import { OfferFeature } from "../OfferFeature";
 import { Parallax } from "../Parallax";
 import { Reveal } from "../Reveal";
 import { RoadStops } from "../RoadStops";
@@ -144,6 +145,18 @@ export async function HomeView({ lang }: { lang: Lang }) {
         label={lang === "tr" ? "Kumaş kütüphanesi" : "Fabric library"}
         items={fabrics.map((f) => ({ id: f.id, name: f.name, code: getCode(f.code).name[lang], href: codeHref(f.code), tile: f.tile }))}
       />
+
+      {/* 2c. Siparişe açık parçalar (lib/preorder.ts; fiyat panelden). Sipariş sayfası Türkçe olduğu için yalnızca TR. */}
+      {lang === "tr" && cat.offers.length > 0 && (
+        <section aria-label="Siparişe açık" className="px-[var(--gutter)] pb-[18vh]">
+          <div className="flex flex-col gap-[14vh]">
+            {cat.offers.map((o) => {
+              const col = collections.find((x) => x.id === o.collection);
+              return <OfferFeature key={o.key} offer={o} label={`Siparişe açık${col ? ` · ${col.name.tr}` : ""}`} />;
+            })}
+          </div>
+        </section>
+      )}
 
       {/* 3. Öne çıkan koleksiyon (yayında parçası varsa) */}
       {featured && (

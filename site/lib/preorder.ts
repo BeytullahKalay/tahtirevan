@@ -5,11 +5,47 @@
 
 export const PREORDER_FORM = "on-siparis"; // Netlify Forms adı (bildirim e-postası için), public/__forms.html ile aynı
 
+/**
+ * Siparişe açık parçalar. Sitede (anasayfa "Siparişe açık", koleksiyon sayfası, üst menü) ve sipariş
+ * sayfasında kullanılır. Fiyat ve teslim süresi panelden gelir (Reklam testi › Sipariş sayfası).
+ * Şimdilik yalnızca Türkçe sitede gösterilir; sipariş sayfası Türkçe.
+ */
 export const PRODUCTS = {
-  gecis: { name: "Geçiş berjeri" },
+  gecis: {
+    name: "Geçiş berjeri",
+    title: "Geçiş",
+    type: "berjer",
+    collection: "kurulus", // panelde koleksiyonun "key" alanı
+    href: "/siparis/gecis",
+    image: { src: "/siparis/gecis-genel.webp", w: 938, h: 1024, alt: "Geçiş berjeri, üç çeyrek açıdan" },
+    line: "Altından laciverde on dört kadife bant. Gül kurusu bantta, parçanın numarasını taşıyan pirinç bir damga.",
+  },
 } as const;
 export type ProductKey = keyof typeof PRODUCTS;
 export const isProduct = (v: unknown): v is ProductKey => typeof v === "string" && v in PRODUCTS;
+
+/** Sitede gösterilen hâli: kod bilgisi + panelden gelen fiyat ve süre. */
+export type Offer = {
+  key: ProductKey;
+  name: string;
+  title: string;
+  type: string;
+  collection: string;
+  href: string;
+  image: { src: string; w: number; h: number; alt: string };
+  line: string;
+  price: string;
+  priceNote: string;
+  leadTime: string;
+  open: boolean;
+};
+
+/** "147.500 TL", "147500₺" → "147.500". Rakam değilse null (metin olduğu gibi gösterilir). */
+export function priceAmount(price: string): string | null {
+  const m = price.replace(/\s+/g, " ").trim().match(/^(?:₺\s?)?([\d.,\s]+?)\s*(?:TL|₺|tl)?$/);
+  const digits = m ? m[1].replace(/[.\s]/g, "") : "";
+  return /^\d+$/.test(digits) ? Number(digits).toLocaleString("tr-TR") : null;
+}
 
 export type PreorderInput = {
   name: string;

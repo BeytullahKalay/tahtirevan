@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { PieceType } from "@/lib/catalog";
 import { collectionHref, href, type Lang } from "@/lib/i18n";
 import { useCatalog } from "../CatalogProvider";
+import { OfferFeature } from "../OfferFeature";
 import { PieceCard } from "../PieceCard";
 import { Reveal } from "../Reveal";
 
@@ -50,7 +51,7 @@ const LAYOUT = [
 
 export function CollectionsView({ lang, only }: { lang: Lang; only?: string }) {
   const c = COPY[lang];
-  const { collections, pieces, piecesByCollection, typeLabel, options } = useCatalog();
+  const { collections, pieces, piecesByCollection, typeLabel, options, offers } = useCatalog();
   const [tab, setTab] = useState<Tab>("all");
   const list = only ? collections.filter((col) => col.id === only) : collections;
   const single = only ? list[0] : undefined;
@@ -112,7 +113,38 @@ export function CollectionsView({ lang, only }: { lang: Lang; only?: string }) {
               )}
               {only && <h2 id={`col-${col.id}`} className="sr-only">{col.name[lang]}</h2>}
 
-              {all.length === 0 ? (
+              {all.length === 0 && lang === "tr" && offers.some((o) => o.collection === col.id) ? (
+                <>
+                  {col.intro[lang] && (
+                    <Reveal>
+                      <p className="lede mb-[10vh] max-w-[56ch] !text-tas">{col.intro[lang]}</p>
+                    </Reveal>
+                  )}
+                  <div className="flex flex-col gap-[14vh]">
+                    {offers
+                      .filter((o) => o.collection === col.id)
+                      .map((o, i) => (
+                        <OfferFeature key={o.key} offer={o} label="Siparişe açık" headingLevel={3} priority={ci === 0 && i === 0} />
+                      ))}
+                  </div>
+                  <Reveal className="mt-[14vh] grid gap-8 border-t hairline pt-10 lg:grid-cols-12">
+                    <h3 className="display-sm lg:col-span-5">Sıradaki parçalar hazırlanıyor.</h3>
+                    <div className="lg:col-span-6 lg:col-start-7">
+                      <p className="max-w-[46ch] text-tas">
+                        Aklınızda başka bir parça mı var? Kumaşınızı ve ölçünüzü birlikte seçeriz; kuruluş serisinin numarası onun da üzerinde olur.
+                      </p>
+                      <div className="mt-8 flex flex-col items-start gap-6">
+                        <Link href={href(lang, "consultation")} className="btn btn-quiet">
+                          {c.soonCta}
+                        </Link>
+                        <Link href={href(lang, "studies")} className="link-gold is-static label tap !text-fildisi">
+                          {c.studies}
+                        </Link>
+                      </div>
+                    </div>
+                  </Reveal>
+                </>
+              ) : all.length === 0 ? (
                 <Reveal className="grid gap-10 lg:grid-cols-12">
                   <div className="lg:col-span-6">
                     {col.intro[lang] && <p className="lede max-w-[46ch]">{col.intro[lang]}</p>}

@@ -10,7 +10,7 @@ import { useCatalog } from "./CatalogProvider";
 export function Header({ lang }: { lang: Lang }) {
   const t = UI[lang];
   const pathname = usePathname() || "/";
-  const { slugs, pieces } = useCatalog();
+  const { slugs, pieces, offers } = useCatalog();
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -19,7 +19,7 @@ export function Header({ lang }: { lang: Lang }) {
   const firstLink = useRef<HTMLAnchorElement>(null);
 
   // Koleksiyonlar, yayında parça olana kadar menüde görünmez (boş sayfaya götürmesin); alt bilgide kalır.
-  const keys = (["studies", "patterns", "collections", "bespoke", "story"] as const).filter((k) => k !== "collections" || pieces.length > 0);
+  const keys = (["studies", "patterns", "collections", "bespoke", "story"] as const).filter((k) => k !== "collections" || pieces.length > 0 || (lang === "tr" && offers.length > 0));
   const links = keys.map((k) => ({ href: href(lang, k), label: t.nav[k], hint: t.navHint[k] }));
 
   // Aşağı kaydırınca gizlen, yukarı kaydırınca dön.

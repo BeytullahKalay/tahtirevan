@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Mark } from "../Brand";
 import { looksLikeBot, netlifyForms, postNetlifyForm } from "@/lib/forms";
-import { PREORDER_FORM, PRODUCTS, parsePreorder, type PreorderErrors, type ProductKey } from "@/lib/preorder";
+import { PREORDER_FORM, PRODUCTS, parsePreorder, priceAmount, type PreorderErrors, type ProductKey } from "@/lib/preorder";
 
 /**
  * Reklam testinin sipariş sayfası. Akış: sayfa → "Sipariş ver" → kısa form → "Bekleme listesindesiniz".
@@ -35,7 +35,11 @@ function detectSource() {
       sessionStorage.setItem("tr-src", s);
       return s;
     }
-    return sessionStorage.getItem("tr-src") || "diger";
+    const saved = sessionStorage.getItem("tr-src");
+    if (saved) return saved;
+    // Sitenin kendi sayfalarından (anasayfa, koleksiyon) gelen ziyaretçi
+    if (document.referrer && new URL(document.referrer).host === window.location.host) return "site";
+    return "diger";
   } catch {
     return "diger";
   }
@@ -169,7 +173,9 @@ export function PreorderView({ product, open, price, priceNote, leadTime }: Prop
           <Mark className="h-8 w-8 shrink-0 text-altin" />
           <span className="wordmark">Tahtırevan</span>
         </a>
-        <span className="label hidden sm:block">Siparişle yapılır</span>
+        <a href="/koleksiyonlar/kurulus-serisi" className="link-gold is-static label tap !text-fildisi">
+          Kuruluş serisi
+        </a>
       </header>
 
       <main id="main">
@@ -213,6 +219,9 @@ export function PreorderView({ product, open, price, priceNote, leadTime }: Prop
                   <p className="mt-4 max-w-[46ch] text-sm text-tas">
                     Sıranızı ayırır. Şimdi ödeme alınmaz; sizi arayıp kumaşı, ölçüyü ve teslim tarihini birlikte netleştiririz.
                   </p>
+                  <a href="/gorusme" className="link-gold is-static label tap mt-6 inline-block !text-fildisi">
+                    Önce görüşmek isterim
+                  </a>
                 </>
               ) : (
                 <p className="mt-8 max-w-[46ch] text-fildisi/85">
@@ -381,9 +390,7 @@ export function PreorderView({ product, open, price, priceNote, leadTime }: Prop
  * aralıklı, üstünde "Fiyat" etiketi, altında neyin dahil olduğu. "147.500 TL", "147500₺" gibi yazımları toparlar.
  */
 function PriceTag({ price, note }: { price: string; note: string }) {
-  const m = price.replace(/\s+/g, " ").match(/^(?:₺\s?)?([\d.,\s]+?)\s*(?:TL|₺|tl)?$/);
-  const digits = m ? m[1].replace(/[.\s]/g, "") : "";
-  const amount = /^\d+$/.test(digits) ? Number(digits).toLocaleString("tr-TR") : null;
+  const amount = priceAmount(price);
   return (
     <div>
       <p className="label">Fiyat</p>
