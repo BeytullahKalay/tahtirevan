@@ -76,6 +76,6 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  // Panel, API, durum sayfasının kendisi, Next dosyaları ve uzantılı dosyalar (görsel, robots.txt…) hariç her sayfa.
-  matcher: ["/((?!api|admin|durum|_next|.*\\.[A-Za-z0-9]+$).*)"],
+  // Panel, API, durum sayfasının kendisi, reklam testinin sipariş sayfaları (+ KVKK metni), Next dosyaları ve uzantılı dosyalar (görsel, robots.txt…) hariç her sayfa.
+  matcher: ["/((?!api|admin|durum|siparis|gizlilik|_next|.*\\.[A-Za-z0-9]+$).*)"],
 };

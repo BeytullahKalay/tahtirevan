@@ -81,6 +81,8 @@ export interface Config {
     videos: Video;
     models: Model;
     signups: Signup;
+    'on-siparisler': OnSiparisler;
+    'on-siparis-olaylari': OnSiparisOlaylari;
     users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -110,6 +112,8 @@ export interface Config {
     videos: VideosSelect<false> | VideosSelect<true>;
     models: ModelsSelect<false> | ModelsSelect<true>;
     signups: SignupsSelect<false> | SignupsSelect<true>;
+    'on-siparisler': OnSiparislerSelect<false> | OnSiparislerSelect<true>;
+    'on-siparis-olaylari': OnSiparisOlaylariSelect<false> | OnSiparisOlaylariSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -123,10 +127,12 @@ export interface Config {
   globals: {
     'site-status': SiteStatus;
     'site-settings': SiteSetting;
+    'on-siparis-sayfasi': OnSiparisSayfasi;
   };
   globalsSelect: {
     'site-status': SiteStatusSelect<false> | SiteStatusSelect<true>;
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+    'on-siparis-sayfasi': OnSiparisSayfasiSelect<false> | OnSiparisSayfasiSelect<true>;
   };
   locale: 'tr' | 'en';
   widgets: {
@@ -618,6 +624,52 @@ export interface Signup {
   createdAt: string;
 }
 /**
+ * People who filled in the order form. No payment was taken. Download: /api/on-siparisler/csv · Counters: /api/on-siparis-olaylari/rapor
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "on-siparisler".
+ */
+export interface OnSiparisler {
+  id: number;
+  name: string;
+  phone: string;
+  email?: string | null;
+  city?: string | null;
+  note?: string | null;
+  /**
+   * Update after calling.
+   */
+  status?: ('yeni' | 'arandi' | 'kapora' | 'vazgecti' | 'ulasilamadi') | null;
+  /**
+   * What was said on the call?
+   */
+  callNote?: string | null;
+  product?: string | null;
+  queue?: number | null;
+  /**
+   * instagram = from the ad
+   */
+  source?: string | null;
+  consent?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * One row per view, click or submission. No personal data. Summary: /api/on-siparis-olaylari/rapor
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "on-siparis-olaylari".
+ */
+export interface OnSiparisOlaylari {
+  id: number;
+  type: 'view' | 'click' | 'submit';
+  source?: string | null;
+  product?: string | null;
+  day?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
@@ -727,6 +779,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'signups';
         value: number | Signup;
+      } | null)
+    | ({
+        relationTo: 'on-siparisler';
+        value: number | OnSiparisler;
+      } | null)
+    | ({
+        relationTo: 'on-siparis-olaylari';
+        value: number | OnSiparisOlaylari;
       } | null)
     | ({
         relationTo: 'users';
@@ -1089,6 +1149,37 @@ export interface SignupsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "on-siparisler_select".
+ */
+export interface OnSiparislerSelect<T extends boolean = true> {
+  name?: T;
+  phone?: T;
+  email?: T;
+  city?: T;
+  note?: T;
+  status?: T;
+  callNote?: T;
+  product?: T;
+  queue?: T;
+  source?: T;
+  consent?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "on-siparis-olaylari_select".
+ */
+export interface OnSiparisOlaylariSelect<T extends boolean = true> {
+  type?: T;
+  source?: T;
+  product?: T;
+  day?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
@@ -1235,6 +1326,27 @@ export interface SiteSetting {
   createdAt?: string | null;
 }
 /**
+ * The page the ad links to: tahtirevan.com/siparis/gecis. Stays open in Coming soon mode.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "on-siparis-sayfasi".
+ */
+export interface OnSiparisSayfasi {
+  id: number;
+  /**
+   * If unticked, the page shows that the list is full instead of the form.
+   */
+  open?: boolean | null;
+  /**
+   * Shown large. If empty, the page says the price is shared on the call.
+   */
+  price?: string | null;
+  priceNote?: string | null;
+  leadTime?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-status_select".
  */
@@ -1283,6 +1395,19 @@ export interface SiteSettingsSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "on-siparis-sayfasi_select".
+ */
+export interface OnSiparisSayfasiSelect<T extends boolean = true> {
+  open?: T;
+  price?: T;
+  priceNote?: T;
+  leadTime?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

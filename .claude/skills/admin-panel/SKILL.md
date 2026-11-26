@@ -48,6 +48,9 @@ Oturum 7 gün açık kalır. 8 yanlış denemede hesap 15 dakika kilitlenir.
 | Medya | 3B modeller (`models`) | Yalnızca `.glb`. Fotoğraftan yapay zekâyla üretilmiş ham dosya olduğu gibi yüklenir; sırt kumaşı / oturak kadifesi / metal **kendiliğinden** ayrılır (bkz. "3B modeller") |
 | Ayarlar | Site durumu (global `site-status`) | Site açık / "Yakında" / "Bakımdayız"; iki sayfanın metinleri, açılış tarihi, tahmini dönüş, iletişim e-postası |
 | Ayarlar | Açılış listesi (`signups`) | "Yakında" sayfasındaki "Haber ver" formundan gelen e-postalar; CSV: `/api/signups/csv` |
+| Reklam testi | Ön siparişler (`on-siparisler`) | Sipariş sayfasındaki formu dolduranlar (ad, telefon, şehir, kaynak, sıra no). Ödeme alınmaz; kullanıcı arayıp "Durum" ve "Görüşme notu"nu doldurur. CSV: `/api/on-siparisler/csv` |
+| Reklam testi | Sayfa sayaçları (`on-siparis-olaylari`) | Adsız sayaç: sayfayı açtı / Sipariş ver'e bastı / formu gönderdi, gün ve kaynakla. Günlük özet: `/api/on-siparis-olaylari/rapor` (giriş gerekir) |
+| Reklam testi | Sipariş sayfası (global `on-siparis-sayfasi`) | `/siparis/gecis` sayfasının fiyatı, fiyat notu, teslim süresi, form açık/kapalı |
 | Ayarlar | Site ayarları (global) | Ana sayfa açılışı (en fazla 4 kumaş), kumaş stüdyosundaki 3B model, sayaçtaki 3 sayı |
 | Ayarlar | Kullanıcılar | Panel hesapları |
 
@@ -83,6 +86,16 @@ Kod: yönlendirme `site/proxy.ts` (Next 16'nın middleware'i), sayfa `site/app/(
 - `proxy.ts` modu kendi sitesinden `/api/globals/site-status` ile okur (5 sn önbellek) ve oturumu `/api/users/me` ile doğrular (60 sn önbellek). Ayar okunamazsa site **açık** kalır.
 - Durum sayfasının tasarımı `coming-soon/index.html` ile aynı. Birinde tasarım değişirse diğerine de taşı.
 - Test için modu değiştirmen gerekirse önce `npm run backup`, sonunda modu `live`'a geri al ve `deneme@example.com` gibi test kayıtlarını sil. `payload run` ile çalışan betik `site/` içinde olmalı (paket ESM; dışarıdaki dosya CJS derlenip üst seviye `await` hata veriyor).
+
+## Reklam testi: sipariş sayfası (26.11.2026)
+
+- Instagram reklamının götürdüğü "kapı testi" sayfası: `/siparis/gecis` (Geçiş berjeri, Reels 10 filmi). Sayfa → "Sipariş ver" → kısa form → "Bekleme listesindesiniz, sıra numaranız NN, şu an ödeme alınmadı". Ürün henüz yapılmadı; sayfa bunu "siparişle, elde yapılır, ödeme şimdi alınmaz" diye dürüstçe söyler.
+- Reklam bağlantısı: `https://tahtirevan.com/siparis/gecis?utm_source=instagram` (raporda "reklamdan" sütunu `instagram`/`meta` kaynağını sayar; Meta'nın eklediği `fbclid` de `meta` sayılır).
+- Kod: kök düzen `app/(siparis)/layout.tsx` (üst menü, açılış animasyonu, çerez çubuğu yok), sayfa `app/(siparis)/siparis/gecis/page.tsx`, görünüm `components/preorder/PreorderView.tsx`, kurallar `lib/preorder.ts`, API `app/api/on-siparis/route.ts` (kayıt + sıra no) ve `app/api/on-siparis/olay/route.ts` (sayaç; IP/çerez tutmaz, botları sayımaz). Panel: `payload/collections/preorders.ts`, `payload/globals/preorderPage.ts`, göç `migrations/20261126_184354_on_siparis.ts`.
+- `proxy.ts` `siparis` ve `gizlilik` adreslerini "Yakında" kapısından muaf tutar (form KVKK metnine bağlanır).
+- Netlify'da form ayrıca Netlify Forms `on-siparis`e gider (hi@tahtirevan.com bildirimi için); asıl kayıt panelde.
+- Sayfa görüntülemesi oturum başına bir kez sayılır (`sessionStorage`). Test ettikten sonra deneme kayıtlarını sil.
+- Yeni ürün için sayfa eklemek: `lib/preorder.ts` → `PRODUCTS`'a ekle, `app/(siparis)/siparis/<anahtar>/page.tsx` ve görselleri `public/siparis/` altına koy. `PreorderView` içindeki başlık, metin ve görseller şimdilik Geçiş'e özel; ikinci ürün gelince bunları prop'a taşı. Fiyat ayarı da tek (global) olduğu için ürün başına ayrılmalı.
 
 ## Günlük kullanım kuralları
 

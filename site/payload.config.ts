@@ -19,6 +19,8 @@ import { Fabrics, PatternCodes, PieceCollections, Pieces, Studies } from "./payl
 import { Finishes, PieceTypes, Sizes, Woods } from "./payload/collections/options";
 import { FabricImages, Media, Models, Videos } from "./payload/collections/uploads";
 import { Signups } from "./payload/collections/signups";
+import { PreorderEvents, Preorders } from "./payload/collections/preorders";
+import { PreorderPage } from "./payload/globals/preorderPage";
 import { Users } from "./payload/collections/users";
 import { SiteSettings } from "./payload/globals/siteSettings";
 import { SiteStatus } from "./payload/globals/siteStatus";
@@ -72,9 +74,11 @@ export default buildConfig({
     Videos,
     Models,
     Signups,
+    Preorders,
+    PreorderEvents,
     Users,
   ],
-  globals: [SiteStatus, SiteSettings],
+  globals: [SiteStatus, SiteSettings, PreorderPage],
   localization: {
     locales: [
       { code: "tr", label: "Türkçe" },
